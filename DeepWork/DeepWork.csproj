@@ -11,6 +11,15 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="MVVM\Views\AccountCreationPage.xaml" />
+    <None Remove="MVVM\Views\FocusSessionPage.xaml" />
+    <None Remove="MVVM\Views\HistoryPage.xaml" />
+    <None Remove="MVVM\Views\LongTasksPage.xaml" />
+    <None Remove="MVVM\Views\MonitoringPage.xaml" />
+    <None Remove="MVVM\Views\NavigationViewPage.xaml" />
+    <None Remove="MVVM\Views\SettingsPage.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -40,7 +49,41 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MVVM\ViewModels\" />
-    <Folder Include="MVVM\Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\MonitoringPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\LongTasksPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\FocusSessionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\HistoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\AccountCreationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\Views\NavigationViewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!-- 

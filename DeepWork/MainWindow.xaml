@@ -8,7 +8,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-    </StackPanel>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="31"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+			<ImageIcon Source="ms-appx:///Assets/StoreLogo.scale-400.png" Width="20" Height="20"/>
+			<TextBlock Text="Deep Work"/>
+		</StackPanel>
+		<Frame x:Name="ContentFrame" Grid.Row="1"/>
+	</Grid>
 </Window>

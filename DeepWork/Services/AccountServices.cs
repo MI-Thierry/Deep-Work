@@ -8,7 +8,7 @@ namespace DeepWork.Services
 	public class AccountServices : IDisposable
 	{
 		private readonly XmlSerializer m_AccountSerializer;
-		private readonly Stream m_AccountFileStream;
+		private Stream m_AccountFileStream;
 		public Account UserAccount { get; private set; }
 		public string AccountFilePath { get; private set; }
 		public string AppDataPath { get; private set; }
@@ -36,25 +36,27 @@ namespace DeepWork.Services
 				m_AccountFileStream = File.OpenWrite(AccountFilePath);
 
 				// Deserializing account data xml file
-				m_AccountSerializer = new(typeof(Account));
-				UserAccount = (Account)m_AccountSerializer.Deserialize(m_AccountFileStream);
+				try
+				{
+					UserAccount = (Account)m_AccountSerializer.Deserialize(m_AccountFileStream);
+				}
+				catch (InvalidOperationException)
+				{
+					m_AccountFileStream.Dispose();
+					File.Delete(AccountFilePath);
+				}
 			}
 			else
 			{
+				m_AccountFileStream = Stream.Null;
 				IsAccountAvailable = false;
-
-				// Creating Account data xml file
-				File.Create(AccountFilePath);
-
-				// Opening account data xml file stream
-				m_AccountFileStream = File.OpenWrite(AccountFilePath);
-
 			}
 		}
 
 		public void CreateAccount(Account usrAccount)
 		{
 			UserAccount = usrAccount;
+			m_AccountFileStream = File.Create(AccountFilePath);
 			m_AccountSerializer.Serialize(m_AccountFileStream, UserAccount);
 		}
 
