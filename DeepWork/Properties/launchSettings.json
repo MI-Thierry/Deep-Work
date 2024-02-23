@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DeepWork (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "DeepWork (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
