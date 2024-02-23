@@ -12,5 +12,10 @@ namespace DeepWork.MVVM.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public List<ShortTask> Tasks { get; set; }
+
+        public void AddShortTask(ShortTask task)
+        {
+            Tasks.Add(task);
+        }
     }
 }

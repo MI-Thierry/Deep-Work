@@ -7,6 +7,10 @@ namespace DeepWork.MVVM.Models
     public class Account
     {
         public string AccountName { get; set; }
-        public List<LongTask> LongTask { get; set; }
+        public List<LongTask> LongTasks { get; set; }
+        public void AddLongTask(LongTask task)
+        {
+            LongTasks.Add(task);
+        }
     }
 }
