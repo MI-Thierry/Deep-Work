@@ -14,6 +14,6 @@ namespace DeepWork.MVVM.Models
         public string Password { get; set; }
 
         [XmlArray]
-        public ObservableCollection<LongTask> LongTasks { get; set; }
+        public ObservableCollection<LongTask> LongTasks { get; set; } = new();
     }
 }

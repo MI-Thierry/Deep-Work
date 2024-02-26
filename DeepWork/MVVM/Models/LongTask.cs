@@ -11,18 +11,21 @@ namespace DeepWork.MVVM.Models
         public string Name { get; set; }
 
         [XmlAttribute]
-        public uint MaxDuration { get; set; }
+        public TimeSpan MaxDuration { get; set; }
 
         [XmlAttribute]
         public uint MaxShortTaskCount { get; set; }
 
         [XmlAttribute]
-        public DateTime StartTime { get; set; }
+        public DateTime StartDate { get; set; }
 
         [XmlAttribute]
-        public DateTime EndTime { get; set; }
+        public DateTime EndDate { get; set; }
 
         [XmlArray]
-        public ObservableCollection<ShortTask> Tasks { get; set; }
+        public ObservableCollection<ShortTask> RunningTasks { get; set; } = new();
+
+        [XmlArray]
+        public ObservableCollection<ShortTask> FinishedTasks { get; set; } = new();
     }
 }

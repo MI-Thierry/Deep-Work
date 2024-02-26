@@ -1,8 +1,8 @@
 ﻿using DeepWork.MVVM.Models;
 using System;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace DeepWork.Services
@@ -57,39 +57,61 @@ namespace DeepWork.Services
 
 		public void CreateAccount(string username, string password)
 		{
-			SHA1 sha1 = SHA1.Create();
-			byte[] psw = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
 			UserAccount = new Account
 			{
 				Username = username,
-				Password = Encoding.UTF8.GetString(psw)
+				Password = password
 			};
+			IsAccountAvailable = true;
 			m_AccountFileStream = File.Create(AccountFilePath);
-			UpdateAccountDataFile();
+			SaveChanges();
 		}
 
 		public void AddLongTask(LongTask task)
 		{
 			UserAccount.LongTasks.Add(task);
-			UpdateAccountDataFile();
+			SaveChanges();
 		}
 
 		public void AddShortTask(LongTask parentTask, ShortTask task)
 		{
-			parentTask.Tasks.Add(task);
-			UpdateAccountDataFile();
+			parentTask.RunningTasks.Add(task);
+			SaveChanges();
+		}
+        public void FinishLongTask(string name)
+        {
+			LongTask taskToFinish = UserAccount.LongTasks.FirstOrDefault(task => task.Name == name);
+			UserAccount.LongTasks.Remove(taskToFinish);
+			SaveChanges();
+        }
+
+		public void FinishShortTask(LongTask parentTask, string name)
+		{
+			ShortTask taskToFinish = parentTask.RunningTasks.FirstOrDefault(task => task.Name == name);
+
+			parentTask.RunningTasks.Remove(taskToFinish);
+			parentTask.FinishedTasks.Add(taskToFinish);
+
+			if (parentTask.MaxDuration < taskToFinish.Duration)
+				parentTask.MaxDuration = taskToFinish.Duration;
+
+			SaveChanges() ;
 		}
 
-		private void UpdateAccountDataFile()
+        public async void SaveChanges()
 		{
-			m_AccountSerializer.Serialize(m_AccountFileStream, UserAccount);
-			m_AccountFileStream.Flush();
+			await Task.Run(() =>
+			{
+				m_AccountFileStream.SetLength(0);
+				m_AccountSerializer.Serialize(m_AccountFileStream, UserAccount);
+				m_AccountFileStream.Flush();
+			});
 		}
 
 		public void Dispose()
 		{
-			UpdateAccountDataFile();
+			SaveChanges();
 			m_AccountFileStream.Dispose();
 		}
-	}
+    }
 }
