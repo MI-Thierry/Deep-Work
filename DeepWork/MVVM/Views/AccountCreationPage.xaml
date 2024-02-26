@@ -6,10 +6,21 @@
     xmlns:local="using:DeepWork.MVVM.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
-    <Grid>
-
-    </Grid>
+	<Grid Margin="20">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<StackPanel Spacing="10">
+			<TextBox x:Name="firstName" ToolTipService.ToolTip="Enter your first name" 
+                 PlaceholderText="First Name"/>
+			<TextBox x:Name="lastName" ToolTipService.ToolTip="Enter your last name"
+                 PlaceholderText="Last Name"/>
+			<PasswordBox x:Name="password" ToolTipService.ToolTip="Enter strong password"
+                     PlaceholderText="Password"/>
+			<Button Content="Create Account" Click="CreateAccountButton_Click"/>
+		</StackPanel>
+	</Grid>
 </Page>

@@ -1,11 +1,13 @@
 ﻿using DeepWork.MVVM.Models;
 using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace DeepWork.Services
 {
-	public class AccountServices : IDisposable
+	public class AccountManagementServices : IDisposable
 	{
 		private readonly XmlSerializer m_AccountSerializer;
 		private Stream m_AccountFileStream;
@@ -14,7 +16,7 @@ namespace DeepWork.Services
 		public string AppDataPath { get; private set; }
 		public bool IsAccountAvailable { get; private set; }
 
-		public AccountServices()
+		public AccountManagementServices()
 		{
 			m_AccountSerializer = new XmlSerializer(typeof(Account));
 
@@ -30,20 +32,20 @@ namespace DeepWork.Services
 			// Checking account data xml file availablability
 			if (File.Exists(AccountFilePath))
 			{
-				IsAccountAvailable = true;
-
 				// Opening account data xml file
-				m_AccountFileStream = File.OpenWrite(AccountFilePath);
+				m_AccountFileStream = File.Open(AccountFilePath, FileMode.Open, FileAccess.ReadWrite);
 
 				// Deserializing account data xml file
 				try
 				{
 					UserAccount = (Account)m_AccountSerializer.Deserialize(m_AccountFileStream);
+					IsAccountAvailable = true;
 				}
 				catch (InvalidOperationException)
 				{
 					m_AccountFileStream.Dispose();
 					File.Delete(AccountFilePath);
+					IsAccountAvailable = false;
 				}
 			}
 			else
@@ -53,15 +55,40 @@ namespace DeepWork.Services
 			}
 		}
 
-		public void CreateAccount(Account usrAccount)
+		public void CreateAccount(string username, string password)
 		{
-			UserAccount = usrAccount;
+			SHA1 sha1 = SHA1.Create();
+			byte[] psw = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
+			UserAccount = new Account
+			{
+				Username = username,
+				Password = Encoding.UTF8.GetString(psw)
+			};
 			m_AccountFileStream = File.Create(AccountFilePath);
+			UpdateAccountDataFile();
+		}
+
+		public void AddLongTask(LongTask task)
+		{
+			UserAccount.LongTasks.Add(task);
+			UpdateAccountDataFile();
+		}
+
+		public void AddShortTask(LongTask parentTask, ShortTask task)
+		{
+			parentTask.Tasks.Add(task);
+			UpdateAccountDataFile();
+		}
+
+		private void UpdateAccountDataFile()
+		{
 			m_AccountSerializer.Serialize(m_AccountFileStream, UserAccount);
+			m_AccountFileStream.Flush();
 		}
 
 		public void Dispose()
 		{
+			UpdateAccountDataFile();
 			m_AccountFileStream.Dispose();
 		}
 	}

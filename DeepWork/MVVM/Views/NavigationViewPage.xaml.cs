@@ -36,7 +36,7 @@ namespace DeepWork.MVVM.Views
             ContentFrame.Navigated += ContentFrame_Navigated;
 
             // Load the navigation view default page
-            AccountServices services = App.ServiceProvider.GetRequiredService<AccountServices>();
+            AccountManagementServices services = App.ServiceProvider.GetRequiredService<AccountManagementServices>();
             if (services.IsAccountAvailable)
             {
                 NavView.SelectedItem = NavView.MenuItems[0];

@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Xml.Serialization;
 
 namespace DeepWork.MVVM.Models
 {
     [Serializable]
     public class Account
     {
-        public string AccountName { get; set; }
-        public List<LongTask> LongTasks { get; set; }
-        public void AddLongTask(LongTask task)
-        {
-            LongTasks.Add(task);
-        }
+        [XmlAttribute]
+        public string Username { get; set; }
+
+        [XmlAttribute]
+        public string Password { get; set; }
+
+        [XmlArray]
+        public ObservableCollection<LongTask> LongTasks { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace DeepWork
         {
             // Initializing application's service provider.
             IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<AccountServices>();
+            services.AddSingleton<AccountManagementServices>();
             ServiceProvider = services.BuildServiceProvider();
 
             // Create the MainWindow.
