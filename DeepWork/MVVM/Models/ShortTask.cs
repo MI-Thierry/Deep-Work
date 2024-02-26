@@ -11,5 +11,8 @@ namespace DeepWork.MVVM.Models
 
         [XmlAttribute]
         public string Name { get; set; }
+
+        [XmlAttribute]
+        public DateTime FinishDate { get; set; }
     }
 }

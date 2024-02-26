@@ -1,5 +1,6 @@
 ﻿using DeepWork.MVVM.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -88,14 +89,40 @@ namespace DeepWork.Services
 		public void FinishShortTask(LongTask parentTask, string name)
 		{
 			ShortTask taskToFinish = parentTask.RunningTasks.FirstOrDefault(task => task.Name == name);
+			
+			if (parentTask.MaxDuration < taskToFinish.Duration)
+				parentTask.MaxDuration = taskToFinish.Duration;
+			taskToFinish.FinishDate = DateTime.Now;
 
 			parentTask.RunningTasks.Remove(taskToFinish);
 			parentTask.FinishedTasks.Add(taskToFinish);
 
-			if (parentTask.MaxDuration < taskToFinish.Duration)
-				parentTask.MaxDuration = taskToFinish.Duration;
+			SaveChanges();
+		}
 
-			SaveChanges() ;
+		public List<TaskHistory> GetAccountHistory()
+		{
+			List<TaskHistory> tasksHistoryTree = new();
+			foreach (var longTask in UserAccount.LongTasks)
+			{
+				TaskHistory task = new()
+				{
+					Type = TaskType.LongTask,
+					Name = longTask.Name,
+				};
+				foreach (var shortTask in longTask.FinishedTasks)
+				{
+					task.Childrens.Add(new TaskHistory
+					{
+						Name = shortTask.Name,
+						FinishDate = shortTask.FinishDate,
+						Type = TaskType.ShortTask
+					});
+				}
+				tasksHistoryTree.Add(task);
+			}
+
+			return tasksHistoryTree;
 		}
 
         public async void SaveChanges()
