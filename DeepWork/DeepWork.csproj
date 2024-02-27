@@ -19,6 +19,9 @@
     <None Remove="MVVM\Views\MonitoringPage.xaml" />
     <None Remove="MVVM\Views\NavigationViewPage.xaml" />
     <None Remove="MVVM\Views\SettingsPage.xaml" />
+    <None Remove="UserControls\DateSlider.xaml" />
+    <None Remove="UserControls\NumberInput.xaml" />
+    <None Remove="UserControls\TimeInputBox.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,7 +51,14 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVVM\ViewModels\" />
+    <Page Update="UserControls\TimeInputBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\NumberInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MVVM\Views\MonitoringPage.xaml">
@@ -82,6 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="MVVM\Views\NavigationViewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\DateSlider.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

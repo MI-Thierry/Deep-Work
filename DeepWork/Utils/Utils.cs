@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using WinRT.Interop;
 
@@ -41,5 +42,18 @@ namespace DeepWork.Utils
 			WindowId winId = Win32Interop.GetWindowIdFromWindow(hWnd);
 			return AppWindow.GetFromWindowId(winId);
 		}
-	}
+
+        public static async void WarningDialog(string message, XamlRoot xamlRoot)
+        {
+            ContentDialog TaskDialog = new ContentDialog
+            {
+                Title = "Warning",
+                Content = message,
+                CloseButtonText = "Ok",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = xamlRoot
+            };
+            _ = await TaskDialog.ShowAsync();
+        }
+    }
 }

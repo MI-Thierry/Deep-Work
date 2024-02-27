@@ -106,7 +106,7 @@ namespace DeepWork.MVVM.Views
             }
             else
             {
-                WarningDialog("Create account first.");
+                Utils.Utils.WarningDialog("Create account first.", Content.XamlRoot);
             }
         }
 
