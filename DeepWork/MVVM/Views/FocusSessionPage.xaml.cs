@@ -187,7 +187,10 @@ namespace DeepWork.MVVM.Views
 
         private void TaskList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedShortTask = e.AddedItems.First() as ShortTask;
+            if (e.AddedItems.Any())
+                SelectedShortTask = e.AddedItems.First() as ShortTask;
+            else
+                SelectedShortTask = null;
         }
     }
 }

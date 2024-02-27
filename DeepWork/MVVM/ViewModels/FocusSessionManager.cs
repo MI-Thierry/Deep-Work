@@ -53,7 +53,7 @@ namespace DeepWork.MVVM.ViewModels
             CurrentBreakCount = TotalBreakCount = CurrentFocusCount - 1;
             SessionDuration = duration;
             SessionType = SessionType.Focus;
-            Timer = new Timer(new TimerCallback(TimerTick), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            Timer = new Timer(new TimerCallback(TimerTick), null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
         }
 
         private void TimerTick(object state)
@@ -113,7 +113,7 @@ namespace DeepWork.MVVM.ViewModels
             MediaPlayer mediaPlayer = new()
             {
                 Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/alarm1.wav")),
-                Volume = 5
+                Volume = 5,
             };
             mediaPlayer.Play();
         }

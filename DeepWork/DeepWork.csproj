@@ -12,6 +12,9 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Assets\alarm1.wav" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="MVVM\Views\AccountCreationPage.xaml" />
     <None Remove="MVVM\Views\FocusSessionPage.xaml" />
     <None Remove="MVVM\Views\HistoryPage.xaml" />
@@ -49,6 +52,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Assets\alarm1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\TimeInputBox.xaml">
