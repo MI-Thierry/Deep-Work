@@ -16,7 +16,7 @@ namespace DeepWork.MVVM.Views
 
         private void CreateAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            AccountManagementServices services = App.ServiceProvider.GetRequiredService<AccountManagementServices>();
+            AccountManagementServices services = App._serviceProvider.GetRequiredService<AccountManagementServices>();
             string name = firstName.Text + " " + lastName.Text;
             string psw = password.Password;
             services.CreateAccount(name, psw);

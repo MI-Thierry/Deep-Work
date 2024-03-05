@@ -6,7 +6,7 @@ using System.Threading;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 
-namespace DeepWork.MVVM.ViewModels
+namespace DeepWork.ViewModels
 {
     public enum SessionType
     {

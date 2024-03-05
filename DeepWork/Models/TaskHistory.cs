@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeepWork.MVVM.Models
+namespace DeepWork.Models
 {
     public enum TaskType
     {

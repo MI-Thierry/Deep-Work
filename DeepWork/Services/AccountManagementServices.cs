@@ -1,4 +1,4 @@
-﻿using DeepWork.MVVM.Models;
+﻿using DeepWork.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace DeepWork.Services
 {
-	public class AccountManagementServices : IDisposable
+    public class AccountManagementServices : IDisposable
 	{
 		private readonly XmlSerializer m_AccountSerializer;
 		private Stream m_AccountFileStream;

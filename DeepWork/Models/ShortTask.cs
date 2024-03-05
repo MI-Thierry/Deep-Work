@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace DeepWork.MVVM.Models
+namespace DeepWork.Models
 {
     [Serializable]
-	public class ShortTask
-	{
+    public class ShortTask
+    {
         [XmlAttribute]
         public TimeSpan Duration { get; set; }
 

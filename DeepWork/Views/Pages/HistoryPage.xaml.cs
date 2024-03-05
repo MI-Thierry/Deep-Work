@@ -1,4 +1,4 @@
-using DeepWork.MVVM.Models;
+using DeepWork.Models;
 using DeepWork.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
@@ -18,7 +18,7 @@ namespace DeepWork.MVVM.Views
 
         private void Page_Loading(FrameworkElement sender, object args)
         {
-            AccountManagementServices accountManager = App.ServiceProvider
+            AccountManagementServices accountManager = App._serviceProvider
                 .GetRequiredService<AccountManagementServices>();
 
             if (accountManager.IsAccountAvailable)

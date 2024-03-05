@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace DeepWork.MVVM.Models
+namespace DeepWork.Models
 {
     [Serializable]
     public class LongTask
@@ -23,9 +23,9 @@ namespace DeepWork.MVVM.Models
         public DateTime EndDate { get; set; }
 
         [XmlArray]
-        public ObservableCollection<ShortTask> RunningTasks { get; set; } = new();
+        public List<ShortTask> RunningTasks { get; set; } = new();
 
         [XmlArray]
-        public ObservableCollection<ShortTask> FinishedTasks { get; set; } = new();
+        public List<ShortTask> FinishedTasks { get; set; } = new();
     }
 }

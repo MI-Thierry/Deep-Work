@@ -12,16 +12,22 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Views\Pages\**" />
+    <EmbeddedResource Remove="Views\Pages\**" />
+    <None Remove="Views\Pages\**" />
+    <Page Remove="Views\Pages\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="Assets\alarm1.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="MVVM\Views\AccountCreationPage.xaml" />
-    <None Remove="MVVM\Views\FocusSessionPage.xaml" />
-    <None Remove="MVVM\Views\HistoryPage.xaml" />
-    <None Remove="MVVM\Views\LongTasksPage.xaml" />
-    <None Remove="MVVM\Views\MonitoringPage.xaml" />
-    <None Remove="MVVM\Views\NavigationViewPage.xaml" />
-    <None Remove="MVVM\Views\SettingsPage.xaml" />
+    <None Remove="Views\AccountCreationPage.xaml" />
+    <None Remove="Views\FocusSessionPage.xaml" />
+    <None Remove="Views\HistoryPage.xaml" />
+    <None Remove="Views\LongTasksPage.xaml" />
+    <None Remove="Views\MonitoringPage.xaml" />
+    <None Remove="Views\NavigationViewPage.xaml" />
+    <None Remove="Views\SettingsPage.xaml" />
     <None Remove="UserControls\DateSlider.xaml" />
     <None Remove="UserControls\NumberInput.xaml" />
     <None Remove="UserControls\TimeInputBox.xaml" />
@@ -38,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WinUI" Version="2.0.0-rc2.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
@@ -69,44 +76,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="MVVM\Views\MonitoringPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="MVVM\Views\LongTasksPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="MVVM\Views\FocusSessionPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="MVVM\Views\HistoryPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="MVVM\Views\SettingsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="MVVM\Views\AccountCreationPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="MVVM\Views\NavigationViewPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="UserControls\DateSlider.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Pages\" />
+    <Folder Include="ViewModels\Windows\" />
+    <Folder Include="Views\Windows\" />
   </ItemGroup>
 
   <!-- 
@@ -117,4 +94,7 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
+  <ItemGroup>
+    <PRIResource Remove="Views\Pages\**" />
+  </ItemGroup>
 </Project>

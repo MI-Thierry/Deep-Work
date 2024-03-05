@@ -1,4 +1,4 @@
-using DeepWork.MVVM.Models;
+using DeepWork.Models;
 using DeepWork.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
@@ -19,7 +19,7 @@ namespace DeepWork.MVVM.Views
         public LongTasksPage()
         {
             // Getting long tasks from account management services
-            AccountManager = App.ServiceProvider.GetRequiredService<AccountManagementServices>();
+            AccountManager = App._serviceProvider.GetRequiredService<AccountManagementServices>();
             LongTasks = AccountManager.UserAccount.LongTasks;
             CurrentShortTasks = new ObservableCollection<ShortTask>();
 

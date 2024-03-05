@@ -1,6 +1,6 @@
-using DeepWork.MVVM.Models;
-using DeepWork.MVVM.ViewModels;
+using DeepWork.Models;
 using DeepWork.Services;
+using DeepWork.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -28,7 +28,7 @@ namespace DeepWork.MVVM.Views
 
         public FocusSessionPage()
         {
-            m_AccountManager = App.ServiceProvider.GetRequiredService<AccountManagementServices>();
+            m_AccountManager = App._serviceProvider.GetRequiredService<AccountManagementServices>();
             LongTasks = m_AccountManager.UserAccount.LongTasks;
             ShortTasks = new ObservableCollection<ShortTask>();
 

@@ -1,4 +1,5 @@
 ﻿using DeepWork.Services;
+using DeepWork.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using System;
@@ -7,10 +8,21 @@ namespace DeepWork
 {
     public partial class App : Application
     {
-        public static IServiceProvider ServiceProvider { get; private set; }
+        private INavigationWindow _window;
+        private static IServiceProvider _serviceProvider;
         public App()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// It gets the services from service provider
+        /// </summary>
+        /// <typeparam name="T">Type of service you want to get</typeparam>
+        /// <returns>Requested service</returns>
+        public static T GetService<T>()
+        {
+            return _serviceProvider.GetService<T>();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
@@ -18,13 +30,13 @@ namespace DeepWork
             // Initializing application's service provider.
             IServiceCollection services = new ServiceCollection();
             services.AddSingleton<AccountManagementServices>();
-            ServiceProvider = services.BuildServiceProvider();
+            services.AddTransient<INavigationWindow, MainWindow>();
+            _serviceProvider = services.BuildServiceProvider();
 
             // Create the MainWindow.
-            m_window = new MainWindow();
-            m_window.Activate();
+            _window = GetService<INavigationWindow>();
+            _window.ActivateWindow();
         }
 
-        private Window m_window;
     }
 }
