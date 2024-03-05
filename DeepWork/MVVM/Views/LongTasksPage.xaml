@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DeepWork.MVVM.Views.LongTasksPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DeepWork.MVVM.Views"
+	xmlns:utils="using:DeepWork.Utils"
+	xmlns:models="using:DeepWork.MVVM.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+	<Page.Resources>
+		<Style TargetType="TextBlock" x:Key="TextBlockStyle">
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="Foreground" Value="{StaticResource AccentAAFillColorDefaultBrush}"/>
+		</Style>
+		<Style TargetType="FontIcon" x:Key="FontIconStyle">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontFamily" Value="Segoe Fluent Icons"/>
+			<Setter Property="Foreground" Value="{StaticResource AccentAAFillColorDefaultBrush}"/>
+		</Style>
+		<utils:TimeDateToStringConverter x:Key="TimeDateToStringConverter"/>
+		<!--Long Tasks Template That will be used in TreeView-->
+		<DataTemplate x:Key="LongTaskTemplate" x:DataType="models:LongTask">
+			<ListViewItem Background="{StaticResource ListBoxItemPointerOverBackgroundThemeBrush}"
+                      BorderThickness="1">
+				<Grid Margin="5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="18*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<CheckBox Tag="{x:Bind Name}" Margin="-10 0 0 0" Grid.RowSpan="2" 
+						  Checked="EndLongTaskCheckBox_Click"/>
+					<TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind Name}"/>
+					<StackPanel Grid.Column="1" Grid.Row="1" 
+							Orientation="Horizontal" Spacing="2">
+						<TextBlock Text="Tasks :" Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="{x:Bind RunningTasks.Count}" Style="{StaticResource TextBlockStyle}"/>
+						<FontIcon Glyph="&#xe738;" Style="{StaticResource FontIconStyle}"/>
+						<FontIcon Glyph="&#xe787;" Style="{StaticResource FontIconStyle}"/>
+						<TextBlock Text="From" Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="{x:Bind StartDate, 
+							Converter={StaticResource TimeDateToStringConverter}}" 
+                               Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="To" Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="{x:Bind EndDate, 
+							Converter={StaticResource TimeDateToStringConverter}}"
+                               Style="{StaticResource TextBlockStyle}"/>
+					</StackPanel>
+				</Grid>
+			</ListViewItem>
+		</DataTemplate>
+		<!--Short Tasks Template that will be used in ListView-->
+		<DataTemplate x:Key="ShortTaskTemplate" x:DataType="models:ShortTask">
+			<ListViewItem Background="{StaticResource ListBoxItemPointerOverBackgroundThemeBrush}"
+                      BorderThickness="1">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="10*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<Button Tag="{x:Bind Name}" Grid.Column="2" Grid.RowSpan="2" Background="Transparent" Click="EditTaskButton_Click" BorderThickness="0">
+						<FontIcon Glyph="&#xe70f;" FontSize="12"/>
+					</Button>
+					<CheckBox Grid.RowSpan="2" Tag="{x:Bind Name}" IsChecked="False" 
+						Checked="FinishTaskCheckBox_Checked"/>
+					<TextBlock Grid.Column="1" Text="{x:Bind Name}"/>
+					<StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="2" Padding="2">
+						<TextBlock Text="Duration of " Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="{x:Bind Duration.TotalMinutes}" Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="Minutes" Style="{StaticResource TextBlockStyle}"/>
+					</StackPanel>
+				</Grid>
+			</ListViewItem>
+		</DataTemplate>
+	</Page.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+
+		<!--Title or header-->
+		<StackPanel Orientation="Horizontal" Margin="15" Spacing="5">
+			<FontIcon Glyph="&#xe9d5;" FontFamily="Segoe Fluent Icons" FontSize="30"/>
+			<TextBlock Text="Long Tasks" FontSize="30" FontWeight="Bold"/>
+		</StackPanel>
+
+		<!--Long Tasks List-->
+		<ScrollViewer Grid.Row="1">
+			<ListView x:Name="LongTaskList" 
+			  ItemsSource="{x:Bind LongTasks}" 
+			  ItemTemplate="{StaticResource LongTaskTemplate}"
+			  SelectionMode="Single"
+			  SelectionChanged="ContListView_SelectionChanged"/>
+		</ScrollViewer>
+		<!--Tasks Viewer-->
+		<Grid x:Name="TaskViewer" Grid.Column="1" Grid.RowSpan="3"
+		  Visibility="Collapsed" ColumnSpacing="5" Width="300"
+		  Background="{StaticResource LayerOnMicaBaseAltFillColorSecondaryBrush}">
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid CornerRadius="5" Margin="5" >
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+				<Button HorizontalAlignment="Right" Background="Transparent"
+						Width="35" Height="35" Margin="5" Click="ClosePaneButton_Click">
+					<FontIcon Glyph="&#xe711;" FontFamily="Segoe Fluent Icons" FontSize="10"/>
+				</Button>
+				<TextBlock Grid.Row="1" x:Name="TasksViewerHeader" TextWrapping="Wrap" 
+                       Padding="10" FontSize="20" FontWeight="Bold"/>
+				<ScrollViewer Grid.Row="2">
+					<ListView ItemsSource="{x:Bind CurrentShortTasks}" 
+						  ItemTemplate="{StaticResource ShortTaskTemplate}"
+						  SelectionChanged="TaskListView_SelectionChanged"/>
+				</ScrollViewer>
+			</Grid>
+			<AppBarButton Grid.Row="1" Icon="Add" Label="Add Task" 
+					  BorderBrush="{StaticResource AccentAAFillColorDefaultBrush}" 
+					  BorderThickness="1" HorizontalAlignment="Left" 
+					  Click="AddTaskButton_Click"/>
+		</Grid>
+
+		<!--Add and Edit continuous Task Buttons-->
+		<StackPanel Grid.Row="2" Orientation="Horizontal" 
+				CornerRadius="{StaticResource ControlCornerRadius}" 
+				Background="{StaticResource LayerOnMicaBaseAltFillColorSecondaryBrush}" 
+				BorderBrush="{StaticResource AccentAAFillColorDefaultBrush}" 
+				BorderThickness="1" 
+				HorizontalAlignment="Right" Margin="10">
+			<AppBarButton Icon="Add" Label="Add" Click="AddContButton_Click"/>
+		</StackPanel>
+	</Grid>
+</Page>

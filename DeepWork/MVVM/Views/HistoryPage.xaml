@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DeepWork.MVVM.Views.HistoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DeepWork.MVVM.Views"
+	xmlns:utils="using:DeepWork.Utils"
+	xmlns:models="using:DeepWork.MVVM.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+	Loading="Page_Loading">
+
+	<Page.Resources>
+		<!--TimeDate Converter-->
+		<utils:TimeDateToStringConverter x:Key="TimeDateToStringConverter"/>
+
+		<!--TextBlock Style-->
+		<Style TargetType="TextBlock" x:Key="TextBlockStyle">
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="Foreground" Value="{StaticResource AccentAAFillColorDefaultBrush}"/>
+		</Style>
+
+		<!--LongTasks Template to use on the history page-->
+		<DataTemplate x:Key="LongTaskTemplate" x:DataType="models:TaskHistory">
+			<TreeViewItem AutomationProperties.Name="{x:Bind Name}" ItemsSource="{x:Bind Childrens}" 
+					  Background="{StaticResource ListBoxItemPointerOverBackgroundThemeBrush}">
+				<StackPanel>
+					<TextBlock Text="{x:Bind Name}"/>
+					<StackPanel Orientation="Horizontal" Spacing="2">
+						<TextBlock Text="Finished tasks is" Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="{x:Bind Childrens.Count}" 
+							   Style="{StaticResource TextBlockStyle}"/>
+					</StackPanel>
+				</StackPanel>
+			</TreeViewItem>
+		</DataTemplate>
+
+		<!--Short Tasks Template to use on the history page-->
+		<DataTemplate x:Key="ShortTaskTemplate" x:DataType="models:TaskHistory">
+			<TreeViewItem AutomationProperties.Name="{x:Bind Name}">
+				<StackPanel>
+					<TextBlock Text="{x:Bind Name}"/>
+					<StackPanel Orientation="Horizontal" Spacing="2">
+						<TextBlock Text="Finished on" Style="{StaticResource TextBlockStyle}"/>
+						<TextBlock Text="{x:Bind FinishDate, 
+							   Converter={StaticResource TimeDateToStringConverter}}"
+							   Style="{StaticResource TextBlockStyle}"/>
+					</StackPanel>
+				</StackPanel>
+			</TreeViewItem>
+		</DataTemplate>
+		<local:TreeTemplateSelector x:Key="TreeTemplateSelector"
+								LongTaskTemplate="{StaticResource LongTaskTemplate}"
+								ShortTaskTemplate="{StaticResource ShortTaskTemplate}"/>
+	</Page.Resources>
+
+	<Grid Margin="5">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+			<FontIcon Glyph="&#xecc5;" FontFamily="Segoe Fluent Icons" FontSize="30"/>
+			<TextBlock Text="History" FontSize="30" FontWeight="Bold"/>
+		</StackPanel>
+		<ScrollViewer Grid.Row="1">
+			<TreeView ItemsSource="{x:Bind TasksHistoryTree}" 
+			  ItemTemplateSelector="{StaticResource TreeTemplateSelector}"/>
+		</ScrollViewer>
+	</Grid>
+</Page>
