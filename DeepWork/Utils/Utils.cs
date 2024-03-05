@@ -36,12 +36,6 @@ namespace DeepWork.Utils
 			var firstDate = FirstDateOfYear(date);
 			return firstDate.AddDays(DateTime.IsLeapYear(firstDate.Year) ? 365 : 364);
 		}
-		public static AppWindow GetAppWindowForCurrentWindow(Window window)
-		{
-			IntPtr hWnd = WindowNative.GetWindowHandle(window);
-			WindowId winId = Win32Interop.GetWindowIdFromWindow(hWnd);
-			return AppWindow.GetFromWindowId(winId);
-		}
 
         public static async void WarningDialog(string message, XamlRoot xamlRoot)
         {
