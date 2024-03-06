@@ -10,13 +10,13 @@
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="31"/>
+			<RowDefinition Height="45"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+		<StackPanel Orientation="Horizontal" Spacing="5" Margin="5" VerticalAlignment="Center">
 			<ImageIcon Source="ms-appx:///Assets/StoreLogo.scale-400.png" Width="20" Height="20"/>
 			<TextBlock Text="{x:Bind Title}"/>
 		</StackPanel>
-		<Frame x:Name="WindowFrame"/>
+		<Frame Grid.Row="1" x:Name="WindowFrame"/>
 	</Grid>
 </Window>

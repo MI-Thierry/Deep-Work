@@ -1,12 +1,11 @@
 using Microsoft.UI.Xaml.Controls;
 
-namespace DeepWork.MVVM.Views
+namespace DeepWork.Views.Pages;
+
+public sealed partial class SettingsPage : Page
 {
-    public sealed partial class SettingsPage : Page
+    public SettingsPage()
     {
-        public SettingsPage()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

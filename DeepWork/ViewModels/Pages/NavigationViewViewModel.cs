@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DeepWork.Views.Pages;
+using Microsoft.UI.Xaml.Controls;
+using System.Collections.ObjectModel;
 
-namespace DeepWork.ViewModels.Pages
+namespace DeepWork.ViewModels.Pages;
+
+public partial class NavigationViewViewModel : ObservableObject
 {
-    internal class NavigationViewViewModel
-    {
-    }
+	[ObservableProperty]
+	private ObservableCollection<NavigationViewItem> _menuItems = new()
+	{
+		new NavigationViewItem
+		{
+			Content = "Home",
+			Icon = new FontIcon(){Glyph="\uea8a"},
+			Tag = typeof(HomePage)
+		},
+	};
 }

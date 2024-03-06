@@ -12,10 +12,11 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Views\Pages\**" />
-    <EmbeddedResource Remove="Views\Pages\**" />
-    <None Remove="Views\Pages\**" />
-    <Page Remove="Views\Pages\**" />
+    <Compile Remove="Views\Pages\AccountCreationPage.xaml.cs" />
+    <Compile Remove="Views\Pages\FocusSessionPage.xaml.cs" />
+    <Compile Remove="Views\Pages\HistoryPage.xaml.cs" />
+    <Compile Remove="Views\Pages\LongTasksPage.xaml.cs" />
+    <Compile Remove="Views\Pages\MonitoringPage.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Assets\alarm1.wav" />
@@ -27,10 +28,23 @@
     <None Remove="Views\LongTasksPage.xaml" />
     <None Remove="Views\MonitoringPage.xaml" />
     <None Remove="Views\NavigationViewPage.xaml" />
+    <None Remove="Views\Pages\AccountCreationPage.xaml" />
+    <None Remove="Views\Pages\FocusSessionPage.xaml" />
+    <None Remove="Views\Pages\HistoryPage.xaml" />
+    <None Remove="Views\Pages\HomePage.xaml" />
+    <None Remove="Views\Pages\LongTasksPage.xaml" />
+    <None Remove="Views\Pages\MonitoringPage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
     <None Remove="UserControls\DateSlider.xaml" />
     <None Remove="UserControls\NumberInput.xaml" />
     <None Remove="UserControls\TimeInputBox.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Views\Pages\AccountCreationPage.xaml" />
+    <Page Remove="Views\Pages\FocusSessionPage.xaml" />
+    <Page Remove="Views\Pages\HistoryPage.xaml" />
+    <Page Remove="Views\Pages\LongTasksPage.xaml" />
+    <Page Remove="Views\Pages\MonitoringPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +78,9 @@
     <None Update="Assets\alarm1.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Pages\HomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\TimeInputBox.xaml">
@@ -81,7 +98,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\Pages\" />
     <Folder Include="ViewModels\Windows\" />
     <Folder Include="Views\Windows\" />
   </ItemGroup>
@@ -94,7 +110,4 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
-  <ItemGroup>
-    <PRIResource Remove="Views\Pages\**" />
-  </ItemGroup>
 </Project>
