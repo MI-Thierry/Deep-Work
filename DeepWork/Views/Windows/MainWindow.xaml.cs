@@ -92,7 +92,7 @@ public sealed partial class MainWindow : INavigationWindow
 
     private void SetConfigurationSourceTheme()
     {
-        switch (((FrameworkElement)this.Content).ActualTheme)
+		switch (((FrameworkElement)this.Content).ActualTheme)
         {
             case ElementTheme.Dark:
                 m_configurationSource.Theme = SystemBackdropTheme.Dark;

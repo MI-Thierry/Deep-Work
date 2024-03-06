@@ -1,22 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="DeepWork.Views.Pages.SettingsPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:DeepWork.Views.Pages"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+	x:Class="DeepWork.Views.Pages.SettingsPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:DeepWork.Views.Pages"
+	xmlns:viewModels="using:DeepWork.ViewModels.Pages"
+	xmlns:utils="using:DeepWork.Utils"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
+	
+	<Page.DataContext>
+		<viewModels:SettingsViewModel DispatcherQueue="{x:Bind DispatcherQueue}"/>
+	</Page.DataContext>
+	
+	<Page.Resources>
+		<utils:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+	</Page.Resources>
 
-	<StackPanel Margin="20" Spacing="10">
-		<TextBlock Text="About Deep Work" FontSize="25" FontWeight="Bold"/>
-		<TextBlock Text="Version 1.1.2305.1"/>
-		<StackPanel Orientation="Horizontal" Spacing="5">
-			<Grid>
-				<Ellipse Width="15" Height="15" StrokeThickness="1" Stroke="White" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-				<TextBlock Text="c" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-			</Grid>
-			<TextBlock Text="Advanced Technology Engineering Company. All rights reserved"/>
-		</StackPanel>
+	<StackPanel Margin="10">
+		<TextBlock FontSize="20"
+				   FontWeight="Medium"
+				   Text="Personalization" />
+		<TextBlock Margin="0 12 0 0" Text="Theme" />
+		<RadioButton Margin="0 12 0 0"
+					 Command="{Binding ChangeThemeCommand, Mode=OneWay}"
+					 CommandParameter="ThemeLight"
+					 Content="Light"
+					 GroupName="themeSelect"
+					 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
+		
+		<RadioButton Margin="0 8 0 0"
+					 Command="{Binding ChangeThemeCommand, Mode=OneWay}"
+					 CommandParameter="ThemeDark"
+					 Content="Dark"
+					 GroupName="themeSelect"
+					 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+
+		<TextBlock Margin="0 24 0 0"
+				   FontSize="20"
+				   FontWeight="Medium"
+				   Text="About Deep Work" />
+
+		<TextBlock Margin="0 12 0 0" Text="{Binding AppVersion, Mode=OneWay}"/>
 	</StackPanel>
 </Page>

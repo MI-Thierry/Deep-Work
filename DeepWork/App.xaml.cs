@@ -3,6 +3,7 @@ using DeepWork.ViewModels.Pages;
 using DeepWork.Views.Pages;
 using DeepWork.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Animation;
 using System;
