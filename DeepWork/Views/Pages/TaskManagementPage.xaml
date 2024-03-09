@@ -9,7 +9,17 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	DataContext="{x:Bind ViewModel}"
-	Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<Page.Resources>
+		<Style TargetType="Button" x:Key="FooterButtonStyle" BasedOn="{StaticResource DefaultButtonStyle}">
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="FontFamily" Value="Segoe Fluent Icons"/>
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Width" Value="40"/>
+		</Style>
+	</Page.Resources>
 	
 	<SplitView x:Name="splitView" DisplayMode="Overlay" PanePlacement="Right">
 		<SplitView.Pane>
@@ -24,7 +34,7 @@
 					<ListView ItemsSource="{Binding ShortTasks}">
 						<ListView.ItemTemplate>
 							<DataTemplate x:DataType="viewModels:ShortTaskViewModel">
-								<ListViewItem Background="{StaticResource ListBoxItemPointerOverBackgroundThemeBrush}" BorderThickness="1">
+								<ListViewItem>
 									<Grid>
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="1*"/>
@@ -36,7 +46,7 @@
 											<Paragraph>
 												<Run Text="{x:Bind Name}"/>
 											</Paragraph>
-											<Paragraph Foreground="{StaticResource AccentAAFillColorDefaultBrush}" FontSize="12">
+											<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 												<Run Text="Duration of"/>
 												<Run Text="{x:Bind Duration.TotalMinutes, Mode=OneWay}"/>
 												<Run Text="Minutes"/>
@@ -49,10 +59,10 @@
 					</ListView>
 				</ScrollViewer>
 				
-				<Border Grid.Row="2" Background="{StaticResource LayerFillColorDefaultBrush}" Height="50" Width="90" CornerRadius="5" BorderBrush="{StaticResource SurfaceStrokeColorDefaultBrush}" BorderThickness="1" HorizontalAlignment="Right" Margin="5">
+				<Border Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Height="50" Width="90" CornerRadius="5" BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}" BorderThickness="1" HorizontalAlignment="Right" Margin="5">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<Button Content="&#xE710;" BorderThickness="0" Background="Transparent" FontFamily="Segoe Fluent Icons" Height="40" Width="40" Click="AddShortTaskButton_Click"/>
-						<Button Content="&#xE70F;" BorderThickness="0" Background="Transparent" FontFamily="Segoe Fluent Icons" Height="40" Width="40" Click="EditShortTaskButton_Click"/>
+						<Button Content="&#xE710;" Style="{StaticResource FooterButtonStyle}" Click="AddShortTaskButton_Click"/>
+						<Button Content="&#xE70F;" Style="{StaticResource FooterButtonStyle}" Click="EditShortTaskButton_Click"/>
 					</StackPanel>
 				</Border>
 				
@@ -71,8 +81,7 @@
 							  SelectionChanged="LongTasksListView_SelectionChanged">
 					<ListView.ItemTemplate>
 						<DataTemplate x:DataType="viewModels:LongTaskViewModel">
-							<ListViewItem Background="{StaticResource ListBoxItemPointerOverBackgroundThemeBrush}"
-											  BorderThickness="1">
+							<ListViewItem>
 								<Grid Margin="5">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="1*"/>
@@ -85,7 +94,7 @@
 										<Paragraph FontSize="13">
 											<Run Text="{x:Bind Name}"/>
 										</Paragraph>
-										<Paragraph Foreground="{StaticResource AccentAAFillColorDefaultBrush}" FontSize="12">
+										<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 											<Run Text="Tasks:"/>
 											<Run Text="{x:Bind TaskCount}"/>
 											<Run Text="&#xe738;&#xe787;" FontFamily="Segoe Fluent Icons" FontSize="14"/>
@@ -102,10 +111,10 @@
 				</ListView>
 			</ScrollViewer>
 
-			<Border Grid.Row="2" Background="{StaticResource LayerFillColorDefaultBrush}" Height="50" Width="90" CornerRadius="5" BorderBrush="{StaticResource SurfaceStrokeColorDefaultBrush}" BorderThickness="1" HorizontalAlignment="Right" Margin="5">
+			<Border Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Height="50" Width="90" CornerRadius="5" BorderBrush="{StaticResource SurfaceStrokeColorDefaultBrush}" BorderThickness="1" HorizontalAlignment="Right" Margin="5">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-					<Button Content="&#xE710;" BorderThickness="0" Background="Transparent" FontFamily="Segoe Fluent Icons" Height="40" Width="40" Click="AddLongTaskButton_Click"/>
-					<Button Content="&#xE70F;" BorderThickness="0" Background="Transparent" FontFamily="Segoe Fluent Icons" Height="40" Width="40" Click="EditLongTaskButton_Click"/>
+					<Button Content="&#xE710;" Style="{StaticResource FooterButtonStyle}" Click="AddLongTaskButton_Click"/>
+					<Button Content="&#xE70F;" Style="{StaticResource FooterButtonStyle}" Click="EditLongTaskButton_Click"/>
 				</StackPanel>
 			</Border>
 		</Grid>

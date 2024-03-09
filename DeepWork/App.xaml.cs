@@ -12,10 +12,11 @@ namespace DeepWork
 {
 	public partial class App : Application
 	{
-		private INavigationWindow _window;
+		public INavigationWindow Window { get; private set; }
 		private static IServiceProvider _serviceProvider;
 		public App()
 		{
+			// Todo: Get theme from AccountManagementService.
 			this.InitializeComponent();
 		}
 
@@ -43,10 +44,9 @@ namespace DeepWork
 			_serviceProvider = services.BuildServiceProvider();
 
 			// Create the MainWindow.
-			_window = GetService<INavigationWindow>();
-			_window.ActivateWindow();
-			_window.Navigate(typeof(NavigationViewPage), null, new EntranceNavigationTransitionInfo());
+			Window = GetService<INavigationWindow>();
+			Window.ActivateWindow();
+			Window.Navigate(typeof(NavigationViewPage), null, new EntranceNavigationTransitionInfo());
 		}
-
 	}
 }

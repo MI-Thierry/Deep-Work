@@ -13,7 +13,6 @@ public partial class NavigationViewViewModel : ObservableObject
 		new NavigationViewItem
 		{
 			Content = "Task Manager",
-			// Todo: Change this icon.
 			Icon = new FontIcon() { Glyph = "\uE9D5" },
 			Tag = typeof(TaskManagementPage)
 		}

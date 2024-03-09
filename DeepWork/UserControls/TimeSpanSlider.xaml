@@ -15,6 +15,19 @@
 			<Setter Property="HorizontalAlignment" Value="Center"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
+		
+		<Style TargetType="local:SelectableDisplay" x:Key="SelectableDisplayStyle" BasedOn="{StaticResource DefaultSelectableDisplayStyle}">
+			<Setter Property="FontSize" Value="44"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+
+		<Style TargetType="TextBlock" x:Key="TimeSpanSeparatorTextBlockStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="40"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+		</Style>
 	</UserControl.Resources>
 
 	<Grid Width="252">
@@ -27,24 +40,24 @@
 
 		<!--#region Buttons for changing the timespan -->
 		<StackPanel Orientation="Horizontal">
-			<Button Content="&#xE70E;" Click="UpButton_Click" Style="{StaticResource NavigationButtonStyle}" Tag="Hours"/>
-			<Button Content="&#xE70E;" Click="UpButton_Click" Style="{StaticResource NavigationButtonStyle}" Tag="Minutes"/>
-			<Button Content="&#xE70E;" Click="UpButton_Click" Style="{StaticResource NavigationButtonStyle}" Tag="Seconds"/>
+			<Button Content="&#xE70E;" Click="UpButton_Click" Style="{ThemeResource NavigationButtonStyle}" Tag="Hours"/>
+			<Button Content="&#xE70E;" Click="UpButton_Click" Style="{ThemeResource NavigationButtonStyle}" Tag="Minutes"/>
+			<Button Content="&#xE70E;" Click="UpButton_Click" Style="{ThemeResource NavigationButtonStyle}" Tag="Seconds"/>
 		</StackPanel>
 		<StackPanel Grid.Row="2" Orientation="Horizontal">
-			<Button Content="&#xE70D;" Click="DownButton_Click" Style="{StaticResource NavigationButtonStyle}" Tag="Hours"/>
-			<Button Content="&#xE70D;" Click="DownButton_Click" Style="{StaticResource NavigationButtonStyle}" Tag="Minutes"/>
-			<Button Content="&#xE70D;" Click="DownButton_Click" Style="{StaticResource NavigationButtonStyle}" Tag="Seconds"/>
+			<Button Content="&#xE70D;" Click="DownButton_Click" Style="{ThemeResource NavigationButtonStyle}" Tag="Hours"/>
+			<Button Content="&#xE70D;" Click="DownButton_Click" Style="{ThemeResource NavigationButtonStyle}" Tag="Minutes"/>
+			<Button Content="&#xE70D;" Click="DownButton_Click" Style="{ThemeResource NavigationButtonStyle}" Tag="Seconds"/>
 		</StackPanel>
 		<!--#endregion-->
 
-		<Border x:Name="DisplayBorder" Width="252" Grid.Row="1" Background="{StaticResource CardBackgroundFillColorDefaultBrush}" BorderThickness="0 0 0 2" BorderBrush="{StaticResource TextControlElevationBorderBrush}" CornerRadius="5" GotFocus="DisplayBorder_GotFocus" LostFocus="DisplayBorder_LostFocus">
+		<Border x:Name="DisplayBorder" Width="252" Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderThickness="1 1 1 2" BorderBrush="{StaticResource TextControlElevationBorderBrush}" CornerRadius="5" GotFocus="DisplayBorder_GotFocus" LostFocus="DisplayBorder_LostFocus">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3" Spacing="5">
-				<local:SelectableDisplay GroupName="SelectableDisplay" x:Name="HoursDisplay" FontSize="44" FontWeight="Bold" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Hours'), BindBack=ConvertHoursBackToTimeSpan, Mode=TwoWay}" Padding="10 2 5 2"/>
-				<TextBlock Text=":" VerticalAlignment="Center" FontSize="40" FontWeight="Bold"/>
-				<local:SelectableDisplay GroupName="SelectableDisplay" x:Name="MinutesDisplay" FontSize="44" FontWeight="Bold" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Minutes'), BindBack=ConvertMinutesBackToTimeSpan, Mode=TwoWay}" Padding="7.5 2 7.5 2"/>
-				<TextBlock Text=":" VerticalAlignment="Center" FontSize="40" FontWeight="Bold"/>
-				<local:SelectableDisplay GroupName="SelectableDisplay" x:Name="SecondDisplay" FontSize="44" FontWeight="Bold" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Seconds'), BindBack=ConvertSecondsBackToTimeSpan, Mode=TwoWay}" Padding="5 2 10 2"/>
+				<local:SelectableDisplay x:Name="HoursDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Hours'), BindBack=ConvertHoursBackToTimeSpan, Mode=TwoWay}" Padding="10 2 5 2"/>
+				<TextBlock Text=":" Style="{StaticResource TimeSpanSeparatorTextBlockStyle}"/>
+				<local:SelectableDisplay x:Name="MinutesDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Minutes'), BindBack=ConvertMinutesBackToTimeSpan, Mode=TwoWay}" Padding="7.5 2 7.5 2"/>
+				<TextBlock Text=":" Style="{StaticResource TimeSpanSeparatorTextBlockStyle}"/>
+				<local:SelectableDisplay x:Name="SecondDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Seconds'), BindBack=ConvertSecondsBackToTimeSpan, Mode=TwoWay}" Padding="5 2 10 2"/>
 			</StackPanel>
 		</Border>
 
@@ -52,9 +65,9 @@
 			<VisualStateGroup>
 				<VisualState x:Name="Focused">
 					<VisualState.Setters>
-						<Setter Target="DisplayBorder.BorderBrush" Value="{StaticResource TextControlElevationBorderFocusedBrush}"/>
+						<Setter Target="DisplayBorder.BorderBrush" Value="{ThemeResource TextControlElevationBorderFocusedBrush}"/>
+						<Setter Target="DisplayBorder.Background" Value="{ThemeResource SolidBackgroundFillColorBaseBrush}"/>
 						<Setter Target="DisplayBorder.BorderThickness" Value="2"/>
-						<Setter Target="DisplayBorder.Background" Value="{StaticResource SolidBackgroundFillColorBaseBrush}"/>
 					</VisualState.Setters>
 				</VisualState>
 				<VisualState x:Name="Unfocused"/>

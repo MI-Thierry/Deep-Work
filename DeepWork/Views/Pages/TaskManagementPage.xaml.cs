@@ -14,10 +14,7 @@ namespace DeepWork.Views.Pages
 		{
 			ViewModel = App.GetService<TaskManagementViewModel>();
 			this.InitializeComponent();
-			// Todo: Remove TimeDateToStringConverter
 		}
-
-		
 
 		private void LongTasksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
