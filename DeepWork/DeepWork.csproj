@@ -22,6 +22,7 @@
     <Content Remove="Assets\alarm1.wav" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="UserControls\TimeSpanSlider.xaml" />
     <None Remove="Views\AccountCreationPage.xaml" />
     <None Remove="Views\FocusSessionPage.xaml" />
     <None Remove="Views\HistoryPage.xaml" />
@@ -29,11 +30,14 @@
     <None Remove="Views\MonitoringPage.xaml" />
     <None Remove="Views\NavigationViewPage.xaml" />
     <None Remove="Views\Pages\AccountCreationPage.xaml" />
+    <None Remove="Views\Pages\AddLongTaskDialogPage.xaml" />
+    <None Remove="Views\Pages\AddShortTaskDialogPage.xaml" />
     <None Remove="Views\Pages\FocusSessionPage.xaml" />
     <None Remove="Views\Pages\HistoryPage.xaml" />
     <None Remove="Views\Pages\HomePage.xaml" />
     <None Remove="Views\Pages\LongTasksPage.xaml" />
     <None Remove="Views\Pages\MonitoringPage.xaml" />
+    <None Remove="Views\Pages\TaskManagementPage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
     <None Remove="UserControls\DateSlider.xaml" />
     <None Remove="UserControls\NumberInput.xaml" />
@@ -78,6 +82,18 @@
     <None Update="Assets\alarm1.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="UserControls\TimeSpanSlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Pages\AddShortTaskDialogPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Pages\AddLongTaskDialogPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Pages\TaskManagementPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Pages\HomePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
