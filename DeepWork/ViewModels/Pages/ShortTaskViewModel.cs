@@ -2,37 +2,36 @@
 using DeepWork.Models;
 using System;
 
-namespace DeepWork.ViewModels.Pages
+namespace DeepWork.ViewModels.Pages;
+
+public partial class ShortTaskViewModel : ObservableObject
 {
-	public partial class ShortTaskViewModel : ObservableObject
+	[ObservableProperty]
+	private TimeSpan _duration = TimeSpan.Zero;
+
+	[ObservableProperty]
+	private string _name = string.Empty;
+
+	[ObservableProperty]
+	private DateTimeOffset _finishDate = DateTime.Now;
+
+	public static implicit operator ShortTaskViewModel(ShortTask model)
 	{
-		public static implicit operator ShortTaskViewModel(ShortTask viewModel)
+		return new ShortTaskViewModel
 		{
-			return new ShortTaskViewModel
-			{
-				Name = viewModel.Name,
-				Duration = viewModel.Duration,
-				FinishDate = viewModel.FinishDate
-			};
-		}
+			Name = model.Name,
+			Duration = model.Duration,
+			FinishDate = model.FinishDate
+		};
+	}
 
-		public static implicit operator ShortTask(ShortTaskViewModel viewModel)
+	public static implicit operator ShortTask(ShortTaskViewModel viewModel)
+	{
+		return new ShortTask
 		{
-			return new ShortTask
-			{
-				Name = viewModel.Name,
-				Duration = viewModel.Duration,
-				FinishDate = viewModel.FinishDate
-			};
-		}
-
-		[ObservableProperty]
-		private TimeSpan _duration = TimeSpan.Zero;
-
-		[ObservableProperty]
-		private string _name = string.Empty;
-
-		[ObservableProperty]
-		private DateTime _finishDate = DateTime.Now;
+			Name = viewModel.Name,
+			Duration = viewModel.Duration,
+			FinishDate = viewModel.FinishDate
+		};
 	}
 }
