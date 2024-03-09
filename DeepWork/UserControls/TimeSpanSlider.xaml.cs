@@ -71,16 +71,19 @@ public sealed partial class TimeSpanSlider : UserControl
 		switch (part)
 		{
 			case TimeSpanParts.Hours:
+				HoursDisplay.Focus(FocusState.Keyboard);
 				TimeSpan += TimeSpan.FromHours(1);
 				HoursDisplay.IsSelected = true;
 				break;
 
 			case TimeSpanParts.Minutes:
+				MinutesDisplay.Focus(FocusState.Keyboard);
 				TimeSpan += TimeSpan.FromMinutes(1);
 				MinutesDisplay.IsSelected = true;
 				break;
 
 			case TimeSpanParts.Seconds:
+				SecondDisplay.Focus(FocusState.Keyboard);
 				TimeSpan += TimeSpan.FromSeconds(1);
 				SecondDisplay.IsSelected = true;
 				break;
@@ -88,7 +91,6 @@ public sealed partial class TimeSpanSlider : UserControl
 			default:
 				throw new InvalidOperationException("Unknown button tag.");
 		}
-		DisplayBorder.Focus(FocusState.Programmatic);
 	}
 
 	private void DownButton_Click(object sender, RoutedEventArgs e)
@@ -98,23 +100,25 @@ public sealed partial class TimeSpanSlider : UserControl
 		switch (part)
 		{
 			case TimeSpanParts.Hours:
+				HoursDisplay.Focus(FocusState.Keyboard);
 				TimeSpan -= TimeSpan.FromHours(1);
 				HoursDisplay.IsSelected = true;
 				break;
 
 			case TimeSpanParts.Minutes:
+				MinutesDisplay.Focus(FocusState.Keyboard);
 				TimeSpan -= TimeSpan.FromMinutes(1);
 				MinutesDisplay.IsSelected = true;
 				break;
 
 			case TimeSpanParts.Seconds:
+				SecondDisplay.Focus(FocusState.Keyboard);
 				TimeSpan -= TimeSpan.FromSeconds(1);
 				SecondDisplay.IsSelected = true;
 				break;
 			default:
 				throw new InvalidOperationException("Unknown button tag.");
 		}
-		DisplayBorder.Focus(FocusState.Programmatic);
 	}
 
 	private void DisplayBorder_GotFocus(object sender, RoutedEventArgs e)
