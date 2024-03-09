@@ -1,7 +1,7 @@
-using DeepWork.Models;
 using DeepWork.ViewModels.Pages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using System;
 using System.Linq;
 
@@ -19,10 +19,12 @@ namespace DeepWork.Views.Pages
 		private void LongTasksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (e.AddedItems.Any())
-			{
 				ViewModel.SelectLongTask(e.AddedItems.First() as LongTaskViewModel);
-				splitView.IsPaneOpen = true;
-			}
+		}
+		private void ShortTaskListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (e.AddedItems.Any())
+				ViewModel.SelectShortTask(e.AddedItems.First() as ShortTaskViewModel);
 		}
 
 		private void FinishShortTaskCheckBox_Click(object sender, RoutedEventArgs e)
@@ -79,15 +81,57 @@ namespace DeepWork.Views.Pages
 				ViewModel.AddShortTask(content.ViewModel);
 		}
 
-		private void EditLongTaskButton_Click(object sender, RoutedEventArgs e)
+		private async void EditLongTaskButton_Click(object sender, RoutedEventArgs e)
 		{
-			throw new NotImplementedException();
+			AddLongTaskDialogPage content = new()
+			{
+				ViewModel = ViewModel.SelectedLongTask
+			};
+
+			ContentDialog dialog = new()
+			{
+				XamlRoot = this.XamlRoot,
+				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+				Title = "Add Long Task",
+				PrimaryButtonText = "Edit",
+				CloseButtonText = "Cancel",
+				DefaultButton = ContentDialogButton.Primary,
+				Content = content
+			};
+
+			ContentDialogResult result = await dialog.ShowAsync();
+			if (result is ContentDialogResult.Primary)
+				ViewModel.EditSelectedLongTask(content.ViewModel);
 		}
 
-
-		private void EditShortTaskButton_Click(object sender, RoutedEventArgs e)
+		private async void EditShortTaskButton_Click(object sender, RoutedEventArgs e)
 		{
-			throw new NotImplementedException();
+			AddShortTaskDialogPage content = new()
+			{
+				ViewModel = ViewModel.SelectedShortTask
+			};
+
+			ContentDialog dialog = new()
+			{
+				XamlRoot = this.XamlRoot,
+				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+				Title = "Add Short Task",
+				PrimaryButtonText = "Edit",
+				CloseButtonText = "Cancel",
+				DefaultButton = ContentDialogButton.Primary,
+				Content = content
+			};
+
+			ContentDialogResult result = await dialog.ShowAsync();
+			if (result == ContentDialogResult.Primary)
+				ViewModel.EditShortTask(content.ViewModel);
+		}
+
+		private void ListViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+		{
+			// Todo: Fix the bug here where I'm double clicking list item and pane opens and closes.
+			e.Handled = true;
+			splitView.IsPaneOpen = true;
 		}
 	}
 }

@@ -1,9 +1,9 @@
 ﻿using DeepWork.Models;
+using DeepWork.ViewModels.Pages;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace DeepWork.Services
@@ -76,10 +76,11 @@ namespace DeepWork.Services
 			SaveChanges();
 		}
 
-		public void AddShortTask(LongTask parentTask, ShortTask task)
+		public void AddShortTask(string parentName, ShortTask task)
 		{
 			if (!IsAccountAvailable)
 				return;
+			LongTask parentTask = UserAccount.LongTasks.First(item => item.Name == parentName);
 			parentTask.RunningTasks.Add(task);
 			SaveChanges();
 		}
@@ -92,11 +93,12 @@ namespace DeepWork.Services
 			SaveChanges();
         }
 
-		public void FinishShortTask(LongTask parentTask, string taskName)
+		public void FinishShortTask(string parentName, string taskName)
 		{
 			if (!IsAccountAvailable)
 				return;
 
+			LongTask parentTask = UserAccount.LongTasks.First(item => item.Name == parentName);
 			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Name == taskName);
 			if (parentTask.MaxDuration < task.Duration)
 				parentTask.MaxDuration = task.Duration;
@@ -106,6 +108,33 @@ namespace DeepWork.Services
 			parentTask.FinishedTasks.Add(task);
 
 			SaveChanges();
+		}
+
+		public void EditLongTask(string taskName, LongTask editedTask)
+		{
+			LongTask task = GetLongTaskByName(taskName);
+			task.Name = editedTask.Name;
+			task.StartDate = editedTask.StartDate;
+			task.EndDate = editedTask.EndDate;
+			SaveChanges();
+		}
+
+		public void EditShortTask(string parentTask, string taskToEdit, ShortTask editedTask)
+		{
+			ShortTask task = GetShortTaskByName(parentTask, taskToEdit);
+			task.Name = editedTask.Name;
+			task.Duration = editedTask.Duration;
+			SaveChanges();
+		}
+
+		public LongTask GetLongTaskByName(string name) =>
+			UserAccount.LongTasks.First(task => task.Name == name);
+
+		public ShortTask GetShortTaskByName(string parentName, string name)
+		{
+			LongTask parentTask = UserAccount.LongTasks.First(item => item.Name == parentName);
+			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Name == name);
+			return task;
 		}
 
 		public List<TaskHistory> GetAccountHistory()
@@ -133,14 +162,11 @@ namespace DeepWork.Services
 			return tasksHistoryTree;
 		}
 
-        public async void SaveChanges()
+		public void SaveChanges()
 		{
-			await Task.Run(() =>
-			{
-				m_AccountFileStream.SetLength(0);
-				m_AccountSerializer.Serialize(m_AccountFileStream, UserAccount);
-				m_AccountFileStream.Flush();
-			});
+			m_AccountFileStream.SetLength(0);
+			m_AccountSerializer.Serialize(m_AccountFileStream, UserAccount);
+			m_AccountFileStream.Flush();
 		}
 
 		public void Dispose()
@@ -148,5 +174,5 @@ namespace DeepWork.Services
 			SaveChanges();
 			m_AccountFileStream.Dispose();
 		}
-    }
+	}
 }

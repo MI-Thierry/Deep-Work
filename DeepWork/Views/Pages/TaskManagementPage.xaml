@@ -31,7 +31,7 @@
 				</Grid.RowDefinitions>
 				<TextBlock Text="Short Tasks" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 0 0 10"/>
 				<ScrollViewer Grid.Row="1" Margin="0 5 0 0">
-					<ListView ItemsSource="{Binding ShortTasks}">
+					<ListView ItemsSource="{Binding ShortTasks}" SelectionChanged="ShortTaskListView_SelectionChanged">
 						<ListView.ItemTemplate>
 							<DataTemplate x:DataType="viewModels:ShortTaskViewModel">
 								<ListViewItem>
@@ -41,10 +41,10 @@
 											<ColumnDefinition Width="7*"/>
 											<ColumnDefinition Width="Auto"/>
 										</Grid.ColumnDefinitions>
-										<CheckBox Tag="{x:Bind Name}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
+										<CheckBox Tag="{x:Bind Name, Mode=OneWay}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
 										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 											<Paragraph>
-												<Run Text="{x:Bind Name}"/>
+												<Run Text="{x:Bind Name, Mode=OneWay}"/>
 											</Paragraph>
 											<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 												<Run Text="Duration of"/>
@@ -77,18 +77,17 @@
 			</Grid.RowDefinitions>
 			<TextBlock Text="Task Manager" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
 			<ScrollViewer Grid.Row="1">
-				<ListView ItemsSource="{Binding LongTasks}"
-							  SelectionChanged="LongTasksListView_SelectionChanged">
+				<ListView ItemsSource="{Binding LongTasks}" SelectionChanged="LongTasksListView_SelectionChanged" IsDoubleTapEnabled="True">
 					<ListView.ItemTemplate>
 						<DataTemplate x:DataType="viewModels:LongTaskViewModel">
-							<ListViewItem>
+							<ListViewItem DoubleTapped="ListViewItem_DoubleTapped" IsDoubleTapEnabled="True">
 								<Grid Margin="5">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="1*"/>
 										<ColumnDefinition Width="18*"/>
 									</Grid.ColumnDefinitions>
 
-									<CheckBox Tag="{Binding Name, Mode=OneWay}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
+									<CheckBox Tag="{x:Bind Name, Mode=OneWay}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
 
 									<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 										<Paragraph FontSize="13">

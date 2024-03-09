@@ -39,8 +39,8 @@ namespace DeepWork.Utils
 
         public static async void WarningDialog(string message, XamlRoot xamlRoot)
         {
-            ContentDialog TaskDialog = new ContentDialog
-            {
+			ContentDialog TaskDialog = new()
+			{
                 Title = "Warning",
                 Content = message,
                 CloseButtonText = "Ok",

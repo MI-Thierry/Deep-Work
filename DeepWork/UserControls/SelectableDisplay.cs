@@ -11,7 +11,7 @@ namespace DeepWork.UserControls
 	public sealed class SelectableDisplay : Control
 	{
 		private Button Display;
-		private static Dictionary<string, List<SelectableDisplay>> _groups = new();
+		private static readonly Dictionary<string, List<SelectableDisplay>> _groups = new();
 		public bool IsSelected
 		{
 			get { return (bool)GetValue(IsSelectedProperty); }

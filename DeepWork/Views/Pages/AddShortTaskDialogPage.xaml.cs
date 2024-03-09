@@ -5,7 +5,7 @@ namespace DeepWork.Views.Pages
 {
 	public sealed partial class AddShortTaskDialogPage : Page
 	{
-		public ShortTaskViewModel ViewModel { get; private set; }
+		public ShortTaskViewModel ViewModel { get; set; }
 		public AddShortTaskDialogPage()
 		{
 			ViewModel = new ShortTaskViewModel();
