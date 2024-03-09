@@ -6,6 +6,24 @@ namespace DeepWork.ViewModels.Pages
 {
 	public partial class LongTaskViewModel : ObservableObject
 	{
+		[ObservableProperty]
+		private int _taskCount;
+
+		[ObservableProperty]
+		private string _name = string.Empty;
+
+		[ObservableProperty]
+		private TimeSpan _maxDuration = TimeSpan.Zero;
+
+		[ObservableProperty]
+		private uint _maxShortTaskCount = 0;
+
+		[ObservableProperty]
+		DateTime _startDate = DateTime.Now;
+
+		[ObservableProperty]
+		DateTime _endDate = DateTime.Now + TimeSpan.FromDays(1);
+
 		public static implicit operator LongTaskViewModel(LongTask longTask)
 		{
 			return new LongTaskViewModel
@@ -30,22 +48,7 @@ namespace DeepWork.ViewModels.Pages
 				EndDate = viewModel.EndDate,
 			};
 		}
-		[ObservableProperty]
-		private int _taskCount;
 
-		[ObservableProperty]
-		private string _name = string.Empty;
-
-		[ObservableProperty]
-		private TimeSpan _maxDuration = TimeSpan.Zero;
-
-		[ObservableProperty]
-		private uint _maxShortTaskCount = 0;
-
-		[ObservableProperty]
-		DateTime _startDate = DateTime.Now;
-
-		[ObservableProperty]
-		DateTime _endDate = DateTime.Now + TimeSpan.FromDays(1);
-    }
+		public string ConvertDateTimeToString(DateTime date) => date.ToString("ddd, MMM dd, yyyy");
+	}
 }

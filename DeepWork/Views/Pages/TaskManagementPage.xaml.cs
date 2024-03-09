@@ -17,6 +17,8 @@ namespace DeepWork.Views.Pages
 			// Todo: Remove TimeDateToStringConverter
 		}
 
+		
+
 		private void LongTasksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (e.AddedItems.Any())

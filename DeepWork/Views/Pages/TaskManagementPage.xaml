@@ -5,17 +5,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:DeepWork.Views.Pages"
 	xmlns:viewModels="using:DeepWork.ViewModels.Pages"
-	xmlns:utils="using:DeepWork.Utils"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	DataContext="{x:Bind ViewModel}"
 	Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 	
-	<Page.Resources>
-		<utils:TimeDateToStringConverter x:Key="TimeDateToStringConverter"/>
-	</Page.Resources>
-
 	<SplitView x:Name="splitView" DisplayMode="Overlay" PanePlacement="Right">
 		<SplitView.Pane>
 			<Grid Margin="10 10 0 0">
@@ -39,11 +34,11 @@
 										<CheckBox Tag="{x:Bind Name}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
 										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 											<Paragraph>
-												<Run Text="{Binding Name}"/>
+												<Run Text="{x:Bind Name}"/>
 											</Paragraph>
 											<Paragraph Foreground="{StaticResource AccentAAFillColorDefaultBrush}" FontSize="12">
 												<Run Text="Duration of"/>
-												<Run Text="{Binding Duration.TotalMinutes}"/>
+												<Run Text="{x:Bind Duration.TotalMinutes, Mode=OneWay}"/>
 												<Run Text="Minutes"/>
 											</Paragraph>
 										</RichTextBlock>
@@ -88,16 +83,16 @@
 
 									<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 										<Paragraph FontSize="13">
-											<Run Text="{Binding Name}"/>
+											<Run Text="{x:Bind Name}"/>
 										</Paragraph>
 										<Paragraph Foreground="{StaticResource AccentAAFillColorDefaultBrush}" FontSize="12">
 											<Run Text="Tasks:"/>
-											<Run Text="{Binding TaskCount}"/>
+											<Run Text="{x:Bind TaskCount}"/>
 											<Run Text="&#xe738;&#xe787;" FontFamily="Segoe Fluent Icons" FontSize="14"/>
 											<Run Text="From"/>
-											<Run Text="{Binding StartDate, Converter={StaticResource TimeDateToStringConverter}}"/>
+											<Run Text="{x:Bind ConvertDateTimeToString(StartDate), Mode=OneWay}"/>
 											<Run Text="To"/>
-											<Run Text="{Binding EndDate, Converter={StaticResource TimeDateToStringConverter}}"/>
+											<Run Text="{x:Bind ConvertDateTimeToString(EndDate), Mode=OneWay}"/>
 										</Paragraph>
 									</RichTextBlock>
 								</Grid>
