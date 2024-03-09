@@ -14,11 +14,11 @@ namespace DeepWork.Views.Windows;
 
 public sealed partial class MainWindow : INavigationWindow
 {
-	private WindowsSystemDispatcherQueueHelper m_wsdqHelper; // See below for implementation.
+	private readonly AppWindow m_AppWindow;
+	private readonly AppWindowTitleBar m_TitleBar;
+	private WindowsSystemDispatcherQueueHelper m_wsdqHelper;
 	private MicaController m_backdropController;
 	private SystemBackdropConfiguration m_configurationSource;
-	private AppWindow m_AppWindow;
-	private AppWindowTitleBar m_TitleBar;
 
 	public MainWindow()
 	{
