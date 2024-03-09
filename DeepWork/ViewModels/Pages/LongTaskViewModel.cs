@@ -19,10 +19,10 @@ namespace DeepWork.ViewModels.Pages
 		private uint _maxShortTaskCount = 0;
 
 		[ObservableProperty]
-		DateTime _startDate = DateTime.Now;
+		DateTimeOffset _startDate = DateTimeOffset.Now;
 
 		[ObservableProperty]
-		DateTime _endDate = DateTime.Now + TimeSpan.FromDays(1);
+		DateTimeOffset _endDate = DateTimeOffset.Now + TimeSpan.FromDays(1);
 
 		public static implicit operator LongTaskViewModel(LongTask longTask)
 		{
@@ -49,6 +49,6 @@ namespace DeepWork.ViewModels.Pages
 			};
 		}
 
-		public string ConvertDateTimeToString(DateTime date) => date.ToString("ddd, MMM dd, yyyy");
+		public string ConvertDateTimeToString(DateTimeOffset date) => date.ToString("ddd, MMM dd, yyyy");
 	}
 }

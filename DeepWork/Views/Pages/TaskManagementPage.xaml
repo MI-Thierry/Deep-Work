@@ -88,15 +88,15 @@
 										<ColumnDefinition Width="18*"/>
 									</Grid.ColumnDefinitions>
 
-									<CheckBox Tag="{Binding Name}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
+									<CheckBox Tag="{Binding Name, Mode=OneWay}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
 
 									<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 										<Paragraph FontSize="13">
-											<Run Text="{x:Bind Name}"/>
+											<Run Text="{x:Bind Name, Mode=OneWay}"/>
 										</Paragraph>
 										<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 											<Run Text="Tasks:"/>
-											<Run Text="{x:Bind TaskCount}"/>
+											<Run Text="{x:Bind TaskCount, Mode=OneWay}"/>
 											<Run Text="&#xe738;&#xe787;" FontFamily="Segoe Fluent Icons" FontSize="14"/>
 											<Run Text="From"/>
 											<Run Text="{x:Bind ConvertDateTimeToString(StartDate), Mode=OneWay}"/>

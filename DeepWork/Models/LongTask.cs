@@ -17,10 +17,10 @@ namespace DeepWork.Models
         public uint MaxShortTaskCount { get; set; }
 
         [XmlAttribute]
-        public DateTime StartDate { get; set; }
+        public DateTimeOffset StartDate { get; set; }
 
         [XmlAttribute]
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
 
         [XmlArray]
         public List<ShortTask> RunningTasks { get; set; } = new();

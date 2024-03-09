@@ -13,6 +13,6 @@ namespace DeepWork.Models
         public string Name { get; set; }
 
         [XmlAttribute]
-        public DateTime FinishDate { get; set; }
+        public DateTimeOffset FinishDate { get; set; }
     }
 }

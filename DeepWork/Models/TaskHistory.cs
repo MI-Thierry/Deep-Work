@@ -15,7 +15,7 @@ namespace DeepWork.Models
     public class TaskHistory
     {
         public TaskType Type { get; set; }
-        public DateTime FinishDate { get; set; }
+        public DateTimeOffset FinishDate { get; set; }
         public string Name { get; set; }
         public List<TaskHistory> Childrens { get; set; } = new List<TaskHistory>();
     }
