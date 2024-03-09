@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace DeepWork.ViewModels.Pages;
 
-public partial class NavigationViewViewModel : ObservableObject
+public partial class NavigationManagementViewModel : ObservableObject
 {
 	[ObservableProperty]
 	private ObservableCollection<NavigationViewItem> _menuItems = new()

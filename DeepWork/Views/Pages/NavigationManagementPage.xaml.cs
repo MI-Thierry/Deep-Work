@@ -8,14 +8,14 @@ using System.Linq;
 
 namespace DeepWork.Views.Pages;
 
-public sealed partial class NavigationViewPage : Page
+public sealed partial class NavigationManagementPage : Page
 {
-    public NavigationViewViewModel ViewModel { get; set; }
+    public NavigationManagementViewModel ViewModel { get; set; }
     public double NavViewCompactModeThresholdWidth { get; set; }
 
-    public NavigationViewPage()
+    public NavigationManagementPage()
     {
-        ViewModel = App.GetService<NavigationViewViewModel>();
+        ViewModel = App.GetService<NavigationManagementViewModel>();
         this.InitializeComponent();
     }
 

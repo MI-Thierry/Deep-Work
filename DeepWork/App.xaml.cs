@@ -3,7 +3,6 @@ using DeepWork.ViewModels.Pages;
 using DeepWork.Views.Pages;
 using DeepWork.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Animation;
 using System;
@@ -12,8 +11,8 @@ namespace DeepWork
 {
 	public partial class App : Application
 	{
-		public INavigationWindow Window { get; private set; }
 		private static IServiceProvider _serviceProvider;
+		public INavigationWindow Window { get; private set; }
 		public App()
 		{
 			// Todo: Get theme from AccountManagementService.
@@ -38,7 +37,7 @@ namespace DeepWork
 			services.AddTransient<INavigationWindow, MainWindow>();
 
 			// Adding view models for the views
-			services.AddSingleton<NavigationViewViewModel>();
+			services.AddSingleton<NavigationManagementViewModel>();
 			services.AddSingleton<TaskManagementViewModel>();
 
 			_serviceProvider = services.BuildServiceProvider();
@@ -46,7 +45,12 @@ namespace DeepWork
 			// Create the MainWindow.
 			Window = GetService<INavigationWindow>();
 			Window.ActivateWindow();
-			Window.Navigate(typeof(NavigationViewPage), null, new EntranceNavigationTransitionInfo());
+
+			AccountManagementService accountManager = GetService<AccountManagementService>();
+			if (accountManager.IsAccountAvailable)
+				Window.Navigate(typeof(NavigationManagementPage), null, new EntranceNavigationTransitionInfo());
+			else
+				Window.Navigate(typeof(SignupPage), null, new EntranceNavigationTransitionInfo());
 		}
 	}
 }
