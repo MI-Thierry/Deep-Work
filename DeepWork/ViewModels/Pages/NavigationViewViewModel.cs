@@ -12,9 +12,10 @@ public partial class NavigationViewViewModel : ObservableObject
 	{
 		new NavigationViewItem
 		{
-			Content = "Home",
-			Icon = new FontIcon(){Glyph="\uea8a"},
-			Tag = typeof(HomePage)
-		},
+			Content = "Task Manager",
+			// Todo: Change this icon.
+			Icon = new FontIcon() { Glyph = "\uE9D5" },
+			Tag = typeof(TaskManagementPage)
+		}
 	};
 }

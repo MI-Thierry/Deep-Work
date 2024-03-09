@@ -11,12 +11,14 @@
 	DataContext="{x:Bind ViewModel}">
 
 	<Grid>
-		<NavigationView MenuItemsSource="{Binding MenuItems}"
+		<NavigationView x:Name="NavView"
+						MenuItemsSource="{Binding MenuItems}"
 						IsBackEnabled="{Binding ElementName=ContentFrame, Path=CanGoBack}"
 						CompactModeThresholdWidth="{x:Bind NavViewCompactModeThresholdWidth}"
 						IsBackButtonVisible="Collapsed"
 						ItemInvoked="NavigationView_ItemInvoked"
 						BackRequested="NavigationView_BackRequested"
+						Loaded="NavigationView_Loaded"
 						SelectedItem="{Binding MenuItems[0]}">
 			
 			<Frame x:Name="ContentFrame"

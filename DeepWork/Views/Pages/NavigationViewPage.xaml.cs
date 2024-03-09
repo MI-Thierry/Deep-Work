@@ -1,8 +1,10 @@
 using DeepWork.ViewModels.Pages;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using System;
-
+using System.Linq;
 
 namespace DeepWork.Views.Pages;
 
@@ -36,5 +38,11 @@ public sealed partial class NavigationViewPage : Page
     private void NavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
     {
         ContentFrame.GoBack();
+    }
+
+	private void NavigationView_Loaded(object sender, RoutedEventArgs e)
+	{
+        Type pageType = ViewModel.MenuItems.First().Tag as Type;
+		ContentFrame.Navigate(pageType, null, new EntranceNavigationTransitionInfo());
     }
 }
