@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace DeepWork.Services
 {
-    public class AccountManagementServices : IDisposable
+    public class AccountManagementService : IDisposable
 	{
 		private readonly XmlSerializer m_AccountSerializer;
 		private Stream m_AccountFileStream;
@@ -17,7 +17,7 @@ namespace DeepWork.Services
 		public string AppDataPath { get; private set; }
 		public bool IsAccountAvailable { get; private set; }
 
-		public AccountManagementServices()
+		public AccountManagementService()
 		{
 			m_AccountSerializer = new XmlSerializer(typeof(Account));
 
@@ -70,32 +70,40 @@ namespace DeepWork.Services
 
 		public void AddLongTask(LongTask task)
 		{
+			if (!IsAccountAvailable)
+				return;
 			UserAccount.LongTasks.Add(task);
 			SaveChanges();
 		}
 
 		public void AddShortTask(LongTask parentTask, ShortTask task)
 		{
+			if (!IsAccountAvailable)
+				return;
 			parentTask.RunningTasks.Add(task);
 			SaveChanges();
 		}
         public void FinishLongTask(string name)
         {
-			LongTask taskToFinish = UserAccount.LongTasks.FirstOrDefault(task => task.Name == name);
-			UserAccount.LongTasks.Remove(taskToFinish);
+			if (!IsAccountAvailable)
+				return;
+
+			UserAccount.LongTasks.Remove(UserAccount.LongTasks.FirstOrDefault(item => item.Name == name));
 			SaveChanges();
         }
 
-		public void FinishShortTask(LongTask parentTask, string name)
+		public void FinishShortTask(LongTask parentTask, string taskName)
 		{
-			ShortTask taskToFinish = parentTask.RunningTasks.FirstOrDefault(task => task.Name == name);
-			
-			if (parentTask.MaxDuration < taskToFinish.Duration)
-				parentTask.MaxDuration = taskToFinish.Duration;
-			taskToFinish.FinishDate = DateTime.Now;
+			if (!IsAccountAvailable)
+				return;
 
-			parentTask.RunningTasks.Remove(taskToFinish);
-			parentTask.FinishedTasks.Add(taskToFinish);
+			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Name == taskName);
+			if (parentTask.MaxDuration < task.Duration)
+				parentTask.MaxDuration = task.Duration;
+			task.FinishDate = DateTime.Now;
+
+			parentTask.RunningTasks.Remove(task);
+			parentTask.FinishedTasks.Add(task);
 
 			SaveChanges();
 		}

@@ -33,11 +33,12 @@ namespace DeepWork
 		{
 			// Initializing application's service provider.
 			IServiceCollection services = new ServiceCollection();
-			services.AddSingleton<AccountManagementServices>();
+			services.AddSingleton<AccountManagementService>();
 			services.AddTransient<INavigationWindow, MainWindow>();
 
 			// Adding view models for the views
 			services.AddSingleton<NavigationViewViewModel>();
+			services.AddSingleton<TaskManagementViewModel>();
 
 			_serviceProvider = services.BuildServiceProvider();
 
