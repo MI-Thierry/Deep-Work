@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using WinRT.Interop;
 
-namespace DeepWork.Utils
+namespace DeepWork.Helpers
 {
 	public static class Utils
 	{
@@ -37,7 +37,14 @@ namespace DeepWork.Utils
 			return firstDate.AddDays(DateTime.IsLeapYear(firstDate.Year) ? 365 : 364);
 		}
 
-        public static async void WarningDialog(string message, XamlRoot xamlRoot)
+		public static AppWindow GetAppWindow(Window window)
+		{
+			IntPtr hWnd = WindowNative.GetWindowHandle(window);
+			WindowId winId = Win32Interop.GetWindowIdFromWindow(hWnd);
+			return AppWindow.GetFromWindowId(winId);
+		}
+
+		public static async void WarningDialog(string message, XamlRoot xamlRoot)
         {
 			ContentDialog TaskDialog = new()
 			{

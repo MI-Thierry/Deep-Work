@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DeepWork.Utils
+namespace DeepWork.Helpers
 {
 	public class ListToArrayConverter : IValueConverter
 	{

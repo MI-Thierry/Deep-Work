@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DeepWork.Utils
+namespace DeepWork.Helpers
 {
 	class WindowsSystemDispatcherQueueHelper
 	{

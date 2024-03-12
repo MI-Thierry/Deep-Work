@@ -2,7 +2,7 @@
 using System.Text;
 using Windows.System;
 
-namespace DeepWork.Utils;
+namespace DeepWork.Helpers;
 public static class KeyboardHelpers
 {
 	// Todo: Hide this p/invoke function

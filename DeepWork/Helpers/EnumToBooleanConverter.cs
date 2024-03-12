@@ -2,7 +2,7 @@
 using Microsoft.UI.Xaml.Data;
 using System;
 
-namespace DeepWork.Utils
+namespace DeepWork.Helpers
 {
     public class EnumToBooleanConverter : IValueConverter
     {
