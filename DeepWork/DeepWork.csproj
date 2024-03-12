@@ -1,17 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>DeepWork</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+	  <UseRidGraph>true</UseRidGraph>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Helpers\Utils.cs" />
     <Compile Remove="Views\Pages\FocusSessionPage.xaml.cs" />
     <Compile Remove="Views\Pages\HistoryPage.xaml.cs" />
     <Compile Remove="Views\Pages\LongTasksPage.xaml.cs" />
@@ -36,12 +38,13 @@
     <None Remove="Views\Pages\HomePage.xaml" />
     <None Remove="Views\Pages\LongTasksPage.xaml" />
     <None Remove="Views\Pages\MonitoringPage.xaml" />
-    <None Remove="Views\Pages\SignupPage.xaml" />
     <None Remove="Views\Pages\TaskManagementPage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
     <None Remove="UserControls\DateSlider.xaml" />
     <None Remove="UserControls\NumberInput.xaml" />
     <None Remove="UserControls\TimeInputBox.xaml" />
+    <None Remove="Views\Windows\NavigationWindow.xaml" />
+    <None Remove="Views\Windows\SignupWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Views\Pages\FocusSessionPage.xaml" />
@@ -62,10 +65,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.Lottie" Version="8.0.280224" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WinUI" Version="2.0.0-rc2.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240227000" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -84,7 +88,10 @@
     <None Update="Assets\Iceburg Image.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Page Update="Views\Pages\SignupPage.xaml">
+    <Page Update="Views\Windows\SignupWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Windows\NavigationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="UserControls\TimeSpanSlider.xaml">
@@ -117,9 +124,6 @@
     <Page Update="UserControls\DateSlider.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\Windows\" />
   </ItemGroup>
 
   <!-- 

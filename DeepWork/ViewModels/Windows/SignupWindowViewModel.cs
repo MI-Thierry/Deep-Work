@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using DeepWork.Services;
 using Microsoft.Windows.AppLifecycle;
 
-namespace DeepWork.ViewModels.Pages;
+namespace DeepWork.ViewModels.Windows;
 
-public partial class SignupViewModel : ObservableObject
+public partial class SignupWindowViewModel : ObservableObject
 {
 	private readonly AccountManagementService _accountManager;
 
@@ -18,7 +18,7 @@ public partial class SignupViewModel : ObservableObject
 	[ObservableProperty]
 	private string _password;
 
-	public SignupViewModel()
+	public SignupWindowViewModel()
 	{
 		_accountManager = App.GetService<AccountManagementService>();
 	}

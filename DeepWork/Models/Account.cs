@@ -15,9 +15,9 @@ namespace DeepWork.Models
         public string Password { get; set; }
 
         [XmlElement]
-        ApplicationTheme ApplicationTheme { get; set; }
+        public ApplicationTheme ApplicationTheme { get; set; }
 
         [XmlArray]
-        public List<LongTask> LongTasks { get; set; } = new();
+		public List<LongTask> LongTasks { get; set; } = [];
     }
 }

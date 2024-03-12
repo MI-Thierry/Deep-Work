@@ -3,18 +3,21 @@ using DeepWork.Views.Pages;
 using Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
 
-namespace DeepWork.ViewModels.Pages;
+namespace DeepWork.ViewModels.Windows;
 
-public partial class NavigationManagementViewModel : ObservableObject
+public partial class NavigationWindowViewModel : ObservableObject
 {
 	[ObservableProperty]
-	private ObservableCollection<NavigationViewItem> _menuItems = new()
-	{
+	private double _navViewCompactModeThresholdWidth;
+
+	[ObservableProperty]
+	private ObservableCollection<NavigationViewItem> _menuItems =
+	[
 		new NavigationViewItem
 		{
 			Content = "Task Manager",
 			Icon = new FontIcon() { Glyph = "\uE9D5" },
 			Tag = typeof(TaskManagementPage)
 		}
-	};
+	];
 }

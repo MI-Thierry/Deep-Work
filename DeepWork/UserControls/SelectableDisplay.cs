@@ -73,7 +73,7 @@ namespace DeepWork.UserControls
 		private void Display_KeyDown(object sender, KeyRoutedEventArgs e)
 		{
 			// Todo: Add validation codes here.
-			string input = Utils.KeyboardHelpers.GetCharsFromKeys(e.Key, false, false);
+			string input = Helpers.KeyboardHelpers.GetCharsFromKeys(e.Key, false, false);
 			char[] chars = Content.ToCharArray();
 			Content = chars.Last() + input;
 		}
