@@ -17,6 +17,6 @@ namespace DeepWork.Models
 
         public ElementTheme Theme { get; set; }
 
-		public List<LongTask> LongTasks { get; set; } = [];
+		public List<LongTask> LongTasks { get; set; }
     }
 }

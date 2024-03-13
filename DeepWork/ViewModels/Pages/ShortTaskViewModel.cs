@@ -6,6 +6,8 @@ namespace DeepWork.ViewModels.Pages;
 
 public partial class ShortTaskViewModel : ObservableObject
 {
+	public int Id { get; private set; }
+
 	[ObservableProperty]
 	private TimeSpan _duration = TimeSpan.Zero;
 
@@ -19,6 +21,7 @@ public partial class ShortTaskViewModel : ObservableObject
 	{
 		return new ShortTaskViewModel
 		{
+			Id = model.Id,
 			Name = model.Name,
 			Duration = model.Duration,
 			FinishDate = model.FinishDate
@@ -29,6 +32,7 @@ public partial class ShortTaskViewModel : ObservableObject
 	{
 		return new ShortTask
 		{
+			Id = viewModel.Id,
 			Name = viewModel.Name,
 			Duration = viewModel.Duration,
 			FinishDate = viewModel.FinishDate

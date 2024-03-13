@@ -9,7 +9,6 @@ namespace DeepWork.Views.Pages
 {
 	public sealed partial class TaskManagementPage : Page
 	{
-		// Todo: Add deleting capabilities
         public TaskManagementViewModel ViewModel { get; set; }
 		public TaskManagementPage()
 		{
@@ -32,14 +31,14 @@ namespace DeepWork.Views.Pages
 		{
 			CheckBox checkBox = sender as CheckBox;
 			checkBox.IsChecked = false;
-			ViewModel.FinishShortTask(checkBox.Tag as string);
+			ViewModel.FinishShortTask((int)checkBox.Tag);
 		}
 
 		private void FinishLongTaskCheckBox_Click(object sender, RoutedEventArgs e)
 		{
 			CheckBox checkBox = sender as CheckBox;
 			checkBox.IsChecked = false;
-			ViewModel.FinishLongTask(checkBox.Tag as string);
+			ViewModel.FinishLongTask((int)checkBox.Tag);
 		}
 
 		private async void AddLongTaskButton_Click(object sender, RoutedEventArgs e)
@@ -95,6 +94,7 @@ namespace DeepWork.Views.Pages
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Long Task",
 				PrimaryButtonText = "Edit",
+				SecondaryButtonText = "Delete",
 				CloseButtonText = "Cancel",
 				DefaultButton = ContentDialogButton.Primary,
 				Content = content
@@ -103,6 +103,8 @@ namespace DeepWork.Views.Pages
 			ContentDialogResult result = await dialog.ShowAsync();
 			if (result is ContentDialogResult.Primary)
 				ViewModel.EditSelectedLongTask(content.ViewModel);
+			else if (result is ContentDialogResult.Secondary)
+				ViewModel.DeleteLongTask(content.ViewModel.Id);
 		}
 
 		private async void EditShortTaskButton_Click(object sender, RoutedEventArgs e)
@@ -118,6 +120,7 @@ namespace DeepWork.Views.Pages
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Short Task",
 				PrimaryButtonText = "Edit",
+				SecondaryButtonText = "Delete",
 				CloseButtonText = "Cancel",
 				DefaultButton = ContentDialogButton.Primary,
 				Content = content
@@ -126,6 +129,8 @@ namespace DeepWork.Views.Pages
 			ContentDialogResult result = await dialog.ShowAsync();
 			if (result == ContentDialogResult.Primary)
 				ViewModel.EditShortTask(content.ViewModel);
+			else if (result == ContentDialogResult.Secondary)
+				ViewModel.DeleteShortTask(content.ViewModel.Id);
 		}
 
 		private void ListViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

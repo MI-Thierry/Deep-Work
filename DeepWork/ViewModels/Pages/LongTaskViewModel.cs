@@ -6,6 +6,8 @@ namespace DeepWork.ViewModels.Pages;
 
 public partial class LongTaskViewModel : ObservableObject
 {
+	public int Id { get; private set; }
+
 	[ObservableProperty]
 	private int _taskCount;
 
@@ -28,6 +30,7 @@ public partial class LongTaskViewModel : ObservableObject
 	{
 		return new LongTaskViewModel
 		{
+			Id = model.Id,
 			Name = model.Name,
 			MaxDuration = model.MaxDuration,
 			MaxShortTaskCount = model.MaxShortTaskCount,
@@ -41,6 +44,7 @@ public partial class LongTaskViewModel : ObservableObject
 	{
 		return new LongTask
 		{
+			Id = viewModel.Id,
 			Name = viewModel.Name,
 			MaxDuration = viewModel.MaxDuration,
 			MaxShortTaskCount = viewModel.MaxShortTaskCount,

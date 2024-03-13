@@ -66,39 +66,74 @@ namespace DeepWork.Services
 			_accountContext.SaveChanges();
 		}
 
-		public void AddLongTask(LongTask task)
+		public LongTask AddLongTask(LongTask task)
 		{
 			if (!IsAccountAvailable)
-				return;
+				return task;
 
 			ActiveAccount.LongTasks.Add(task);
 			_accountContext.SaveChanges();
+			return task;
 		}
 
-		public void AddShortTask(string parentName, ShortTask task)
+		public void EditLongTask(int taskId, LongTask editedTask)
+		{
+			LongTask task = GetLongTaskById(taskId);
+			task.Name = editedTask.Name;
+			task.StartDate = editedTask.StartDate;
+			task.EndDate = editedTask.EndDate;
+			_accountContext.SaveChanges();
+		}
+
+		public void FinishLongTask(int id)
 		{
 			if (!IsAccountAvailable)
 				return;
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Name == parentName);
+
+			LongTask taskToRemove = ActiveAccount.LongTasks.FirstOrDefault(item => item.Id == id);
+			ActiveAccount.LongTasks.Remove(taskToRemove);
+			_accountContext.LongTasks.Remove(taskToRemove);
+			_accountContext.SaveChanges();
+		}
+
+		public void DeleteLongTask(int id)
+		{
+			if (!IsAccountAvailable)
+				return;
+
+			LongTask taskToRemove = ActiveAccount.LongTasks.FirstOrDefault(item => item.Id == id);
+			ActiveAccount.LongTasks.Remove(taskToRemove);
+			_accountContext.LongTasks.Remove(taskToRemove);
+			_accountContext.SaveChanges();
+		}
+		
+		public ShortTask AddShortTask(int parentId, ShortTask task)
+		{
+			if (!IsAccountAvailable)
+				return task;
+
+			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
 			parentTask.RunningTasks.Add(task);
 			_accountContext.SaveChanges();
-		}
-		public void FinishLongTask(string name)
-		{
-			if (!IsAccountAvailable)
-				return;
 
-			ActiveAccount.LongTasks.Remove(ActiveAccount.LongTasks.FirstOrDefault(item => item.Name == name));
+			return task;
+		}
+
+		public void EditShortTask(int parentId, int taskToEditId, ShortTask editedTask)
+		{
+			ShortTask task = GetShortTaskById(parentId, taskToEditId);
+			task.Name = editedTask.Name;
+			task.Duration = editedTask.Duration;
 			_accountContext.SaveChanges();
 		}
 
-		public void FinishShortTask(string parentName, string taskName)
+		public void FinishShortTask(int parentId, int taskId)
 		{
 			if (!IsAccountAvailable)
 				return;
 
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Name == parentName);
-			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Name == taskName);
+			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == taskId);
 			if (parentTask.MaxDuration < task.Duration)
 				parentTask.MaxDuration = task.Duration;
 			task.FinishDate = DateTime.Now;
@@ -109,30 +144,27 @@ namespace DeepWork.Services
 			_accountContext.SaveChanges();
 		}
 
-		public void EditLongTask(string taskName, LongTask editedTask)
+		public void DeleteShortTask(int parentId, int taskId)
 		{
-			LongTask task = GetLongTaskByName(taskName);
-			task.Name = editedTask.Name;
-			task.StartDate = editedTask.StartDate;
-			task.EndDate = editedTask.EndDate;
+			if (!IsAccountAvailable)
+				return;
+
+			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == taskId);
+
+			parentTask.RunningTasks.Remove(task);
+
+			_accountContext.RunningTasks.Remove(task);
 			_accountContext.SaveChanges();
 		}
 
-		public void EditShortTask(string parentTask, string taskToEdit, ShortTask editedTask)
-		{
-			ShortTask task = GetShortTaskByName(parentTask, taskToEdit);
-			task.Name = editedTask.Name;
-			task.Duration = editedTask.Duration;
-			_accountContext.SaveChanges();
-		}
+		public LongTask GetLongTaskById(int id) =>
+			ActiveAccount.LongTasks.First(task => task.Id == id);
 
-		public LongTask GetLongTaskByName(string name) =>
-			ActiveAccount.LongTasks.First(task => task.Name == name);
-
-		public ShortTask GetShortTaskByName(string parentName, string name)
+		public ShortTask GetShortTaskById(int parentId, int childId)
 		{
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Name == parentName);
-			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Name == name);
+			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == childId);
 			return task;
 		}
 

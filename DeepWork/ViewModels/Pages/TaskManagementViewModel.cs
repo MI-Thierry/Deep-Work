@@ -5,10 +5,9 @@ using System.Linq;
 
 namespace DeepWork.ViewModels.Pages;
 
+// Todo: Remove unnecessary things
 public partial class TaskManagementViewModel : ObservableObject
 {
-	private string _selectedLongTaskName;
-	private string _selectedShortTaskName;
 	private readonly AccountManagementService _accountManager;
 
 	public LongTaskViewModel SelectedLongTask { get; set; }
@@ -36,62 +35,71 @@ public partial class TaskManagementViewModel : ObservableObject
 
 	public void SelectLongTask(LongTaskViewModel taskVm)
 	{
-		SelectedLongTask = _accountManager.GetLongTaskByName(taskVm.Name);
-		_selectedLongTaskName = SelectedLongTask.Name;
+		SelectedLongTask = _accountManager.GetLongTaskById(taskVm.Id);
 
 		ShortTasks.Clear();
-		foreach (var task in _accountManager.GetLongTaskByName(_selectedLongTaskName).RunningTasks)
+		foreach (var task in _accountManager.GetLongTaskById(SelectedLongTask.Id).RunningTasks)
 			ShortTasks.Add(task);
-	}
-
-	public void SelectShortTask(ShortTaskViewModel taskVm)
-	{
-		SelectedShortTask = _accountManager.GetShortTaskByName(_selectedLongTaskName, taskVm.Name);
-		_selectedShortTaskName = SelectedShortTask.Name;
 	}
 
 	public void AddLongTask(LongTaskViewModel task)
 	{
-		LongTasks.Add(task);
-		_accountManager.AddLongTask(task);
+		LongTasks.Add(_accountManager.AddLongTask(task));
 	}
 
 	public void EditSelectedLongTask(LongTaskViewModel editedTask)
 	{
-		_accountManager.EditLongTask(_selectedLongTaskName, editedTask);
-		LongTaskViewModel taskToEdit = LongTasks.First(task => task.Name == _selectedLongTaskName);
+		_accountManager.EditLongTask(editedTask.Id, editedTask);
+		LongTaskViewModel taskToEdit = LongTasks.First(task => task.Id == SelectedLongTask.Id);
 		taskToEdit.Name = editedTask.Name;
 		taskToEdit.StartDate = editedTask.StartDate;
 		taskToEdit.EndDate = editedTask.EndDate;
 		SelectLongTask(taskToEdit);
 	}
 
-	public void FinishLongTask(string name)
+	public void FinishLongTask(int id)
 	{
-		LongTasks.Remove(LongTasks.FirstOrDefault(item => item.Name == name));
-		_accountManager.FinishLongTask(name);
+		LongTasks.Remove(LongTasks.FirstOrDefault(task => task.Id == id));
+		_accountManager.FinishLongTask(id);
 	}
 
-	public void AddShortTask(ShortTaskViewModel task)
+	public void DeleteLongTask(int id)
 	{
-		ShortTasks.Add(task);
-		LongTasks.First(t => t.Name == _selectedLongTaskName).TaskCount++;
-		_accountManager.AddShortTask(_selectedLongTaskName, task);
+		LongTasks.Remove(LongTasks.FirstOrDefault(task => task.Id == id));
+		_accountManager.DeleteLongTask(id);
+	}
+
+	public void SelectShortTask(ShortTaskViewModel taskVm)
+	{
+		SelectedShortTask = _accountManager.GetShortTaskById(SelectedLongTask.Id, taskVm.Id);
+	}
+
+	public void AddShortTask(ShortTaskViewModel taskVm)
+	{
+		LongTasks.First(task => task.Id == SelectedLongTask.Id).TaskCount++;
+		ShortTasks.Add(_accountManager.AddShortTask(SelectedLongTask.Id, taskVm));
 	}
 
 	public void EditShortTask(ShortTaskViewModel editedTask)
 	{
-		_accountManager.EditShortTask(_selectedLongTaskName, _selectedShortTaskName, editedTask);
-		ShortTaskViewModel taskToEdit = ShortTasks.First(task => task.Name == _selectedShortTaskName);
+		_accountManager.EditShortTask(SelectedLongTask.Id, SelectedShortTask.Id, editedTask);
+		ShortTaskViewModel taskToEdit = ShortTasks.First(task => task.Id == editedTask.Id);
 		taskToEdit.Name = editedTask.Name;
 		taskToEdit.Duration = editedTask.Duration;
 		SelectShortTask(taskToEdit);
 	}
 
-	public void FinishShortTask(string name)
+	public void FinishShortTask(int taskId)
 	{
-		ShortTasks.Remove(ShortTasks.FirstOrDefault(item => item.Name == name));
-		LongTasks.First(t => t.Name == _selectedLongTaskName).TaskCount--;
-		_accountManager.FinishShortTask(_selectedLongTaskName, name);
+		ShortTasks.Remove(ShortTasks.FirstOrDefault(task => task.Id == taskId));
+		LongTasks.First(task => task.Id == SelectedLongTask.Id).TaskCount--;
+		_accountManager.FinishShortTask(SelectedLongTask.Id, taskId);
+	}
+
+	public void DeleteShortTask(int taskId)
+	{
+		ShortTasks.Remove(ShortTasks.FirstOrDefault(task => task.Id == taskId));
+		LongTasks.First(task => task.Id == SelectedLongTask.Id).TaskCount--;
+		_accountManager.DeleteShortTask(SelectedLongTask.Id, taskId);
 	}
 }

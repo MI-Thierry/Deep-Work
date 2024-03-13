@@ -41,7 +41,8 @@
 											<ColumnDefinition Width="7*"/>
 											<ColumnDefinition Width="Auto"/>
 										</Grid.ColumnDefinitions>
-										<CheckBox Tag="{x:Bind Name, Mode=OneWay}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
+										
+										<CheckBox Tag="{x:Bind Id, Mode=OneTime}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
 										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 											<Paragraph>
 												<Run Text="{x:Bind Name, Mode=OneWay}"/>
@@ -87,7 +88,7 @@
 										<ColumnDefinition Width="18*"/>
 									</Grid.ColumnDefinitions>
 
-									<CheckBox Tag="{x:Bind Name, Mode=OneWay}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
+									<CheckBox Tag="{x:Bind Id, Mode=OneTime}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
 
 									<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 										<Paragraph FontSize="13">
