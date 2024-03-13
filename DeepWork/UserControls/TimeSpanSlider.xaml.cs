@@ -68,70 +68,26 @@ public sealed partial class TimeSpanSlider : UserControl
 	{
 		string Tag = (sender as Button).Tag as string;
 		TimeSpanParts part = (TimeSpanParts)Enum.Parse(typeof(TimeSpanParts), Tag);
-		switch (part)
+		TimeSpan += part switch
 		{
-			case TimeSpanParts.Hours:
-				HoursDisplay.Focus(FocusState.Keyboard);
-				TimeSpan += TimeSpan.FromHours(1);
-				HoursDisplay.IsSelected = true;
-				break;
-
-			case TimeSpanParts.Minutes:
-				MinutesDisplay.Focus(FocusState.Keyboard);
-				TimeSpan += TimeSpan.FromMinutes(1);
-				MinutesDisplay.IsSelected = true;
-				break;
-
-			case TimeSpanParts.Seconds:
-				SecondDisplay.Focus(FocusState.Keyboard);
-				TimeSpan += TimeSpan.FromSeconds(1);
-				SecondDisplay.IsSelected = true;
-				break;
-
-			default:
-				throw new InvalidOperationException("Unknown button tag.");
-		}
+			TimeSpanParts.Hours => TimeSpan.FromHours(1),
+			TimeSpanParts.Minutes => TimeSpan.FromMinutes(1),
+			TimeSpanParts.Seconds => TimeSpan.FromSeconds(1),
+			_ => throw new InvalidOperationException("Unknown button tag."),
+		};
 	}
 
 	private void DownButton_Click(object sender, RoutedEventArgs e)
 	{
 		string Tag = (sender as Button).Tag as string;
 		TimeSpanParts part = (TimeSpanParts)Enum.Parse(typeof(TimeSpanParts), Tag);
-		switch (part)
+		TimeSpan -= part switch
 		{
-			case TimeSpanParts.Hours:
-				HoursDisplay.Focus(FocusState.Keyboard);
-				TimeSpan -= TimeSpan.FromHours(1);
-				HoursDisplay.IsSelected = true;
-				break;
-
-			case TimeSpanParts.Minutes:
-				MinutesDisplay.Focus(FocusState.Keyboard);
-				TimeSpan -= TimeSpan.FromMinutes(1);
-				MinutesDisplay.IsSelected = true;
-				break;
-
-			case TimeSpanParts.Seconds:
-				SecondDisplay.Focus(FocusState.Keyboard);
-				TimeSpan -= TimeSpan.FromSeconds(1);
-				SecondDisplay.IsSelected = true;
-				break;
-			default:
-				throw new InvalidOperationException("Unknown button tag.");
-		}
-	}
-
-	private void DisplayBorder_GotFocus(object sender, RoutedEventArgs e)
-	{
-		VisualStateManager.GoToState(this, nameof(Focused), false);
-	}
-
-	private void DisplayBorder_LostFocus(object sender, RoutedEventArgs e)
-	{
-		VisualStateManager.GoToState(this, nameof(Unfocused), false);
-		HoursDisplay.IsSelected = false;
-		MinutesDisplay.IsSelected = false;
-		SecondDisplay.IsSelected = false;
+			TimeSpanParts.Hours => TimeSpan.FromHours(1),
+			TimeSpanParts.Minutes => TimeSpan.FromMinutes(1),
+			TimeSpanParts.Seconds => TimeSpan.FromSeconds(1),
+			_ => throw new InvalidOperationException("Unknown button tag."),
+		};
 	}
 
 	private enum TimeSpanParts
@@ -140,5 +96,18 @@ public sealed partial class TimeSpanSlider : UserControl
 		Hours,
 		Minutes,
 		Seconds
+	}
+
+	private void UserControl_GotFocus(object sender, RoutedEventArgs e)
+	{
+		VisualStateManager.GoToState(this, nameof(Focused), false);
+	}
+
+	private void UserControl_LostFocus(object sender, RoutedEventArgs e)
+	{
+		VisualStateManager.GoToState(this, nameof(Unfocused), false);
+		HoursDisplay.IsSelected = false;
+		MinutesDisplay.IsSelected = false;
+		SecondDisplay.IsSelected = false;
 	}
 }

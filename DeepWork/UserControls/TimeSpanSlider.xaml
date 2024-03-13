@@ -7,7 +7,9 @@
 	xmlns:utils="using:DeepWork.Helpers"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d">
+	mc:Ignorable="d"
+	GotFocus="UserControl_GotFocus"
+	LostFocus="UserControl_LostFocus">
 
 	<UserControl.Resources>
 		<Style TargetType="Button" x:Key="NavigationButtonStyle" BasedOn="{StaticResource AlternateCloseButtonStyle}">
@@ -51,7 +53,7 @@
 		</StackPanel>
 		<!--#endregion-->
 
-		<Border x:Name="DisplayBorder" Width="252" Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderThickness="1 1 1 2" BorderBrush="{StaticResource TextControlElevationBorderBrush}" CornerRadius="5" GotFocus="DisplayBorder_GotFocus" LostFocus="DisplayBorder_LostFocus">
+		<Border x:Name="DisplayBorder" Width="252" Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderThickness="1 1 1 2" BorderBrush="{StaticResource TextControlElevationBorderBrush}" CornerRadius="5">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3" Spacing="5">
 				<local:SelectableDisplay x:Name="HoursDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Hours'), BindBack=ConvertHoursBackToTimeSpan, Mode=TwoWay}" Padding="10 2 5 2"/>
 				<TextBlock Text=":" Style="{StaticResource TimeSpanSeparatorTextBlockStyle}"/>
