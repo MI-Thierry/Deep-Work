@@ -9,10 +9,11 @@ namespace DeepWork.Views.Pages
 {
 	public sealed partial class TaskManagementPage : Page
 	{
+		// Todo: Add deleting capabilities
         public TaskManagementViewModel ViewModel { get; set; }
 		public TaskManagementPage()
 		{
-			ViewModel = App.GetService<TaskManagementViewModel>();
+			ViewModel = new TaskManagementViewModel();
 			this.InitializeComponent();
 		}
 
@@ -47,7 +48,7 @@ namespace DeepWork.Views.Pages
 
 			ContentDialog dialog = new()
 			{
-				XamlRoot = this.XamlRoot,
+				XamlRoot = XamlRoot,
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Long Task",
 				PrimaryButtonText = "Add",
@@ -67,7 +68,7 @@ namespace DeepWork.Views.Pages
 
 			ContentDialog dialog = new()
 			{
-				XamlRoot = this.XamlRoot,
+				XamlRoot = XamlRoot,
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Short Task",
 				PrimaryButtonText = "Add",
@@ -90,7 +91,7 @@ namespace DeepWork.Views.Pages
 
 			ContentDialog dialog = new()
 			{
-				XamlRoot = this.XamlRoot,
+				XamlRoot = XamlRoot,
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Long Task",
 				PrimaryButtonText = "Edit",
@@ -113,7 +114,7 @@ namespace DeepWork.Views.Pages
 
 			ContentDialog dialog = new()
 			{
-				XamlRoot = this.XamlRoot,
+				XamlRoot = XamlRoot,
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Short Task",
 				PrimaryButtonText = "Edit",

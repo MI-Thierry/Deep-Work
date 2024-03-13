@@ -1,10 +1,12 @@
-﻿using DeepWork.Services;
+﻿using DeepWork.Data;
+using DeepWork.Services;
 using DeepWork.ViewModels.Pages;
 using DeepWork.ViewModels.Windows;
 using DeepWork.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using System;
+using System.IO;
 
 namespace DeepWork
 {
@@ -12,10 +14,21 @@ namespace DeepWork
 	{
 		private static IServiceProvider _serviceProvider;
 		public Window Window { get; private set; }
+		public string AppDataPath { get; private set; }
+		public string DbPath { get; private set; }
 		public App()
 		{
 			// Todo: Get theme from AccountManagementService.
 			this.InitializeComponent();
+
+			// Create a path to appdata directory
+			string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			AppDataPath = Path.Join(localAppData, "Deep Work");
+			DbPath = Path.Join(AppDataPath, "DeepWorkData.db");
+
+			// Checking appdata directory availability
+			if (!Directory.Exists(AppDataPath))
+				Directory.CreateDirectory(AppDataPath);
 		}
 
 		/// <summary>
@@ -32,11 +45,11 @@ namespace DeepWork
 		{
 			// Initializing application's service provider.
 			IServiceCollection services = new ServiceCollection();
+			services.AddSqlite<AccountContext>($"Data Source={DbPath}");
 			services.AddSingleton<AccountManagementService>();
 			services.AddSingleton<NavigationWindow>();
 
 			// Adding view models for the views
-			services.AddSingleton<TaskManagementViewModel>();
 			services.AddSingleton<NavigationWindowViewModel>();
 
 			// Building service provider.

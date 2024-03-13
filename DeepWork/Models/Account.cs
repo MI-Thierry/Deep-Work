@@ -1,23 +1,22 @@
 ﻿using Microsoft.UI.Xaml;
-using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace DeepWork.Models
 {
-    [Serializable]
     public class Account
     {
-        [XmlAttribute]
+        public int Id { get; set; }
+
+        [Required]
         public string Username { get; set; }
 
-        [XmlAttribute]
         public string Password { get; set; }
 
-        [XmlElement]
-        public ApplicationTheme ApplicationTheme { get; set; }
+        public bool IsActive { get; set; }
 
-        [XmlArray]
+        public ElementTheme Theme { get; set; }
+
 		public List<LongTask> LongTasks { get; set; } = [];
     }
 }

@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace DeepWork.Models
 {
-    [Serializable]
-    public class LongTask
-    {
-        [XmlAttribute]
-        public string Name { get; set; }
+	public class LongTask
+	{
+		public int Id { get; set; }
 
-        [XmlAttribute]
-        public TimeSpan MaxDuration { get; set; }
+		[Required]
+		public string Name { get; set; }
 
-        [XmlAttribute]
-        public uint MaxShortTaskCount { get; set; }
+		public TimeSpan MaxDuration { get; set; }
 
-        [XmlAttribute]
-        public DateTimeOffset StartDate { get; set; }
+		public uint MaxShortTaskCount { get; set; }
 
-        [XmlAttribute]
-        public DateTimeOffset EndDate { get; set; }
+		public DateTimeOffset StartDate { get; set; }
 
-        [XmlArray]
-        public List<ShortTask> RunningTasks { get; set; } = new();
+		public DateTimeOffset EndDate { get; set; }
 
-        [XmlArray]
-        public List<ShortTask> FinishedTasks { get; set; } = new();
-    }
+		public List<ShortTask> RunningTasks { get; set; } = [];
+
+		public List<ShortTask> FinishedTasks { get; set; } = [];
+	}
 }

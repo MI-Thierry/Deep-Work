@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DeepWork.Models;
 using DeepWork.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -24,13 +21,13 @@ public partial class TaskManagementViewModel : ObservableObject
 	[ObservableProperty]
 	private ObservableCollection<ShortTaskViewModel> _shortTasks;
 
-	public TaskManagementViewModel(AccountManagementService accountManager)
+	public TaskManagementViewModel()
 	{
-		_accountManager = accountManager;
-		_longTasks = new ObservableCollection<LongTaskViewModel>();
-		_shortTasks = new ObservableCollection<ShortTaskViewModel>();
+		_accountManager = App.GetService<AccountManagementService>();
+		_longTasks = [];
+		_shortTasks = [];
 
-		foreach (var task in _accountManager.UserAccount.LongTasks)
+		foreach (var task in _accountManager.ActiveAccount.LongTasks)
 			_longTasks.Add(task);
 
 		if (_longTasks.Any())
@@ -96,49 +93,5 @@ public partial class TaskManagementViewModel : ObservableObject
 		ShortTasks.Remove(ShortTasks.FirstOrDefault(item => item.Name == name));
 		LongTasks.First(t => t.Name == _selectedLongTaskName).TaskCount--;
 		_accountManager.FinishShortTask(_selectedLongTaskName, name);
-	}
-
-	private List<LongTask> PopulateLongTasks()
-	{
-		return new List<LongTask>
-		{
-			new() {
-				Name = "First Long Task",
-				StartDate = DateTimeOffset.Now,
-				EndDate = DateTimeOffset.Now + TimeSpan.FromDays(1),
-				MaxDuration = TimeSpan.Zero,
-				MaxShortTaskCount = 0,
-
-				RunningTasks = new List<ShortTask>
-				{
-					new() {
-						Duration = TimeSpan.Zero,
-						Name = "First Task",
-						FinishDate = DateTimeOffset.Now,
-					},
-					new() {
-						Duration = TimeSpan.Zero,
-						Name = "Second Task",
-						FinishDate = DateTimeOffset.Now,
-					}
-				}
-			},
-			new() {
-				Name = "Second Long Task",
-				StartDate = DateTimeOffset.Now,
-				EndDate = DateTimeOffset.Now + TimeSpan.FromDays(1),
-				MaxDuration = TimeSpan.Zero,
-				MaxShortTaskCount = 0,
-
-				RunningTasks = new List<ShortTask>
-				{
-					new() {
-						Duration = TimeSpan.Zero,
-						Name = "Second Task",
-						FinishDate = DateTimeOffset.Now,
-					}
-				}
-			}
-		};
 	}
 }

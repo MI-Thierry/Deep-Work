@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace DeepWork.Models
 {
-    [Serializable]
-    public class ShortTask
-    {
-        [XmlAttribute]
-        public TimeSpan Duration { get; set; }
+	public class ShortTask
+	{
+		public int Id { get; set; }
 
-        [XmlAttribute]
-        public string Name { get; set; }
+		[Required]
+		public string Name { get; set; }
 
-        [XmlAttribute]
-        public DateTimeOffset FinishDate { get; set; }
-    }
+		public TimeSpan Duration { get; set; }
+
+		public DateTimeOffset FinishDate { get; set; }
+	}
 }
