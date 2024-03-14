@@ -1,18 +1,23 @@
+using DeepWork.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Markup;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Windows.System;
 
 namespace DeepWork.UserControls
 {
+	// Todo: Add filtering on this control
 	[ContentProperty(Name ="Content")]
 	public sealed class SelectableDisplay : Control
 	{
 		private Button Display;
-		private static readonly Dictionary<string, List<SelectableDisplay>> _groups = new();
-		public bool IsSelected
+		private static readonly Dictionary<string, List<SelectableDisplay>> _groups = [];
+
+        public bool IsSelected
 		{
 			get { return (bool)GetValue(IsSelectedProperty); }
 			set {
@@ -35,10 +40,10 @@ namespace DeepWork.UserControls
 		{
 			get { return (string)GetValue(GroupNameProperty); }
 			set {
-				if (_groups.ContainsKey(value))
-					_groups[value].Add(this);
+				if (_groups.TryGetValue(value, out List<SelectableDisplay> group))
+					group.Add(this);
 				else
-					_groups.Add(value, new List<SelectableDisplay> { this });
+					_groups.Add(value, [this]);
 				SetValue(GroupNameProperty, value);
 			}
 		}
@@ -70,12 +75,24 @@ namespace DeepWork.UserControls
 			}
 		}
 
+		private string GetCharsFromKeys(VirtualKey key)
+		{
+			StringBuilder buffer = new(256);
+			byte[] keyboardState = new byte[256];
+			KeyboardHelpers.GetKeyboardState(keyboardState);
+
+			_ = KeyboardHelpers.ToUnicode((uint)key, 0, keyboardState, buffer, 256, 0);
+			return buffer.ToString();
+		}
+
 		private void Display_KeyDown(object sender, KeyRoutedEventArgs e)
 		{
-			// Todo: Add validation codes here.
-			string input = Helpers.KeyboardHelpers.GetCharsFromKeys(e.Key, false, false);
-			char[] chars = Content.ToCharArray();
-			Content = chars.Last() + input;
+			string input = GetCharsFromKeys(e.Key);
+			if (!string.IsNullOrEmpty(input) && int.TryParse(input, out int _))
+			{
+				char[] chars = Content.ToCharArray();
+				Content = chars.Last() + input;
+			}
 		}
 
 		private void Display_Click(object sender, RoutedEventArgs e)

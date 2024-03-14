@@ -42,26 +42,30 @@ public sealed partial class TimeSpanSlider : UserControl
 	private TimeSpan ConvertBackToTimeSpan(string value, TimeSpanParts conversionType)
 	{
 		TimeSpan span = TimeSpan;
-		switch (conversionType)
+		if (int.TryParse(value, out int result))
 		{
-			case TimeSpanParts.Hours:
-				span -= TimeSpan.FromHours(span.Hours);
-				span += TimeSpan.FromHours(int.Parse(value));
-				return span;
+			switch (conversionType)
+			{
+				case TimeSpanParts.Hours:
+					span -= TimeSpan.FromHours(span.Hours);
+					span += TimeSpan.FromHours(result);
+					return span;
 
-			case TimeSpanParts.Minutes:
-				span -= TimeSpan.FromMinutes(span.Minutes);
-				span += TimeSpan.FromMinutes(int.Parse(value));
-				return span;
+				case TimeSpanParts.Minutes:
+					span -= TimeSpan.FromMinutes(span.Minutes);
+					span += TimeSpan.FromMinutes(result);
+					return span;
 
-			case TimeSpanParts.Seconds:
-				span -= TimeSpan.FromSeconds(span.Seconds);
-				span += TimeSpan.FromSeconds(int.Parse(value));
-				return span;
+				case TimeSpanParts.Seconds:
+					span -= TimeSpan.FromSeconds(span.Seconds);
+					span += TimeSpan.FromSeconds(result);
+					return span;
 
-			default:
-				throw new InvalidOperationException("The conversion type is unknown.");
+				default:
+					throw new InvalidOperationException("The conversion type is unknown.");
+			}
 		}
+		return span;
 	}
 
 	private void UpButton_Click(object sender, RoutedEventArgs e)

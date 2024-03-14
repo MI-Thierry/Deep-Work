@@ -12,6 +12,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Copyright>Copyright © $([System.DateTime]::UtcNow.Year) ATE Company All rights reserved.</Copyright>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Helpers\Utils.cs" />
