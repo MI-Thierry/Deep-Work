@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace DeepWork.ViewModels.Pages;
 
-// Todo: Remove unnecessary things
 public partial class TaskManagementViewModel : ObservableObject
 {
 	private readonly AccountManagementService _accountManager;

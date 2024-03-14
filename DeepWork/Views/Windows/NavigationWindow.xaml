@@ -47,8 +47,8 @@
 			</Button>
 			
 			<StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Spacing="5">
-				<ImageIcon Source="C:\Users\mithi\source\repos\Deep-Work\DeepWork\Assets\Square44x44Logo.scale-200.png" Height="25"/>
-				<TextBlock x:Name="TitleBarTextBlock" VerticalAlignment="Center" Margin="10 0 0 0"/>
+				<ImageIcon Source="ms-Appx:///Assets/Square44x44Logo.scale-200.png" Height="25"/>
+				<TextBlock Text="Deep Work" VerticalAlignment="Center" Margin="10 0 0 0"/>
 			</StackPanel>
 		</Grid>
 		

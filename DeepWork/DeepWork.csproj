@@ -11,6 +11,7 @@
 	  <UseRidGraph>true</UseRidGraph>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <Copyright>Copyright © $([System.DateTime]::UtcNow.Year) ATE Company All rights reserved.</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Helpers\Utils.cs" />

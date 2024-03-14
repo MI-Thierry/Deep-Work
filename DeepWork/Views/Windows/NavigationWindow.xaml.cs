@@ -7,7 +7,6 @@ using Microsoft.UI.Xaml.Navigation;
 using System.Linq;
 using System;
 using Microsoft.UI.Windowing;
-using Windows.ApplicationModel;
 using Windows.Foundation;
 using Microsoft.UI.Xaml.Media;
 using Windows.Graphics;
@@ -31,9 +30,7 @@ namespace DeepWork.Views.Windows
 			{
 				SystemBackdrop = new MicaBackdrop();
 			}
-
 			AppWindow.Changed += AppWindow_Changed;
-			Activated += NavigationWindow_Activated;
 			AppTitleBar.SizeChanged += AppTitleBar_SizeChanged;
 			AppTitleBar.Loaded += AppTitleBar_Loaded;
 			(Content as FrameworkElement).ActualThemeChanged += NavigationWindow_ActualThemeChanged;
@@ -43,8 +40,6 @@ namespace DeepWork.Views.Windows
 			{
 				AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
 			}
-			// Todo: Make this safe.
-			TitleBarTextBlock.Text = AppInfo.Current.DisplayInfo.DisplayName;
 
 			BackRequestButton.PointerEntered += BackRequestButton_PointerEntered;
 			BackRequestButton.PointerExited += BackRequestButton_PointerExited;
@@ -123,20 +118,6 @@ namespace DeepWork.Views.Windows
 				_Width: (int)Math.Round(bounds.Width * scale),
 				_Height: (int)Math.Round(bounds.Height * scale)
 				);
-		}
-
-		private void NavigationWindow_Activated(object sender, WindowActivatedEventArgs args)
-		{
-			if (args.WindowActivationState == WindowActivationState.Deactivated)
-			{
-				TitleBarTextBlock.Foreground =
-					(SolidColorBrush)App.Current.Resources["WindowCaptionForegroundDisabled"];
-			}
-			else
-			{
-				TitleBarTextBlock.Foreground =
-				(SolidColorBrush)App.Current.Resources["WindowCaptionForeground"];
-			}
 		}
 
 		private void AppWindow_Changed(AppWindow sender, AppWindowChangedEventArgs args)

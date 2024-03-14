@@ -12,13 +12,14 @@ namespace DeepWork
 {
 	public partial class App : Application
 	{
+		private readonly AccountManagementService _accountManager;
 		private static IServiceProvider _serviceProvider;
 		public Window Window { get; private set; }
 		public string AppDataPath { get; private set; }
 		public string DbPath { get; private set; }
+
 		public App()
 		{
-			// Todo: Get theme from AccountManagementService.
 			this.InitializeComponent();
 
 			// Create a path to appdata directory
@@ -29,6 +30,26 @@ namespace DeepWork
 			// Checking appdata directory availability
 			if (!Directory.Exists(AppDataPath))
 				Directory.CreateDirectory(AppDataPath);
+
+			// Initializing application's service provider.
+			IServiceCollection services = new ServiceCollection();
+			services.AddSqlite<AccountContext>($"Data Source={DbPath}");
+			services.AddSingleton<AccountManagementService>();
+			services.AddSingleton<NavigationWindow>();
+
+			// Adding view models for the views
+			services.AddSingleton<NavigationWindowViewModel>();
+
+			// Building service provider.
+			_serviceProvider = services.BuildServiceProvider();
+
+			// Getting account management services and creating windows.
+			_accountManager = GetService<AccountManagementService>();
+
+			if (_accountManager.IsAccountAvailable)
+				Current.RequestedTheme = _accountManager.ActiveAccount.Theme == ElementTheme.Light ? ApplicationTheme.Light
+										 : _accountManager.ActiveAccount.Theme == ElementTheme.Dark ? ApplicationTheme.Dark
+										 : Current.RequestedTheme;
 		}
 
 		/// <summary>
@@ -43,21 +64,7 @@ namespace DeepWork
 
 		protected override void OnLaunched(LaunchActivatedEventArgs args)
 		{
-			// Initializing application's service provider.
-			IServiceCollection services = new ServiceCollection();
-			services.AddSqlite<AccountContext>($"Data Source={DbPath}");
-			services.AddSingleton<AccountManagementService>();
-			services.AddSingleton<NavigationWindow>();
-
-			// Adding view models for the views
-			services.AddSingleton<NavigationWindowViewModel>();
-
-			// Building service provider.
-			_serviceProvider = services.BuildServiceProvider();
-
-			// Getting account management services and creating windows.
-			AccountManagementService accountManager = GetService<AccountManagementService>();
-			if (accountManager.IsAccountAvailable)
+			if (_accountManager.IsAccountAvailable)
 				Window = GetService<NavigationWindow>();
 			else
 				Window = new SignupWindow();

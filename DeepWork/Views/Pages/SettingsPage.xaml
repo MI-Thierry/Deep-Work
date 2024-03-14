@@ -13,35 +13,84 @@
 	<Page.DataContext>
 		<viewModels:SettingsViewModel/>
 	</Page.DataContext>
-	
+
 	<Page.Resources>
 		<utils:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
 	</Page.Resources>
+	<ScrollViewer>
+		<StackPanel Margin="10">
+			<TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" Margin="20"/>
+			<TextBlock Margin="20 20 0 0" Style="{StaticResource BodyStrongTextBlockStyle}" Text="Account"/>
+			<Expander Margin="20 0 0 0" HorizontalAlignment="Stretch">
+				<Expander.Header>
+					<TextBlock Text="Future Implementation"/>
+				</Expander.Header>
+			</Expander>
+			<TextBlock Margin="20 20 0 0" Style="{StaticResource BodyStrongTextBlockStyle}" Text="General"/>
+			<Expander HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Margin="20 0 0 0">
+				<Expander.Header>
+					<StackPanel Orientation="Horizontal">
+						<FontIcon Glyph="&#xE790;" />
+						<RichTextBlock IsTextSelectionEnabled="False" Margin="15">
+							<Paragraph FontSize="14">
+								<Run Text="App theme"/>
+							</Paragraph>
+							<Paragraph FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+								<Run Text="Select which app theme to display"/>
+							</Paragraph>
+						</RichTextBlock>
+					</StackPanel>
+				</Expander.Header>
+				<Expander.Content>
+					<StackPanel>
+						<RadioButton Margin="0 12 0 0"
+									 Content="Light"
+									 Tag="Light"
+									 GroupName="themeSelect"
+									 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
+									 Checked="ChangeThemeRadioButtonChecked"/>
 
-	<StackPanel Margin="10">
-		<TextBlock FontSize="20"
-				   FontWeight="Medium"
-				   Text="Personalization" />
-		<TextBlock Margin="0 12 0 0" Text="Theme" />
-		<RadioButton Margin="0 12 0 0"
-					 Content="Light"
-					 Tag="Light"
-					 GroupName="themeSelect"
-					 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
-					 Checked="ChangeThemeRadioButtonChecked"/>
-		
-		<RadioButton Margin="0 8 0 0"
-					 Content="Dark"
-					 Tag="Dark"
-					 GroupName="themeSelect"
-					 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
-					 Checked="ChangeThemeRadioButtonChecked"/>
+						<RadioButton Margin="0 8 0 0"
+									 Content="Dark"
+									 Tag="Dark"
+									 GroupName="themeSelect"
+									 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
+									 Checked="ChangeThemeRadioButtonChecked"/>
 
-		<TextBlock Margin="0 24 0 0"
-				   FontSize="20"
-				   FontWeight="Medium"
-				   Text="About Deep Work" />
-
-		<TextBlock Margin="0 12 0 0" Text="{Binding AppVersion, Mode=OneWay}"/>
-	</StackPanel>
+						<RadioButton Margin="0 8 0 0"
+									 Content="Use system setting"
+									 Tag="Default"
+									 GroupName="themeSelect"
+									 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
+									 Checked="ChangeThemeRadioButtonChecked"/>
+					</StackPanel>
+				</Expander.Content>
+			</Expander>
+			<TextBlock Text="About" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="20 20 0 0"/>
+			<Expander HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Margin="20 0 0 0">
+				<Expander.Header>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<ImageIcon Source="ms-Appx:///Assets/Square44x44Logo.scale-200.png" Height="25"/>
+						<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False" Margin="15">
+							<Paragraph FontSize="14">
+								<Run Text="Deep Work"/>
+							</Paragraph>
+							<Paragraph FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+								<Run Text="{Binding CopyrightInformation}"/>
+							</Paragraph>
+						</RichTextBlock>
+						<TextBlock Grid.Column="2" Text="{Binding AppVersion}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+					</Grid>
+				</Expander.Header>
+				<Expander.Content>
+					<HyperlinkButton Content="License Terms" NavigateUri="https://github.com/MI-Thierry/Deep-Work/blob/main/LICENSE"/>
+				</Expander.Content>
+			</Expander>
+		</StackPanel>
+	</ScrollViewer>
 </Page>

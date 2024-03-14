@@ -66,6 +66,12 @@ namespace DeepWork.Services
 			_accountContext.SaveChanges();
 		}
 
+		public void ChangeTheme(ElementTheme theme)
+		{
+			ActiveAccount.Theme = theme;
+			_accountContext.SaveChanges();
+		}
+
 		public LongTask AddLongTask(LongTask task)
 		{
 			if (!IsAccountAvailable)

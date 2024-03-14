@@ -13,12 +13,12 @@ namespace DeepWork.Helpers
                 throw new ArgumentException("EnumToBooleanConverter parameter must be an enum name");
             }
 
-            if (!Enum.IsDefined(typeof(ApplicationTheme), value))
+            if (!Enum.IsDefined(typeof(ElementTheme), value))
             {
                 throw new ArgumentException("EnumToBooleanConverter value must be an enum");
             }
 
-            var enumValue = Enum.Parse(typeof(ApplicationTheme), enumString);
+            var enumValue = Enum.Parse(typeof(ElementTheme), enumString);
 
             return enumValue.Equals(value);
         }
@@ -30,7 +30,7 @@ namespace DeepWork.Helpers
                 throw new ArgumentException("EnumToBooleanConverter parameter must be an enum name");
             }
 
-            return Enum.Parse(typeof(ApplicationTheme), enumString);
+            return Enum.Parse(typeof(ElementTheme), enumString);
         }
     }
 }
