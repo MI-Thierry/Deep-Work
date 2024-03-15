@@ -114,4 +114,10 @@ public sealed partial class TimeSpanSlider : UserControl
 		MinutesDisplay.IsSelected = false;
 		SecondDisplay.IsSelected = false;
 	}
+
+	private void SelectableDisplay_BeforeTextChanging(SelectableDisplay sender, SelectableDisplayBeforeTextChangingEventArgs args)
+	{
+		if (!int.TryParse(args.NewText, out int _))
+			args.Cancel = true;
+	}
 }

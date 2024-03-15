@@ -55,11 +55,11 @@
 
 		<Border x:Name="DisplayBorder" Width="252" Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderThickness="1 1 1 2" BorderBrush="{StaticResource TextControlElevationBorderBrush}" CornerRadius="5">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3" Spacing="5">
-				<local:SelectableDisplay x:Name="HoursDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Hours'), BindBack=ConvertHoursBackToTimeSpan, Mode=TwoWay}" Padding="10 2 5 2"/>
+				<local:SelectableDisplay x:Name="HoursDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Hours'), BindBack=ConvertHoursBackToTimeSpan, Mode=TwoWay}" Padding="10 2 5 2" BeforeTextChanging="SelectableDisplay_BeforeTextChanging"/>
 				<TextBlock Text=":" Style="{StaticResource TimeSpanSeparatorTextBlockStyle}"/>
-				<local:SelectableDisplay x:Name="MinutesDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Minutes'), BindBack=ConvertMinutesBackToTimeSpan, Mode=TwoWay}" Padding="7.5 2 7.5 2"/>
+				<local:SelectableDisplay x:Name="MinutesDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Minutes'), BindBack=ConvertMinutesBackToTimeSpan, Mode=TwoWay}" Padding="7.5 2 7.5 2" BeforeTextChanging="SelectableDisplay_BeforeTextChanging"/>
 				<TextBlock Text=":" Style="{StaticResource TimeSpanSeparatorTextBlockStyle}"/>
-				<local:SelectableDisplay x:Name="SecondDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Seconds'), BindBack=ConvertSecondsBackToTimeSpan, Mode=TwoWay}" Padding="5 2 10 2"/>
+				<local:SelectableDisplay x:Name="SecondDisplay" GroupName="SelectableDisplays" Style="{StaticResource SelectableDisplayStyle}" Content="{x:Bind ConvertTimeSpanToString(TimeSpan, 'Seconds'), BindBack=ConvertSecondsBackToTimeSpan, Mode=TwoWay}" Padding="5 2 10 2" BeforeTextChanging="SelectableDisplay_BeforeTextChanging"/>
 			</StackPanel>
 		</Border>
 
