@@ -93,13 +93,7 @@ namespace DeepWork.Services
 
 		public void FinishLongTask(int id)
 		{
-			if (!IsAccountAvailable)
-				return;
-
-			LongTask taskToRemove = ActiveAccount.LongTasks.FirstOrDefault(item => item.Id == id);
-			ActiveAccount.LongTasks.Remove(taskToRemove);
-			_accountContext.LongTasks.Remove(taskToRemove);
-			_accountContext.SaveChanges();
+			DeleteLongTask(id);
 		}
 
 		public void DeleteLongTask(int id)
@@ -108,6 +102,10 @@ namespace DeepWork.Services
 				return;
 
 			LongTask taskToRemove = ActiveAccount.LongTasks.FirstOrDefault(item => item.Id == id);
+			foreach (var shortTask in taskToRemove.RunningTasks)
+				_accountContext.RunningTasks.Remove(shortTask);
+			foreach (var shortTask in taskToRemove.FinishedTasks)
+				_accountContext.FinishedTasks.Remove(shortTask);
 			ActiveAccount.LongTasks.Remove(taskToRemove);
 			_accountContext.LongTasks.Remove(taskToRemove);
 			_accountContext.SaveChanges();

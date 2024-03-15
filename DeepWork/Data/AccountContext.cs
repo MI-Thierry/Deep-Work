@@ -8,5 +8,5 @@ public class AccountContext(DbContextOptions<AccountContext> options) : DbContex
 	public DbSet<Account> Accounts => Set<Account>();
 	public DbSet<LongTask> LongTasks => Set<LongTask>();
     public DbSet<ShortTask> RunningTasks => Set<ShortTask>();
-	public DbSet<ShortTask> FinishedTask => Set<ShortTask>();
+	public DbSet<ShortTask> FinishedTasks => Set<ShortTask>();
 }
