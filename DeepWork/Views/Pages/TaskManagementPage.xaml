@@ -34,7 +34,7 @@
 					<ListView ItemsSource="{Binding ShortTasks}" SelectionChanged="ShortTaskListView_SelectionChanged">
 						<ListView.ItemTemplate>
 							<DataTemplate x:DataType="viewModels:ShortTaskViewModel">
-								<ListViewItem>
+								<ListViewItem x:Name="ShortTaskListViewItem">
 									<Grid>
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="1*"/>
@@ -43,6 +43,7 @@
 										</Grid.ColumnDefinitions>
 										
 										<CheckBox Tag="{x:Bind Id, Mode=OneTime}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
+										<Button Content="&#xE74D;" Grid.Column="2" IsEnabled="{Binding ElementName=ShortTaskListViewItem, Path=IsSelected}" Style="{StaticResource AlternateCloseButtonStyle}" Foreground="IndianRed" Click="DeleteShortTaskButton_Click"/>
 										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 											<Paragraph>
 												<Run Text="{x:Bind Name, Mode=OneWay}"/>
@@ -78,18 +79,36 @@
 			</Grid.RowDefinitions>
 			<TextBlock Text="Task Manager" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
 			<ScrollViewer Grid.Row="1">
-				<ListView ItemsSource="{Binding LongTasks}" SelectionChanged="LongTasksListView_SelectionChanged" IsDoubleTapEnabled="True">
+				<ListView ItemsSource="{Binding LongTasks}" SelectionChanged="LongTasksListView_SelectionChanged">
 					<ListView.ItemTemplate>
 						<DataTemplate x:DataType="viewModels:LongTaskViewModel">
-							<ListViewItem DoubleTapped="ListViewItem_DoubleTapped" IsDoubleTapEnabled="True">
+							<ListViewItem x:Name="LongTaskListViewItem">
 								<Grid Margin="5">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="1*"/>
 										<ColumnDefinition Width="18*"/>
+										<ColumnDefinition Width="Auto"/>
 									</Grid.ColumnDefinitions>
 
 									<CheckBox Tag="{x:Bind Id, Mode=OneTime}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
-
+									<Button Content="&#xE712;" Grid.Column="2" IsEnabled="{Binding ElementName=LongTaskListViewItem, Path=IsSelected}" Style="{StaticResource AlternateCloseButtonStyle}">
+										<Button.Flyout>
+											<MenuFlyout Placement="Bottom">
+												<MenuFlyoutItem Text="Short Tasks" Click="OpenShortTasksMenuFlyoutItem_Click">
+													<MenuFlyoutItem.Icon>
+														<FontIcon Glyph="&#xE8FD;" />
+													</MenuFlyoutItem.Icon>
+												</MenuFlyoutItem>
+												<MenuFlyoutSeparator/>
+												<MenuFlyoutItem Text="Delete Task" Click="DeleteLongTaskMenuFlyoutItem_Click">
+													<MenuFlyoutItem.Icon>
+														<FontIcon Glyph="&#xE74D;" Foreground="IndianRed"/>
+													</MenuFlyoutItem.Icon>
+												</MenuFlyoutItem>
+											</MenuFlyout>
+										</Button.Flyout>
+									</Button>
+									
 									<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
 										<Paragraph FontSize="13">
 											<Run Text="{x:Bind Name, Mode=OneWay}"/>

@@ -11,14 +11,14 @@ using Windows.System;
 
 namespace DeepWork.UserControls;
 
-[ContentProperty(Name ="Content")]
+[ContentProperty(Name = "Content")]
 public sealed class SelectableDisplay : Control
 {
 	private Button Display;
 	private static readonly Dictionary<string, List<SelectableDisplay>> _groups = [];
 
 	public event TypedEventHandler<SelectableDisplay, SelectableDisplayBeforeTextChangingEventArgs> BeforeTextChanging;
-        public bool IsSelected
+	public bool IsSelected
 	{
 		get { return (bool)GetValue(IsSelectedProperty); }
 		set {
@@ -110,7 +110,7 @@ public sealed class SelectableDisplay : Control
 	{
 		bool useTransitions = false;
 		if (IsSelected)
-			VisualStateManager.GoToState(this,"Selected" ,useTransitions);
+			VisualStateManager.GoToState(this, "Selected", useTransitions);
 		else
 			VisualStateManager.GoToState(this, "Unselected", useTransitions);
 	}

@@ -1,15 +1,16 @@
+using DeepWork.Helpers;
 using DeepWork.ViewModels.Pages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DeepWork.Views.Pages
 {
 	public sealed partial class TaskManagementPage : Page
 	{
-        public TaskManagementViewModel ViewModel { get; set; }
+		public TaskManagementViewModel ViewModel { get; set; }
 		public TaskManagementPage()
 		{
 			ViewModel = new TaskManagementViewModel();
@@ -94,7 +95,6 @@ namespace DeepWork.Views.Pages
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Long Task",
 				PrimaryButtonText = "Edit",
-				SecondaryButtonText = "Delete",
 				CloseButtonText = "Cancel",
 				DefaultButton = ContentDialogButton.Primary,
 				Content = content
@@ -103,8 +103,6 @@ namespace DeepWork.Views.Pages
 			ContentDialogResult result = await dialog.ShowAsync();
 			if (result is ContentDialogResult.Primary)
 				ViewModel.EditSelectedLongTask(content.ViewModel);
-			else if (result is ContentDialogResult.Secondary)
-				ViewModel.DeleteLongTask(content.ViewModel.Id);
 		}
 
 		private async void EditShortTaskButton_Click(object sender, RoutedEventArgs e)
@@ -120,7 +118,6 @@ namespace DeepWork.Views.Pages
 				Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
 				Title = "Add Short Task",
 				PrimaryButtonText = "Edit",
-				SecondaryButtonText = "Delete",
 				CloseButtonText = "Cancel",
 				DefaultButton = ContentDialogButton.Primary,
 				Content = content
@@ -129,15 +126,44 @@ namespace DeepWork.Views.Pages
 			ContentDialogResult result = await dialog.ShowAsync();
 			if (result == ContentDialogResult.Primary)
 				ViewModel.EditShortTask(content.ViewModel);
-			else if (result == ContentDialogResult.Secondary)
-				ViewModel.DeleteShortTask(content.ViewModel.Id);
+		}
+		private async void DeleteLongTaskMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+		{
+			ContentDialog dialog = new()
+			{
+				XamlRoot = this.XamlRoot,
+				Title = "Warning",
+				PrimaryButtonText = "Yes",
+				CloseButtonText = "No",
+				DefaultButton = ContentDialogButton.Close,
+				Content = "Are you sure to you want to delete this long task"
+			};
+			var result = await dialog.ShowAsync();
+
+			if (result == ContentDialogResult.Primary)
+				ViewModel.DeleteLongTask(ViewModel.SelectedLongTask.Id);
 		}
 
-		private void ListViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+		private void OpenShortTasksMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
 		{
-			// Todo: Fix the bug here where I'm double clicking list item and pane opens and closes.
-			e.Handled = true;
 			splitView.IsPaneOpen = true;
+		}
+
+		private async void DeleteShortTaskButton_Click(object sender, RoutedEventArgs e)
+		{
+			ContentDialog dialog = new()
+			{
+				XamlRoot = this.XamlRoot,
+				Title = "Warning",
+				PrimaryButtonText = "Yes",
+				CloseButtonText = "No",
+				DefaultButton = ContentDialogButton.Close,
+				Content = "Are you sure to you want to delete this short task"
+			};
+			var result = await dialog.ShowAsync();
+
+			if (result == ContentDialogResult.Primary)
+				ViewModel.DeleteShortTask(ViewModel.SelectedShortTask.Id);
 		}
 	}
 }
