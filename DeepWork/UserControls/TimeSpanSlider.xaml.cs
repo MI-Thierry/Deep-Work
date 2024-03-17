@@ -6,6 +6,22 @@ namespace DeepWork.UserControls;
 
 public sealed partial class TimeSpanSlider : UserControl
 {
+	public TimeSpan MaxTimeSpan
+	{
+		get { return (TimeSpan)GetValue(MaxTimeSpanProperty); }
+		set { SetValue(MaxTimeSpanProperty, value); }
+	}
+	public static readonly DependencyProperty MaxTimeSpanProperty =
+		DependencyProperty.Register(nameof(MaxTimeSpan), typeof(TimeSpan), typeof(TimeSpanSlider), new PropertyMetadata(TimeSpan.MaxValue));
+
+	public TimeSpan MinTimeSpan
+	{
+		get { return (TimeSpan)GetValue(MinTimeSpanProperty); }
+		set { SetValue(MinTimeSpanProperty, value); }
+	}
+	public static readonly DependencyProperty MinTimeSpanProperty =
+		DependencyProperty.Register(nameof(MinTimeSpan), typeof(TimeSpan), typeof(TimeSpanSlider), new PropertyMetadata(TimeSpan.MinValue));
+
 	public TimeSpan TimeSpan
 	{
 		get { return (TimeSpan)GetValue(TimeSpanProperty); }
@@ -41,6 +57,7 @@ public sealed partial class TimeSpanSlider : UserControl
 
 	private TimeSpan ConvertBackToTimeSpan(string value, TimeSpanParts conversionType)
 	{
+		var metaData = TimeSpanProperty.GetMetadata(typeof(TimeSpan));
 		TimeSpan span = TimeSpan;
 		if (int.TryParse(value, out int result))
 		{
@@ -49,17 +66,35 @@ public sealed partial class TimeSpanSlider : UserControl
 				case TimeSpanParts.Hours:
 					span -= TimeSpan.FromHours(span.Hours);
 					span += TimeSpan.FromHours(result);
-					return span;
+					return (span > MaxTimeSpan && TimeSpan == MaxTimeSpan) ? MaxTimeSpan + TimeSpan.FromTicks(1)
+						: (span > MaxTimeSpan && TimeSpan > MaxTimeSpan) ? MaxTimeSpan
+						: (span > MaxTimeSpan) ? MaxTimeSpan
+						: (span < MinTimeSpan && TimeSpan == MinTimeSpan) ? MinTimeSpan + TimeSpan.FromTicks(1)
+						: (span < MinTimeSpan && TimeSpan > MinTimeSpan)? MinTimeSpan
+						: (span < MinTimeSpan) ? MinTimeSpan
+						: span;
 
 				case TimeSpanParts.Minutes:
 					span -= TimeSpan.FromMinutes(span.Minutes);
 					span += TimeSpan.FromMinutes(result);
-					return span;
+					return (span > MaxTimeSpan && TimeSpan == MaxTimeSpan) ? MaxTimeSpan + TimeSpan.FromTicks(1)
+						: (span > MaxTimeSpan && TimeSpan > MaxTimeSpan) ? MaxTimeSpan
+						: (span > MaxTimeSpan) ? MaxTimeSpan
+						: (span < MinTimeSpan && TimeSpan == MinTimeSpan) ? MinTimeSpan + TimeSpan.FromTicks(1)
+						: (span < MinTimeSpan && TimeSpan > MinTimeSpan) ? MinTimeSpan
+						: (span < MinTimeSpan) ? MinTimeSpan
+						: span;
 
 				case TimeSpanParts.Seconds:
 					span -= TimeSpan.FromSeconds(span.Seconds);
 					span += TimeSpan.FromSeconds(result);
-					return span;
+					return (span > MaxTimeSpan && TimeSpan == MaxTimeSpan) ? MaxTimeSpan + TimeSpan.FromTicks(1)
+						: (span > MaxTimeSpan && TimeSpan > MaxTimeSpan) ? MaxTimeSpan
+						: (span > MaxTimeSpan) ? MaxTimeSpan
+						: (span < MinTimeSpan && TimeSpan == MinTimeSpan) ? MinTimeSpan + TimeSpan.FromTicks(1)
+						: (span < MinTimeSpan && TimeSpan > MinTimeSpan) ? MinTimeSpan
+						: (span < MinTimeSpan) ? MinTimeSpan
+						: span;
 
 				default:
 					throw new InvalidOperationException("The conversion type is unknown.");
@@ -72,26 +107,32 @@ public sealed partial class TimeSpanSlider : UserControl
 	{
 		string Tag = (sender as Button).Tag as string;
 		TimeSpanParts part = (TimeSpanParts)Enum.Parse(typeof(TimeSpanParts), Tag);
-		TimeSpan += part switch
+		if (TimeSpan <= MaxTimeSpan)
 		{
-			TimeSpanParts.Hours => TimeSpan.FromHours(1),
-			TimeSpanParts.Minutes => TimeSpan.FromMinutes(1),
-			TimeSpanParts.Seconds => TimeSpan.FromSeconds(1),
-			_ => throw new InvalidOperationException("Unknown button tag."),
-		};
+			TimeSpan += part switch
+			{
+				TimeSpanParts.Hours => TimeSpan.FromHours(1),
+				TimeSpanParts.Minutes => TimeSpan.FromMinutes(1),
+				TimeSpanParts.Seconds => TimeSpan.FromSeconds(1),
+				_ => throw new InvalidOperationException("Unknown button tag."),
+			};
+		}
 	}
 
 	private void DownButton_Click(object sender, RoutedEventArgs e)
 	{
 		string Tag = (sender as Button).Tag as string;
 		TimeSpanParts part = (TimeSpanParts)Enum.Parse(typeof(TimeSpanParts), Tag);
-		TimeSpan -= part switch
+		if (TimeSpan >= MinTimeSpan)
 		{
-			TimeSpanParts.Hours => TimeSpan.FromHours(1),
-			TimeSpanParts.Minutes => TimeSpan.FromMinutes(1),
-			TimeSpanParts.Seconds => TimeSpan.FromSeconds(1),
-			_ => throw new InvalidOperationException("Unknown button tag."),
-		};
+			TimeSpan -= part switch
+			{
+				TimeSpanParts.Hours => TimeSpan.FromHours(1),
+				TimeSpanParts.Minutes => TimeSpan.FromMinutes(1),
+				TimeSpanParts.Seconds => TimeSpan.FromSeconds(1),
+				_ => throw new InvalidOperationException("Unknown button tag."),
+			};
+		}
 	}
 
 	private enum TimeSpanParts
