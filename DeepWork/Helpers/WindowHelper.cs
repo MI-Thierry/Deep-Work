@@ -1,16 +1,16 @@
-﻿using Microsoft.UI.Xaml;
-using Microsoft.UI;
-using System;
-using WinRT.Interop;
+﻿using Microsoft.UI;
 using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Threading.Tasks;
+using System;
+using System.Runtime.InteropServices;
 using Windows.Foundation;
+using WinRT.Interop;
 
 namespace DeepWork.Helpers
 {
-    public static class WindowHelpers
-    {
+	public static class WindowHelper
+	{
 		public static AppWindow GetAppWindow(Window window)
 		{
 			IntPtr hWnd = WindowNative.GetWindowHandle(window);
@@ -29,6 +29,20 @@ namespace DeepWork.Helpers
 				XamlRoot = xamlRoot
 			};
 			return TaskDialog.ShowAsync();
+		}
+
+		[DllImport("user32.dll")]
+		private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+		public static void ShowWindow(Window window)
+		{
+			IntPtr hwnd = WindowNative.GetWindowHandle(window);
+			ShowWindow(hwnd, 0x00000009);
+			SetForegroundWindow(hwnd);
 		}
 	}
 }

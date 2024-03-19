@@ -19,8 +19,8 @@ namespace DeepWork.Models
 
 		public DateTimeOffset EndDate { get; set; }
 
-		public List<ShortTask> RunningTasks { get; set; }
+		public List<ShortTask> RunningTasks { get; set; } = [];
 
-		public List<ShortTask> FinishedTasks { get; set; }
+		public List<ShortTask> FinishedTasks { get; set; } = [];
 	}
 }

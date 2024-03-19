@@ -1,10 +1,14 @@
 ﻿using DeepWork.Data;
+using DeepWork.Helpers;
 using DeepWork.Services;
 using DeepWork.ViewModels.Pages;
 using DeepWork.ViewModels.Windows;
 using DeepWork.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
+using Microsoft.Windows.AppLifecycle;
+using Microsoft.Windows.AppNotifications;
 using System;
 using System.IO;
 
@@ -39,6 +43,13 @@ namespace DeepWork
 
 			// Adding view models for the views
 			services.AddSingleton<NavigationWindowViewModel>();
+			services.AddSingleton((serviceProvider) =>
+			{
+				return new PomodoroTimerViewModel(
+					serviceProvider.GetRequiredService<AccountManagementService>(),
+					Window.DispatcherQueue
+					);
+			});
 
 			// Building service provider.
 			_serviceProvider = services.BuildServiceProvider();
@@ -69,6 +80,55 @@ namespace DeepWork
 			else
 				Window = new SignupWindow();
 			Window.Activate();
+
+			// To ensure all Notification handling happens in this process instance, register for
+			// NotificationInvoked before calling Register(). Without this a new process will
+			// be launched to handle the notification.
+			AppNotificationManager notificationManager = AppNotificationManager.Default;
+			notificationManager.NotificationInvoked += NotificationManager_NotificationInvoked;
+			notificationManager.Register();
+
+			AppActivationArguments activatedArgs = AppInstance.GetCurrent().GetActivatedEventArgs();
+			var activationKind = activatedArgs.Kind;
+			if (activationKind != ExtendedActivationKind.AppNotification)
+				LaunchAndBringToForegroundIfNeeded();
+			else
+				HandleNotification((AppNotificationActivatedEventArgs)activatedArgs.Data);
+
+		}
+
+		private void HandleNotification(AppNotificationActivatedEventArgs args)
+		{
+			DispatcherQueue dispatcherQueue = Window?.DispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
+			PomodoroTimerViewModel pmdrVm = GetService<PomodoroTimerViewModel>();
+
+			dispatcherQueue.TryEnqueue(delegate
+			{
+				switch (args.Arguments["action"])
+				{
+					case "stopPomodoroSession":
+						pmdrVm.StopPomodoroSession();
+						LaunchAndBringToForegroundIfNeeded();
+						break;
+
+					case "dismiss":
+						break;
+
+					default:
+						LaunchAndBringToForegroundIfNeeded();
+						break;
+				}
+			});
+		}
+
+		private void LaunchAndBringToForegroundIfNeeded()
+		{
+			WindowHelper.ShowWindow(Window);
+		}
+
+		private void NotificationManager_NotificationInvoked(AppNotificationManager sender, AppNotificationActivatedEventArgs args)
+		{
+			HandleNotification(args);
 		}
 	}
 }

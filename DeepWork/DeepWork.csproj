@@ -26,6 +26,7 @@
     <Content Remove="Assets\Iceburg Image.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="UserControls\PmdrDurationInputBox.xaml" />
     <None Remove="UserControls\TimeSpanSlider.xaml" />
     <None Remove="Views\AccountCreationPage.xaml" />
     <None Remove="Views\FocusSessionPage.xaml" />
@@ -40,11 +41,11 @@
     <None Remove="Views\Pages\HomePage.xaml" />
     <None Remove="Views\Pages\LongTasksPage.xaml" />
     <None Remove="Views\Pages\MonitoringPage.xaml" />
+    <None Remove="Views\Pages\PomodoroTimerPage.xaml" />
     <None Remove="Views\Pages\TaskManagementPage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
     <None Remove="UserControls\DateSlider.xaml" />
     <None Remove="UserControls\NumberInput.xaml" />
-    <None Remove="UserControls\TimeInputBox.xaml" />
     <None Remove="Views\Windows\NavigationWindow.xaml" />
     <None Remove="Views\Windows\SignupWindow.xaml" />
   </ItemGroup>
@@ -94,6 +95,12 @@
     <None Update="Assets\Iceburg Image.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="UserControls\PmdrDurationInputBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Pages\PomodoroTimerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Windows\SignupWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -113,11 +120,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\Pages\HomePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="UserControls\TimeInputBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

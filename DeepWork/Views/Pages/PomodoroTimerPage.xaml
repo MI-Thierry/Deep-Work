@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+	x:Class="DeepWork.Views.Pages.PomodoroTimerPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:DeepWork.Views.Pages"
+	xmlns:viewModels="using:DeepWork.ViewModels.Pages"
+	xmlns:uc="using:DeepWork.UserControls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
+
+	<ScrollViewer HorizontalScrollBarVisibility="Auto">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="500"/>
+				<ColumnDefinition MinWidth="300"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" VerticalAlignment="Stretch" CornerRadius="5" Margin="5" Height="400">
+				<Grid Margin="5">
+					<StackPanel Margin="5" Spacing="10" Visibility="{x:Bind ConvertPeriodTypeToVisibility(ViewModel.CurrentPeriodType ,'OutSession'), Mode=OneWay}">
+						<TextBlock Text="Time to Focus" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"/>
+						<RichTextBlock IsTextSelectionEnabled="False">
+							<Paragraph Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextAlignment="Center">
+								<Run Text="You can enter the amount of minutes to focus. There is break of 5 minutes every 25 minutes."/>
+							</Paragraph>
+						</RichTextBlock>
+						<uc:PmdrDurationInputBox Value="{x:Bind GetMinutesFromTimeSpan(ViewModel.PmdrSessionDuration), BindBack=GetTimeSpanFromMinutes, Mode=TwoWay}" StepValue="30" PlaceHolderText="Mins" MaxValue="360" MinValue="30"/>
+						<RichTextBlock>
+							<Paragraph TextAlignment="Center">
+								<Run Text="You'll have"/>
+								<Run Text="{x:Bind ViewModel.TotalBreakPeriodCount, Mode=OneWay}"/>
+								<Run Text="breaks"/>
+							</Paragraph>
+							<Paragraph TextAlignment="Center">
+								<Run Text="Focus Session until"/>
+								<Run Text="{x:Bind ConvertDateTimeToString(ViewModel.PmdrSessionEndTime), Mode=OneWay}"/>
+							</Paragraph>
+						</RichTextBlock>
+						<Button HorizontalAlignment="Center" Command="{x:Bind ViewModel.StartPomodoroSessionCommand}" Style="{StaticResource AccentButtonStyle}" >
+							<StackPanel Spacing="5" Orientation="Horizontal">
+								<FontIcon Glyph="&#xedda;"/>
+								<TextBlock Text="Start Focus Session"/>
+							</StackPanel>
+						</Button>
+					</StackPanel>
+					<StackPanel Spacing="10" Visibility="{x:Bind ConvertPeriodTypeToVisibility(ViewModel.CurrentPeriodType ,'InSession'), Mode=OneWay}">
+						<TextBlock Text="{x:Bind ConvertPeriodTypeToString(ViewModel.CurrentPeriodType), Mode=OneWay}" Style="{StaticResource BodyStrongTextBlockStyle}" HorizontalAlignment="Center"/>
+						<Grid>
+							<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
+							<TextBlock Text="{x:Bind ConvertTimeSpanToString(ViewModel.CountDown), Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"/>
+							<ProgressRing Width="252" Height="252"  Value="{x:Bind CalculatePercentage(ViewModel.CountDown, ViewModel.CurrentPeriodType), Mode=OneWay}" IsIndeterminate="False" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+						</Grid>
+						<RichTextBlock IsTextSelectionEnabled="False">
+							<Paragraph FontSize="14" TextAlignment="Center">
+								<Run Text="Up Next: "/>
+								<Run Text="{x:Bind ConvertPeriodTypeToString(ViewModel.NextPeriodType), Mode=OneWay}"/>
+							</Paragraph>
+							<Paragraph FontSize="14" TextAlignment="Center">
+								<Run Text="Elapsed time is: "/>
+								<Run Text="{x:Bind ViewModel.ElapsedTime, Mode=OneWay}"/>
+							</Paragraph>
+						</RichTextBlock>
+						<Button HorizontalAlignment="Center" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.StopPomodoroSessionCommand}">
+							<StackPanel Spacing="5" Orientation="Horizontal">
+								<FontIcon Glyph="&#xe978;" FontFamily="Segoe Fluent Icons"/>
+								<TextBlock Text="Stop focus session" />
+							</StackPanel>
+						</Button>
+					</StackPanel>
+				</Grid>
+			</Border>
+			
+			<Border Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="5" Margin="5">
+				<ScrollViewer>
+					<StackPanel>
+						<TextBlock Text="Long Tasks" Margin="20 10 0 0" Style="{StaticResource SubtitleTextBlockStyle}"/>
+						<ListView ItemsSource="{x:Bind ViewModel.LongTasks}" SelectionChanged="LongTasksListView_SelectionChanged">
+							<ListView.ItemTemplate>
+								<DataTemplate x:DataType="viewModels:LongTaskViewModel">
+									<ListViewItem x:Name="LongTaskListViewItem" Margin="5">
+										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
+											<Paragraph FontSize="13">
+												<Run Text="{x:Bind Name, Mode=OneWay}"/>
+											</Paragraph>
+											<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
+												<Run Text="Tasks:"/>
+												<Run Text="{x:Bind TaskCount, Mode=OneWay}"/>
+												<Run Text="&#xe738;&#xe787;" FontFamily="Segoe Fluent Icons" FontSize="14"/>
+												<Run Text="From"/>
+												<Run Text="{x:Bind ConvertDateTimeToString(StartDate), Mode=OneWay}"/>
+												<Run Text="To"/>
+												<Run Text="{x:Bind ConvertDateTimeToString(EndDate), Mode=OneWay}"/>
+											</Paragraph>
+										</RichTextBlock>
+									</ListViewItem>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+			
+			<Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="5" Margin="5">
+				<ScrollViewer>
+					<StackPanel>
+						<TextBlock Text="Short Tasks" Margin="20 10 0 0" Style="{StaticResource SubtitleTextBlockStyle}"/>
+						<ListView ItemsSource="{x:Bind ViewModel.ShortTasks}">
+							<ListView.ItemTemplate>
+								<DataTemplate x:DataType="viewModels:ShortTaskViewModel">
+									<ListViewItem x:Name="ShortTaskListViewItem">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition/>
+											</Grid.ColumnDefinitions>
+
+											<CheckBox Tag="{x:Bind Id, Mode=OneTime}" IsChecked="False" Click="SelectShortTaskCheckBox_Click"/>
+											<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
+												<Paragraph>
+													<Run Text="{x:Bind Name, Mode=OneWay}"/>
+												</Paragraph>
+												<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
+													<Run Text="Duration of"/>
+													<Run Text="{x:Bind Duration.TotalMinutes, Mode=OneWay}"/>
+													<Run Text="Minutes"/>
+												</Paragraph>
+											</RichTextBlock>
+										</Grid>
+									</ListViewItem>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+			<RichTextBlock Grid.Column="1" Grid.Row="1" IsTextSelectionEnabled="False" Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+				<Paragraph TextAlignment="Center" FontSize="16">
+					<Run>
+						If you want to record you focus time
+						you can check the check button on the
+						short task you want to record for.
+					</Run>
+				</Paragraph>
+			</RichTextBlock>
+		</Grid>
+	</ScrollViewer>
+</Page>

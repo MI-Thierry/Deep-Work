@@ -57,7 +57,6 @@ public sealed partial class TimeSpanSlider : UserControl
 
 	private TimeSpan ConvertBackToTimeSpan(string value, TimeSpanParts conversionType)
 	{
-		var metaData = TimeSpanProperty.GetMetadata(typeof(TimeSpan));
 		TimeSpan span = TimeSpan;
 		if (int.TryParse(value, out int result))
 		{

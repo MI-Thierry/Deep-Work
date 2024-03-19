@@ -11,13 +11,20 @@ public partial class NavigationWindowViewModel : ObservableObject
 	private double _navViewCompactModeThresholdWidth;
 
 	[ObservableProperty]
-	private ObservableCollection<NavigationViewItem> _menuItems =
+	private ObservableCollection<NavigationViewItemBase> _menuItems =
 	[
 		new NavigationViewItem
 		{
 			Content = "Task Manager",
 			Icon = new FontIcon() { Glyph = "\uE9D5" },
 			Tag = typeof(TaskManagementPage)
+		},
+		new NavigationViewItemSeparator(),
+		new NavigationViewItem
+		{
+			Content = "Pomodoro Timer",
+			Icon = new FontIcon() { Glyph = "\uEC4A"},
+			Tag = typeof(PomodoroTimerPage)
 		}
 	];
 }

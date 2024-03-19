@@ -15,16 +15,31 @@ using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI;
 using Windows.UI;
+using WinRT.Interop;
+using System.Runtime.InteropServices;
 
 namespace DeepWork.Views.Windows
 {
 	public sealed partial class NavigationWindow : Window
 	{
-		public NavigationWindowViewModel ViewModel { get; set; }
+		private readonly IntPtr _hWnd = IntPtr.Zero;
+		private readonly SubclassProc _subclassDelegate;
+
+        public int MinHeight { get; set; }
+        public int MinWidth { get; set; }
+
+        public NavigationWindowViewModel ViewModel { get; set; }
+
 		public NavigationWindow(NavigationWindowViewModel viewModel)
 		{
 			ViewModel = viewModel;
+			MinHeight = 500;
+			MinWidth = 560;
+
 			this.InitializeComponent();
+			_hWnd = WindowNative.GetWindowHandle(this);
+			_subclassDelegate = new SubclassProc(WindowSubClass);
+			bool bReturn = SetWindowSubclass(_hWnd, _subclassDelegate, 0, 0);
 
 			if (MicaController.IsSupported())
 			{
@@ -173,8 +188,10 @@ namespace DeepWork.Views.Windows
 
 		private void NavigationView_Loaded(object sender, RoutedEventArgs e)
 		{
-			Type pageType = ViewModel.MenuItems.First().Tag as Type;
-			ContentFrame.Navigate(pageType, null, new EntranceNavigationTransitionInfo());
+			if (ViewModel.MenuItems.First() is NavigationViewItem item)
+				ContentFrame.Navigate(item.Tag as Type, null, new EntranceNavigationTransitionInfo());
+			else
+				throw new InvalidOperationException("The first element of MenuItems should be a NavigationViewItem");
 		}
 
 		private void BackRequestButton_Click(object sender, RoutedEventArgs e)
@@ -196,6 +213,40 @@ namespace DeepWork.Views.Windows
 		private void BackRequestButton_PointerPressed(object sender, PointerRoutedEventArgs e)
 		{
 			AnimatedIcon.SetState(BackRequestButton, "Pressed");
+		}
+
+		private int WindowSubClass(IntPtr hWnd, uint uMsg, nint wParam, IntPtr lParam, IntPtr uIdSubClass, uint dwRefData)
+		{
+			switch (uMsg)
+			{
+				case WM_GETMINMAXINFO:
+					MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+					mmi.ptMinTrackSize.X = MinWidth;
+					mmi.ptMinTrackSize.Y = MinHeight;
+					Marshal.StructureToPtr(mmi, lParam, false);
+					return 0;
+			}
+			return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+		}
+
+		public delegate int SubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubClass, uint dwRefData);
+
+		[DllImport("Comctl32.dll", SetLastError = true)]
+		public static extern bool SetWindowSubclass([In] IntPtr hWnd, [In] SubclassProc pfnSubClass, [In]uint uIdSubClass, [In]uint dwRefData);
+
+		[DllImport("Comctl32.dll", SetLastError = true)]
+		public static extern int DefSubclassProc([In] IntPtr hWnd, [In] uint uMsg, [In] IntPtr wParam, [In] IntPtr lParam);
+
+		
+		public const int WM_GETMINMAXINFO = 0x0024;
+
+		public struct MINMAXINFO
+		{
+			public System.Drawing.Point ptReserved;
+			public System.Drawing.Point ptMaxSize;
+			public System.Drawing.Point ptMaxPosition;
+			public System.Drawing.Point ptMinTrackSize;
+			public System.Drawing.Point ptMaxTrackSize;
 		}
 	}
 }
