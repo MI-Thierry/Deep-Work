@@ -18,7 +18,7 @@ namespace DeepWork
 	{
 		private readonly AccountManagementService _accountManager;
 		private static IServiceProvider _serviceProvider;
-		public Window Window { get; private set; }
+		public Window MainWindow { get; private set; }
 		public string AppDataPath { get; private set; }
 		public string DbPath { get; private set; }
 
@@ -39,17 +39,12 @@ namespace DeepWork
 			IServiceCollection services = new ServiceCollection();
 			services.AddSqlite<AccountContext>($"Data Source={DbPath}");
 			services.AddSingleton<AccountManagementService>();
-			services.AddSingleton<NavigationWindow>();
+			services.AddTransient<NavigationWindow>();
+			services.AddTransient<SignupWindow>();
 
 			// Adding view models for the views
 			services.AddSingleton<NavigationWindowViewModel>();
-			services.AddSingleton((serviceProvider) =>
-			{
-				return new PomodoroTimerViewModel(
-					serviceProvider.GetRequiredService<AccountManagementService>(),
-					Window.DispatcherQueue
-					);
-			});
+			services.AddSingleton<PomodoroTimerViewModel>();
 
 			// Building service provider.
 			_serviceProvider = services.BuildServiceProvider();
@@ -73,17 +68,30 @@ namespace DeepWork
 			return _serviceProvider.GetService<T>();
 		}
 
+		public static object GetService(Type serviceType)
+		{
+			return _serviceProvider.GetService(serviceType);
+		}
+
+		public void NavigateWindow(Type windowType)
+		{
+			PomodoroTimerViewModel viewModel = _serviceProvider.GetRequiredService<PomodoroTimerViewModel>();
+			viewModel.StopPomodoroSession();
+
+			Window win = _serviceProvider.GetRequiredService(windowType) as Window;
+			win.Activate();
+
+			MainWindow?.Close();
+			MainWindow = win;
+		}
+
 		protected override void OnLaunched(LaunchActivatedEventArgs args)
 		{
 			if (_accountManager.IsAccountAvailable)
-				Window = GetService<NavigationWindow>();
+				NavigateWindow(typeof(NavigationWindow));
 			else
-				Window = new SignupWindow();
-			Window.Activate();
+				NavigateWindow(typeof(SignupWindow));
 
-			// To ensure all Notification handling happens in this process instance, register for
-			// NotificationInvoked before calling Register(). Without this a new process will
-			// be launched to handle the notification.
 			AppNotificationManager notificationManager = AppNotificationManager.Default;
 			notificationManager.NotificationInvoked += NotificationManager_NotificationInvoked;
 			notificationManager.Register();
@@ -94,20 +102,19 @@ namespace DeepWork
 				LaunchAndBringToForegroundIfNeeded();
 			else
 				HandleNotification((AppNotificationActivatedEventArgs)activatedArgs.Data);
-
 		}
 
 		private void HandleNotification(AppNotificationActivatedEventArgs args)
 		{
-			DispatcherQueue dispatcherQueue = Window?.DispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
-			PomodoroTimerViewModel pmdrVm = GetService<PomodoroTimerViewModel>();
+			DispatcherQueue dispatcherQueue = MainWindow?.DispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
+			PomodoroTimerViewModel pmdrViewModel = GetService<PomodoroTimerViewModel>();
 
 			dispatcherQueue.TryEnqueue(delegate
 			{
 				switch (args.Arguments["action"])
 				{
 					case "stopPomodoroSession":
-						pmdrVm.StopPomodoroSession();
+						pmdrViewModel.StopPomodoroSession();
 						LaunchAndBringToForegroundIfNeeded();
 						break;
 
@@ -123,7 +130,7 @@ namespace DeepWork
 
 		private void LaunchAndBringToForegroundIfNeeded()
 		{
-			WindowHelper.ShowWindow(Window);
+			WindowHelper.ShowWindow(MainWindow);
 		}
 
 		private void NotificationManager_NotificationInvoked(AppNotificationManager sender, AppNotificationActivatedEventArgs args)
