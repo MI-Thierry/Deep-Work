@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace DeepWork.Services
 {
@@ -15,18 +17,21 @@ namespace DeepWork.Services
 		public List<Account> AvailableAccounts { get; private set; }
 		public Account ActiveAccount { get; private set; }
 		public bool IsAccountAvailable { get; private set; }
+		public event Action<Account> ActiveAccountChanged;
 
 		public AccountManagementService(AccountContext context)
 		{
 			_accountContext = context;
 			context.Database.EnsureCreated();
+			AvailableAccounts = [.. _accountContext.Accounts];
 
-			if (context.Accounts.Any())
+			if (AvailableAccounts.Count != 0
+				&& AvailableAccounts.SingleOrDefault(account => account.IsActive) != null)
 			{
 				AvailableAccounts = [.. _accountContext.Accounts];
 				ActiveAccount = context.Accounts
-					.Include(p => p.LongTasks).ThenInclude(p => p.RunningTasks)
-					.Include(p => p.LongTasks).ThenInclude(p => p.FinishedTasks)
+					.Include(p => p.RunningLongTasks).ThenInclude(p => p.RunningTasks)
+					.Include(p => p.RunningLongTasks).ThenInclude(p => p.FinishedTasks)
 					.Single(account => account.IsActive);
 
 				IsAccountAvailable = true;
@@ -40,10 +45,12 @@ namespace DeepWork.Services
 
 		public Account CreateAccount(string username, string password)
 		{
+			byte[] computedPassword = SHA1.HashData(Encoding.Default.GetBytes(password));
+
 			Account account = new()
 			{
 				Username = username,
-				Password = password,
+				Password = Convert.ToBase64String(computedPassword),
 				Theme = ElementTheme.Default
 			};
 			_accountContext.Accounts.Add(account);
@@ -53,16 +60,40 @@ namespace DeepWork.Services
 			return account;
 		}
 
-		public void ActivateAccount(Account account)
+		public Account SignInAccount(int accountId, string password)
 		{
+			byte[] computedPassword = SHA1.HashData(Encoding.Default.GetBytes(password));
+			Account account = AvailableAccounts.First(acc => acc.Id == accountId);
+
+			if (account.Password != Convert.ToBase64String(computedPassword))
+				return null;
+
 			if (ActiveAccount != null)
 				ActiveAccount.IsActive = false;
 
 			ActiveAccount = _accountContext.Accounts
-				.Include(p => p.LongTasks).ThenInclude(p => p.RunningTasks)
-				.Include(p => p.LongTasks).ThenInclude(p => p.FinishedTasks)
+				.Include(p => p.RunningLongTasks).ThenInclude(p => p.RunningTasks)
+				.Include(p => p.RunningLongTasks).ThenInclude(p => p.FinishedTasks)
 				.Single(acc => acc.Username == account.Username);
 			ActiveAccount.IsActive = true;
+			ActiveAccountChanged?.Invoke(ActiveAccount);
+
+			_accountContext.SaveChanges();
+			return ActiveAccount;
+		}
+
+		public void SignOutAccount()
+		{
+			ActiveAccount.IsActive = false;
+			ActiveAccount = null;
+			_accountContext.SaveChanges();
+		}
+
+		public void ModifyAccount(string username, string password)
+		{
+			byte[] computedPassword = SHA1.HashData(Encoding.Default.GetBytes(password));
+			ActiveAccount.Username = username;
+			ActiveAccount.Password = Convert.ToBase64String(computedPassword);
 			_accountContext.SaveChanges();
 		}
 
@@ -77,7 +108,7 @@ namespace DeepWork.Services
 			if (!IsAccountAvailable)
 				return task;
 
-			ActiveAccount.LongTasks.Add(task);
+			ActiveAccount.RunningLongTasks.Add(task);
 			_accountContext.SaveChanges();
 			return task;
 		}
@@ -101,12 +132,12 @@ namespace DeepWork.Services
 			if (!IsAccountAvailable)
 				return;
 
-			LongTask taskToRemove = ActiveAccount.LongTasks.FirstOrDefault(item => item.Id == id);
+			LongTask taskToRemove = ActiveAccount.RunningLongTasks.FirstOrDefault(item => item.Id == id);
 			foreach (var shortTask in taskToRemove.RunningTasks)
 				_accountContext.RunningTasks.Remove(shortTask);
 			foreach (var shortTask in taskToRemove.FinishedTasks)
 				_accountContext.FinishedTasks.Remove(shortTask);
-			ActiveAccount.LongTasks.Remove(taskToRemove);
+			ActiveAccount.RunningLongTasks.Remove(taskToRemove);
 			_accountContext.LongTasks.Remove(taskToRemove);
 			_accountContext.SaveChanges();
 		}
@@ -116,7 +147,7 @@ namespace DeepWork.Services
 			if (!IsAccountAvailable)
 				return task;
 
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			LongTask parentTask = ActiveAccount.RunningLongTasks.First(item => item.Id == parentId);
 			parentTask.RunningTasks.Add(task);
 			_accountContext.SaveChanges();
 
@@ -136,7 +167,7 @@ namespace DeepWork.Services
 			if (!IsAccountAvailable)
 				return;
 
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			LongTask parentTask = ActiveAccount.RunningLongTasks.First(item => item.Id == parentId);
 			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == taskId);
 			if (parentTask.MaxDuration < task.Duration)
 				parentTask.MaxDuration = task.Duration;
@@ -153,7 +184,7 @@ namespace DeepWork.Services
 			if (!IsAccountAvailable)
 				return;
 
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			LongTask parentTask = ActiveAccount.RunningLongTasks.First(item => item.Id == parentId);
 			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == taskId);
 
 			parentTask.RunningTasks.Remove(task);
@@ -163,11 +194,11 @@ namespace DeepWork.Services
 		}
 
 		public LongTask GetLongTaskById(int id) =>
-			ActiveAccount.LongTasks.First(task => task.Id == id);
+			ActiveAccount.RunningLongTasks.First(task => task.Id == id);
 
 		public ShortTask GetShortTaskById(int parentId, int childId)
 		{
-			LongTask parentTask = ActiveAccount.LongTasks.First(item => item.Id == parentId);
+			LongTask parentTask = ActiveAccount.RunningLongTasks.First(item => item.Id == parentId);
 			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == childId);
 			return task;
 		}
@@ -175,7 +206,7 @@ namespace DeepWork.Services
 		public List<TaskHistory> GetAccountHistory()
 		{
 			List<TaskHistory> tasksHistoryTree = [];
-			foreach (var longTask in ActiveAccount.LongTasks)
+			foreach (var longTask in ActiveAccount.RunningLongTasks)
 			{
 				TaskHistory task = new()
 				{

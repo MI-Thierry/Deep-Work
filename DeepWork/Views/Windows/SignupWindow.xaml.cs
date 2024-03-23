@@ -1,17 +1,23 @@
+using DeepWork.ViewModels.Pages;
+using DeepWork.ViewModels.Windows;
 using Microsoft.UI;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using System.Linq;
 using Windows.UI;
 
 namespace DeepWork.Views.Windows
 {
 	public sealed partial class SignupWindow : Window
 	{
+		public SignupWindowViewModel ViewModel { get; set; }
 		public SignupWindow()
 		{
 			this.InitializeComponent();
 
+			ViewModel = new SignupWindowViewModel();
 			(Content as FrameworkElement).ActualThemeChanged += NavigationWindow_ActualThemeChanged;
 
 			ExtendsContentIntoTitleBar = true;
@@ -45,6 +51,15 @@ namespace DeepWork.Views.Windows
 					AppWindow.TitleBar.ButtonForegroundColor = Colors.White;
 					AppWindow.TitleBar.ButtonHoverForegroundColor = Colors.White;
 					break;
+			}
+		}
+
+		private void AccountListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (e.AddedItems.Count != 0)
+			{
+				ViewModel.SelectedAccountId = (e.AddedItems.First() as AccountViewModel).Id;
+				LoginButton.IsEnabled = true;
 			}
 		}
 	}

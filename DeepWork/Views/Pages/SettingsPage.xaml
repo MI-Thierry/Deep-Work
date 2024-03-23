@@ -21,10 +21,46 @@
 		<StackPanel Margin="10">
 			<TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Settings" Margin="20"/>
 			<TextBlock Margin="20 20 0 0" Style="{StaticResource BodyStrongTextBlockStyle}" Text="Account"/>
-			<Expander Margin="20 0 0 0" HorizontalAlignment="Stretch">
+			<Expander Margin="20 0 0 0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
 				<Expander.Header>
-					<TextBlock Text="Future Implementation"/>
+					<Grid Margin="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<PersonPicture DisplayName="{Binding OpenAccount.UserName, Mode=OneWay}" Height="65"/>
+						<StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20">
+							<TextBlock Text="{Binding OpenAccount.UserName}"/>
+							<HyperlinkButton Content="Manage account" Click="ManageAccountHyperlinkButton_Click"/>
+						</StackPanel>
+						<Button Grid.Column="3" Content="Sign Out" Command="{Binding SignOutAccountCommand}"/>
+					</Grid>
 				</Expander.Header>
+				<Expander.Content>
+					<StackPanel Spacing="5">
+						<TextBlock Text="Account List" Style="{StaticResource BodyStrongTextBlockStyle}"/>
+						<ListView ItemsSource="{Binding AccountsList}">
+							<ListView.ItemTemplate>
+								<DataTemplate x:DataType="viewModels:AccountViewModel">
+									<ListViewItem>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto"/>
+												<ColumnDefinition/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+											<PersonPicture DisplayName="{Binding UserName}" Height="35" Margin="10"/>
+											<TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding UserName}"/>
+											<Button Grid.Column="2" Content="Sign In" Click="SignInButton_Click" Tag="{Binding Id}" HorizontalAlignment="Right"/>
+										</Grid>
+									</ListViewItem>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+						<Button Content="Create Account" Style="{StaticResource AccentButtonStyle}" Click="CreateAccountButton_Click"/>
+					</StackPanel>
+				</Expander.Content>
 			</Expander>
 			<TextBlock Margin="20 20 0 0" Style="{StaticResource BodyStrongTextBlockStyle}" Text="General"/>
 			<Expander HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Margin="20 0 0 0">

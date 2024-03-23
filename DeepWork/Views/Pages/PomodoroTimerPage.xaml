@@ -41,7 +41,7 @@
 								<Run Text="{x:Bind ConvertDateTimeToString(ViewModel.PmdrSessionEndTime), Mode=OneWay}"/>
 							</Paragraph>
 						</RichTextBlock>
-						<Button HorizontalAlignment="Center" Command="{x:Bind ViewModel.StartPomodoroSessionCommand}" Style="{StaticResource AccentButtonStyle}" >
+						<Button HorizontalAlignment="Center" Command="{x:Bind ViewModel.StartPomodoroSessionCommand}" CommandParameter="{x:Bind DispatcherQueue}" Style="{StaticResource AccentButtonStyle}" >
 							<StackPanel Spacing="5" Orientation="Horizontal">
 								<FontIcon Glyph="&#xedda;"/>
 								<TextBlock Text="Start Focus Session"/>
