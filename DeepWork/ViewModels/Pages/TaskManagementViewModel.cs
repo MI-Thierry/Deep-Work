@@ -25,7 +25,7 @@ public partial class TaskManagementViewModel : ObservableObject
 		_longTasks = [];
 		_shortTasks = [];
 
-		foreach (var task in _accountManager.ActiveAccount.LongTasks)
+		foreach (var task in _accountManager.ActiveAccount.RunningLongTasks)
 			_longTasks.Add(task);
 
 		if (_longTasks.Any())
