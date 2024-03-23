@@ -11,7 +11,7 @@ namespace DeepWork.ViewModels.Pages
 	public partial class PomodoroTimerViewModel : ObservableObject
 	{
 		private readonly AccountManagementService _accountManager;
-		private readonly DispatcherQueueTimer _dispatcherQueueTimer;
+		private DispatcherQueueTimer _dispatcherQueueTimer;
 		private TimeSpan _leftTime;
 
 		public event PmdrPeriodEndedEventHandle PeriodEnded;
@@ -66,23 +66,21 @@ namespace DeepWork.ViewModels.Pages
 		public LongTaskViewModel SelectedLongTask { get; private set; }
 		public ShortTaskViewModel SelectedShortTask { get; private set; }
 
-		public PomodoroTimerViewModel(AccountManagementService accountManager, DispatcherQueue dispatcherQueue)
+		public PomodoroTimerViewModel(AccountManagementService accountManager)
 		{
-			DispatcherQueue = dispatcherQueue;
-			_dispatcherQueueTimer = DispatcherQueue.CreateTimer();
-			_dispatcherQueueTimer.Interval = TimeSpan.FromMilliseconds(1);
-			_dispatcherQueueTimer.IsRepeating = true;
-			_dispatcherQueueTimer.Tick += DispatcherQueueTimer_Tick;
-
 			_accountManager = accountManager;
+			_accountManager.ActiveAccountChanged += (account) => LoadTasks();
 			_longTasks = [];
 			_shortTasks = [];
+		}
 
-			foreach (var task in _accountManager.ActiveAccount.LongTasks)
-				_longTasks.Add(task);
+		private void LoadTasks()
+		{
+			foreach (var task in _accountManager.ActiveAccount.RunningLongTasks)
+				LongTasks.Add(task);
 
-			if (_longTasks.Any())
-				SelectLongTask(_longTasks.First().Id);
+			if (LongTasks.Any())
+				SelectLongTask(LongTasks.First().Id);
 		}
 
 		public bool SelectLongTask(int id)
@@ -115,8 +113,14 @@ namespace DeepWork.ViewModels.Pages
 		}
 
 		[RelayCommand]
-		private void StartPomodoroSession()
+		private void StartPomodoroSession(DispatcherQueue dispatcherQueue)
 		{
+			DispatcherQueue = dispatcherQueue;
+			_dispatcherQueueTimer = DispatcherQueue.CreateTimer();
+			_dispatcherQueueTimer.Interval = TimeSpan.FromMilliseconds(1);
+			_dispatcherQueueTimer.IsRepeating = true;
+			_dispatcherQueueTimer.Tick += DispatcherQueueTimer_Tick;
+
 			CurrentFocusPeriodCount = 0;
 			CurrentBreakPeriodCount = 0;
 			NextPeriodType = PeriodType.FocusPeriod;
@@ -167,10 +171,13 @@ namespace DeepWork.ViewModels.Pages
 		[RelayCommand]
 		public void StopPomodoroSession()
 		{
-			_dispatcherQueueTimer.Stop();
-			WholePomodoroSessionEnded?.Invoke(ElapsedTime);
-			CurrentPeriodType = PeriodType.None;
-			CountDown = TimeSpan.Zero;
+			DispatcherQueue?.TryEnqueue(delegate
+			{
+				_dispatcherQueueTimer.Stop();
+				WholePomodoroSessionEnded?.Invoke(ElapsedTime);
+				CurrentPeriodType = PeriodType.None;
+				CountDown = TimeSpan.Zero;
+			});
 		}
 
 		public delegate void PmdrPeriodEndedEventHandle(PeriodType lastPeriodType, PeriodType nextPeriodType);
