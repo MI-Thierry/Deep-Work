@@ -124,7 +124,12 @@ namespace DeepWork.Services
 
 		public void FinishLongTask(int id)
 		{
-			DeleteLongTask(id);
+			LongTask taskToRemove = ActiveAccount.RunningLongTasks.FirstOrDefault(item => item.Id == id);
+
+			ActiveAccount.RunningLongTasks.Remove(taskToRemove);
+			ActiveAccount.FinishedLongTasks.Add(taskToRemove);
+
+			_accountContext.SaveChanges();
 		}
 
 		public void DeleteLongTask(int id)
@@ -138,7 +143,7 @@ namespace DeepWork.Services
 			foreach (var shortTask in taskToRemove.FinishedTasks)
 				_accountContext.FinishedTasks.Remove(shortTask);
 			ActiveAccount.RunningLongTasks.Remove(taskToRemove);
-			_accountContext.LongTasks.Remove(taskToRemove);
+			_accountContext.RunningLongTasks.Remove(taskToRemove);
 			_accountContext.SaveChanges();
 		}
 		
