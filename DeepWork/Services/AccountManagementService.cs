@@ -23,6 +23,9 @@ namespace DeepWork.Services
 		{
 			_accountContext = context;
 			context.Database.EnsureCreated();
+
+			// Todo: Remove this in production
+			_accountContext.DbInitialize();
 			AvailableAccounts = [.. _accountContext.Accounts];
 
 			if (AvailableAccounts.Count != 0

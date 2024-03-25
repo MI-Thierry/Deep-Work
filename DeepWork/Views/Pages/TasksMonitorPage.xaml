@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+	x:Class="DeepWork.Views.Pages.TasksMonitorPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:DeepWork.Views.Pages"
+	xmlns:viewModels="using:DeepWork.ViewModels.Pages"
+	xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+	xmlns:uc="using:DeepWork.UserControls"
+	xmlns:sys="using:System"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+	DataContext="{x:Bind ViewModel}">
+	
+	<SplitView DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
+		<SplitView.Pane>
+			<ScrollViewer>
+				<ListView ItemsSource="{Binding LongTasks, Mode=TwoWay}" SelectionChanged="ListView_SelectionChanged">
+					<ListView.ItemTemplate>
+						<DataTemplate x:DataType="viewModels:LongTaskViewModel" >
+							<ListViewItem>
+								<RichTextBlock Margin="0 2 0 2" Grid.Column="1" IsTextSelectionEnabled="False">
+									<Paragraph FontSize="13">
+										<Run Text="{x:Bind Name}"/>
+									</Paragraph>
+									<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
+										<Run Text="From"/>
+										<Run Text="{x:Bind ConvertDateTimeToString(StartDate)}"/>
+										<Run Text="To"/>
+										<Run Text="{x:Bind ConvertDateTimeToString(EndDate)}"/>
+									</Paragraph>
+								</RichTextBlock>
+							</ListViewItem>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</ScrollViewer>
+		</SplitView.Pane>
+		<Grid  Margin="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			
+			<TextBlock Text="Task Monitor" Style="{StaticResource TitleTextBlockStyle}"/>
+			<AppBarToggleButton x:Name="SplitViewOpenButton" Grid.Column="1" Icon="OpenPane" LabelPosition="Collapsed" HorizontalAlignment="Right" AutomationProperties.Name="SplitViewOpen"/>
+
+			<Pivot Grid.Row="1" Grid.ColumnSpan="2" ActualThemeChanged="Pivot_ActualThemeChanged">
+				<PivotItem Header="Weekly Data">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+						<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Week" StepSpan="{x:Bind sys:TimeSpan.FromDays(7)}"/>
+						<lvc:CartesianChart Grid.Row="1" Series="{Binding WeeklySeries, Mode=OneWay}" XAxes="{Binding WeeklyXAxis, Mode=OneWay}" YAxes="{Binding WeeklyYAxis, Mode=OneWay}"/>
+					</Grid>
+				</PivotItem>
+				<PivotItem Header="Monthly Data">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+						<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Month" StepSpan="{x:Bind sys:TimeSpan.FromDays(31)}"/>
+						<lvc:CartesianChart Grid.Row="1" Series="{Binding MonthlySeries, Mode=OneWay}" XAxes="{Binding MonthlyXAxis, Mode=OneWay}" YAxes="{Binding MonthlyYAxis, Mode=OneWay}"/>
+					</Grid>
+				</PivotItem>
+				<PivotItem Header="Yearly Data">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+						<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Year" StepSpan="{x:Bind sys:TimeSpan.FromDays(365)}"/>
+						<lvc:CartesianChart Grid.Row="1" Series="{Binding YearlySeries, Mode=OneWay}" XAxes="{Binding YearlyXAxis, Mode=OneWay}" YAxes="{Binding YearlyYAxis, Mode=OneWay}"/>
+					</Grid>
+				</PivotItem>
+			</Pivot>
+		</Grid>
+	</SplitView>
+</Page>

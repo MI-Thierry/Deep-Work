@@ -19,6 +19,12 @@ public partial class NavigationWindowViewModel : ObservableObject
 			Icon = new FontIcon() { Glyph = "\uE9D5" },
 			Tag = typeof(TaskManagementPage)
 		},
+		new NavigationViewItem
+		{
+			Content = "Tasks Monitor",
+			Icon = new FontIcon() { Glyph = "\uE9D2" },
+			Tag = typeof(TasksMonitorPage)
+		},
 		new NavigationViewItemSeparator(),
 		new NavigationViewItem
 		{

@@ -24,7 +24,8 @@ public sealed partial class SettingsPage : Page
 		if (sender is RadioButton { Tag: string selectedTheme })
 		{
 			ElementTheme theme = Enum.Parse<ElementTheme>(selectedTheme);
-			((sender as RadioButton).XamlRoot.Content as Grid).RequestedTheme = theme;
+			if (theme != ElementTheme.Default)
+				((sender as RadioButton).XamlRoot.Content as Grid).RequestedTheme = theme;
 			else
 			{
 				((sender as RadioButton).XamlRoot.Content as Grid).RequestedTheme =

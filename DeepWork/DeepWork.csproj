@@ -44,6 +44,7 @@
     <None Remove="Views\Pages\PomodoroTimerPage.xaml" />
     <None Remove="Views\Pages\SigninDialogPage.xaml" />
     <None Remove="Views\Pages\TaskManagementPage.xaml" />
+    <None Remove="Views\Pages\TasksMonitorPage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
     <None Remove="UserControls\DateSlider.xaml" />
     <None Remove="UserControls\NumberInput.xaml" />
@@ -96,6 +97,9 @@
     <None Update="Assets\Iceburg Image.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Pages\TasksMonitorPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Pages\SigninDialogPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
