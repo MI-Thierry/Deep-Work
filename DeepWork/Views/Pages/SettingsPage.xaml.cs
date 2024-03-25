@@ -25,6 +25,12 @@ public sealed partial class SettingsPage : Page
 		{
 			ElementTheme theme = Enum.Parse<ElementTheme>(selectedTheme);
 			((sender as RadioButton).XamlRoot.Content as Grid).RequestedTheme = theme;
+			else
+			{
+				((sender as RadioButton).XamlRoot.Content as Grid).RequestedTheme =
+					Application.Current.RequestedTheme == ApplicationTheme.Light
+					? ElementTheme.Light : ElementTheme.Dark;
+			}
 			ViewModel.CurrentTheme = theme;
 		}
 	}
