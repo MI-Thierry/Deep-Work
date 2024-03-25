@@ -90,7 +90,7 @@
 										<ColumnDefinition Width="Auto"/>
 									</Grid.ColumnDefinitions>
 
-									<CheckBox Tag="{x:Bind Id, Mode=OneTime}" Margin="-10 0 0 0" Grid.RowSpan="2" Click="FinishLongTaskCheckBox_Click"/>
+									<CheckBox Tag="{x:Bind Id, Mode=OneTime}" Margin="-10 0 0 0" Click="FinishLongTaskCheckBox_Click"/>
 									<Button Content="&#xE712;" Grid.Column="2" IsEnabled="{Binding ElementName=LongTaskListViewItem, Path=IsSelected}" Style="{StaticResource AlternateCloseButtonStyle}">
 										<Button.Flyout>
 											<MenuFlyout Placement="Bottom">
