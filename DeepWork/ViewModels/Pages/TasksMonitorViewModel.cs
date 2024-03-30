@@ -28,7 +28,6 @@ namespace DeepWork.ViewModels.Pages
 		private SKColor _ticksPaint;
 		private SKColor _subTicksPaint;
 
-		public LongTask SelectedLongTask { get; set; }
 		
 		private DateTimeOffset _date;
 		public DateTimeOffset Date
@@ -39,6 +38,9 @@ namespace DeepWork.ViewModels.Pages
 				LoadData();
 			}
 		}
+
+		[ObservableProperty]
+		private LongTask _selectedLongTask;
 
 		[ObservableProperty]
 		private ObservableCollection<ISeries> _weeklySeries;
@@ -75,11 +77,14 @@ namespace DeepWork.ViewModels.Pages
 			_accountManager = App.GetService<AccountManagementService>();
 			_date = DateTimeOffset.Now;
 			_longTasks = [];
-			SelectedLongTask = _accountManager.ActiveAccount.RunningLongTasks[0];
+			_selectedLongTask = null;
 
-			foreach (var task in _accountManager.ActiveAccount.RunningLongTasks)
-				_longTasks.Add(task);
-
+			if (_accountManager.ActiveAccount.RunningLongTasks.Count != 0)
+			{
+				_selectedLongTask = _accountManager.ActiveAccount.RunningLongTasks.First();
+				foreach (var task in _accountManager.ActiveAccount.RunningLongTasks)
+					_longTasks.Add(task);
+			}
 			LoadData();
 		}
 
@@ -92,23 +97,23 @@ namespace DeepWork.ViewModels.Pages
 			switch (theme)
 			{
 				case ElementTheme.Light:
-					_labelsPaint = new(0xFF3D3D3D);
-					_namesPaint = new(0xFF5E5E5E);
+					_labelsPaint = new(0xff3d3d3d);
+					_namesPaint = new(0xff5e5e5e);
 					_separatorsPaint = _labelsPaint;
-					_subSeparatorPaint = new(0xFF5A5A5A);
-					_fillPaint = new(0x59008AFF);
-					_strokePaint = new(0xEDFF9605);
+					_subSeparatorPaint = new(0xff5a5a5a);
+					_fillPaint = new(0x59008aff);
+					_strokePaint = new(0xedff9605);
 					_ticksPaint = _labelsPaint;
 					_subTicksPaint = _labelsPaint;
 					break;
 
 				case ElementTheme.Dark:
-					_labelsPaint = new(0xFFC3C3C3);
-					_namesPaint = new(0xFFA0A0A0);
+					_labelsPaint = new(0xffc3c3c3);
+					_namesPaint = new(0xffa0a0a0);
 					_separatorsPaint = _labelsPaint;
-					_subSeparatorPaint = new(0xFF5A5A5A);
-					_fillPaint = new(0x59008AFF);
-					_strokePaint = new(0xEDFF9605);
+					_subSeparatorPaint = new(0xff5a5a5a);
+					_fillPaint = new(0x59008aff);
+					_strokePaint = new(0xedff9605);
 					_ticksPaint = _labelsPaint;
 					_subTicksPaint = _labelsPaint;
 					break;
@@ -125,9 +130,12 @@ namespace DeepWork.ViewModels.Pages
 
 		private void LoadData()
 		{
-			LoadWeeklyData();
-			LoadMonthlyData();
-			LoadYearlyData();
+			if (SelectedLongTask != null)
+			{
+				LoadWeeklyData();
+				LoadMonthlyData();
+				LoadYearlyData();
+			}
 		}
 
 		private void LoadWeeklyData()

@@ -14,7 +14,7 @@
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 	DataContext="{x:Bind ViewModel}">
 	
-	<SplitView DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
+	<SplitView Visibility="{x:Bind NullToVisibilityConverter(ViewModel.SelectedLongTask)}" DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
 		<SplitView.Pane>
 			<ScrollViewer>
 				<ListView ItemsSource="{Binding LongTasks, Mode=TwoWay}" SelectionChanged="ListView_SelectionChanged">

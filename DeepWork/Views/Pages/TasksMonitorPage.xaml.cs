@@ -15,6 +15,9 @@ namespace DeepWork.Views.Pages
 			ViewModel.SetTheme(ActualTheme);
 		}
 
+		private Visibility NullToVisibilityConverter(object obj) =>
+			obj != null ? Visibility.Visible : Visibility.Collapsed;
+
 		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (e.AddedItems.Count != 0)
