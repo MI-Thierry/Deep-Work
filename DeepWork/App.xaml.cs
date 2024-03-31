@@ -107,14 +107,14 @@ namespace DeepWork
 		private void HandleNotification(AppNotificationActivatedEventArgs args)
 		{
 			DispatcherQueue dispatcherQueue = MainWindow?.DispatcherQueue ?? DispatcherQueue.GetForCurrentThread();
-			PomodoroTimerViewModel pmdrViewModel = GetService<PomodoroTimerViewModel>();
+			PomodoroTimerViewModel pomViewModel = GetService<PomodoroTimerViewModel>();
 
 			dispatcherQueue.TryEnqueue(delegate
 			{
 				switch (args.Arguments["action"])
 				{
 					case "stopPomodoroSession":
-						pmdrViewModel.StopPomodoroSession();
+						pomViewModel.StopPomodoroSession();
 						LaunchAndBringToForegroundIfNeeded();
 						break;
 
