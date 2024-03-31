@@ -28,6 +28,13 @@ public partial class NavigationWindowViewModel : ObservableObject
 		new NavigationViewItemSeparator(),
 		new NavigationViewItem
 		{
+			Content = "History",
+			Icon = new FontIcon() { Glyph = "\uECC5"},
+			Tag = typeof(HistoryPage)
+		},
+		new NavigationViewItemSeparator(),
+		new NavigationViewItem
+		{
 			Content = "Pomodoro Timer",
 			Icon = new FontIcon() { Glyph = "\uEC4A"},
 			Tag = typeof(PomodoroTimerPage)

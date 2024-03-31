@@ -17,6 +17,7 @@ namespace DeepWork.Services
 		public List<Account> AvailableAccounts { get; private set; }
 		public Account ActiveAccount { get; private set; }
 		public bool IsAccountAvailable { get; private set; }
+
 		public event Action<Account> ActiveAccountChanged;
 
 		public AccountManagementService(AccountContext context)
@@ -25,7 +26,7 @@ namespace DeepWork.Services
 			context.Database.EnsureCreated();
 
 			// Todo: Remove this in production
-			//_accountContext.DbInitialize();
+			_accountContext.DbInitialize();
 			AvailableAccounts = [.. _accountContext.Accounts];
 
 			if (AvailableAccounts.Count != 0
@@ -213,31 +214,6 @@ namespace DeepWork.Services
 			LongTask parentTask = ActiveAccount.RunningLongTasks.First(item => item.Id == parentId);
 			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == childId);
 			return task;
-		}
-
-		public List<TaskHistory> GetAccountHistory()
-		{
-			List<TaskHistory> tasksHistoryTree = [];
-			foreach (var longTask in ActiveAccount.RunningLongTasks)
-			{
-				TaskHistory task = new()
-				{
-					Type = TaskType.LongTask,
-					Name = longTask.Name,
-				};
-				foreach (var shortTask in longTask.FinishedTasks)
-				{
-					task.Childrens.Add(new TaskHistory
-					{
-						Name = shortTask.Name,
-						FinishDate = shortTask.FinishDate,
-						Type = TaskType.ShortTask
-					});
-				}
-				tasksHistoryTree.Add(task);
-			}
-
-			return tasksHistoryTree;
 		}
 	}
 }

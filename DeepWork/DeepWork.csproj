@@ -17,7 +17,6 @@
   <ItemGroup>
     <Compile Remove="Helpers\Utils.cs" />
     <Compile Remove="Views\Pages\FocusSessionPage.xaml.cs" />
-    <Compile Remove="Views\Pages\HistoryPage.xaml.cs" />
     <Compile Remove="Views\Pages\LongTasksPage.xaml.cs" />
     <Compile Remove="Views\Pages\MonitoringPage.xaml.cs" />
   </ItemGroup>
@@ -53,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Views\Pages\FocusSessionPage.xaml" />
-    <Page Remove="Views\Pages\HistoryPage.xaml" />
     <Page Remove="Views\Pages\LongTasksPage.xaml" />
     <Page Remove="Views\Pages\MonitoringPage.xaml" />
   </ItemGroup>
@@ -97,6 +95,9 @@
     <None Update="Assets\Iceburg Image.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Pages\HistoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Pages\TasksMonitorPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

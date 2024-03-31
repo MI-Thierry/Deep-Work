@@ -36,6 +36,30 @@ public static class DbInitializer
 			new(){Name = "Eighth Short Task", Duration = TimeSpan.FromHours(1.23), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(7)},
 		];
 
+		List<ShortTask> shortTasks2 =
+		[
+			new(){Name = "First Short Task", Duration = TimeSpan.FromHours(2), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(7)},
+			new(){Name = "Second Short Task", Duration = TimeSpan.FromHours(1.2), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(6)},
+			new(){Name = "Third Short Task", Duration = TimeSpan.FromHours(0.7), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(5)},
+			new(){Name = "Forth Short Task", Duration = TimeSpan.FromHours(3), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(4)},
+			new(){Name = "Fifth Short Task", Duration = TimeSpan.FromHours(2.1), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(3)},
+			new(){Name = "Sixth Short Task", Duration = TimeSpan.FromHours(0.3), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(2)},
+			new(){Name = "Seventh Short Task", Duration = TimeSpan.FromHours(1.5), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(1)},
+			new(){Name = "Eighth Short Task", Duration = TimeSpan.FromHours(1.23), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(7)},
+		];
+
+		List<ShortTask> shortTasks3 =
+		[
+			new(){Name = "First Short Task", Duration = TimeSpan.FromHours(2), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(7)},
+			new(){Name = "Second Short Task", Duration = TimeSpan.FromHours(1.2), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(6)},
+			new(){Name = "Third Short Task", Duration = TimeSpan.FromHours(0.7), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(5)},
+			new(){Name = "Forth Short Task", Duration = TimeSpan.FromHours(3), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(4)},
+			new(){Name = "Fifth Short Task", Duration = TimeSpan.FromHours(2.1), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(3)},
+			new(){Name = "Sixth Short Task", Duration = TimeSpan.FromHours(0.3), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(2)},
+			new(){Name = "Seventh Short Task", Duration = TimeSpan.FromHours(1.5), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(1)},
+			new(){Name = "Eighth Short Task", Duration = TimeSpan.FromHours(1.23), FinishDate = DateTimeOffset.Now - TimeSpan.FromDays(7)},
+		];
+
 		List<LongTask> longTasks =
 		[
 			new LongTask
@@ -56,6 +80,25 @@ public static class DbInitializer
 			},
 		];
 
+		List<LongTask> longTasks1 =
+		[
+			new LongTask
+			{
+				Name = "First Long Task",
+				StartDate = DateTimeOffset.Now - TimeSpan.FromDays(20),
+				EndDate = DateTimeOffset.Now + TimeSpan.FromDays(20),
+				MaxDuration = TimeSpan.FromHours(1),
+				FinishedTasks = shortTasks2,
+			},
+			new LongTask
+			{
+				Name = "Second Long Task",
+				StartDate = DateTimeOffset.Now - TimeSpan.FromDays(15),
+				EndDate = DateTimeOffset.Now + TimeSpan.FromDays(15),
+				MaxDuration = TimeSpan.FromHours(4),
+				FinishedTasks = shortTasks3,
+			},
+		];
 		Account account = new()
 		{
 			Username = "Muhirwa I. Thierry",
@@ -63,7 +106,8 @@ public static class DbInitializer
 			IsActive = true,
 			Theme = Microsoft.UI.Xaml.ElementTheme.Default,
 			DailyTarget = TimeSpan.FromHours(2),
-			RunningLongTasks = longTasks
+			RunningLongTasks = longTasks,
+			FinishedLongTasks = longTasks1,
 		};
 
 		context.Accounts.Add(account);
