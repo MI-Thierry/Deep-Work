@@ -1,6 +1,11 @@
+using DeepWork.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using System;
+using System.Linq;
+using System.Text;
+using Windows.System;
 
 namespace DeepWork.UserControls;
 
@@ -47,12 +52,12 @@ public sealed partial class TimeSpanSlider : UserControl
 		};
 	}
 
-	public void ConvertHoursBackToTimeSpan(string value) =>
-		TimeSpan = ConvertBackToTimeSpan(value, TimeSpanParts.Hours);
-	public void ConvertMinutesBackToTimeSpan(string value) =>
-		TimeSpan = ConvertBackToTimeSpan(value, TimeSpanParts.Minutes);
-	public void ConvertSecondsBackToTimeSpan(string value) =>
-		TimeSpan = ConvertBackToTimeSpan(value, TimeSpanParts.Seconds);
+	public void ConvertHoursBackToTimeSpan(object value) =>
+		TimeSpan = ConvertBackToTimeSpan(value as string, TimeSpanParts.Hours);
+	public void ConvertMinutesBackToTimeSpan(object value) =>
+		TimeSpan = ConvertBackToTimeSpan(value as string, TimeSpanParts.Minutes);
+	public void ConvertSecondsBackToTimeSpan(object value) =>
+		TimeSpan = ConvertBackToTimeSpan(value as string, TimeSpanParts.Seconds);
 
 
 	private TimeSpan ConvertBackToTimeSpan(string value, TimeSpanParts conversionType)
@@ -150,14 +155,64 @@ public sealed partial class TimeSpanSlider : UserControl
 	private void UserControl_LostFocus(object sender, RoutedEventArgs e)
 	{
 		VisualStateManager.GoToState(this, nameof(Unfocused), false);
-		HoursDisplay.IsSelected = false;
-		MinutesDisplay.IsSelected = false;
-		SecondDisplay.IsSelected = false;
+		HoursDisplay.IsChecked = false;
+		MinutesDisplay.IsChecked = false;
+		SecondDisplay.IsChecked = false;
 	}
 
-	private void SelectableDisplay_BeforeTextChanging(SelectableDisplay sender, SelectableDisplayBeforeTextChangingEventArgs args)
+	private string GetCharsFromKeys(VirtualKey key, uint scanCode)
 	{
-		if (!int.TryParse(args.NewText, out int _))
-			args.Cancel = true;
+		StringBuilder buffer = new(256);
+		byte[] keyboardState = new byte[256];
+		KeyboardHelpers.GetKeyboardState(keyboardState);
+
+		_ = KeyboardHelpers.ToUnicode((uint)key, scanCode, keyboardState, buffer, 256, 0);
+		return buffer.ToString();
+	}
+
+	private void HoursDisplay_KeyDown(object sender, KeyRoutedEventArgs e)
+	{
+		string input = GetCharsFromKeys(e.Key, e.KeyStatus.ScanCode);
+
+		if (!string.IsNullOrEmpty(input) && int.TryParse(input, out int _))
+		{
+			TimeSpan span = TimeSpan;
+			char[] chars = TimeSpan.Hours.ToString("00").ToCharArray();
+			string hrs = chars.Last() + input;
+			span -= TimeSpan.FromHours(span.Hours);
+			span += TimeSpan.FromHours(int.Parse(hrs));
+			TimeSpan = span;
+		}
+	}
+
+
+	private void MinutesDisplay_KeyDown(object sender, KeyRoutedEventArgs e)
+	{
+		string input = GetCharsFromKeys(e.Key, e.KeyStatus.ScanCode);
+
+		if (!string.IsNullOrEmpty(input) && int.TryParse(input, out int _))
+		{
+			TimeSpan span = TimeSpan;
+			char[] chars = TimeSpan.Minutes.ToString("00").ToCharArray();
+			string hrs = chars.Last() + input;
+			span -= TimeSpan.FromMinutes(span.Minutes);
+			span += TimeSpan.FromMinutes(int.Parse(hrs));
+			TimeSpan = span;
+		}
+	}
+
+	private void SecondDisplay_KeyDown(object sender, KeyRoutedEventArgs e)
+	{
+		string input = GetCharsFromKeys(e.Key, e.KeyStatus.ScanCode);
+
+		if (!string.IsNullOrEmpty(input) && int.TryParse(input, out int _))
+		{
+			TimeSpan span = TimeSpan;
+			char[] chars = TimeSpan.Seconds.ToString("00").ToCharArray();
+			string hrs = chars.Last() + input;
+			span -= TimeSpan.FromSeconds(span.Seconds);
+			span += TimeSpan.FromSeconds(int.Parse(hrs));
+			TimeSpan = span;
+		}
 	}
 }
