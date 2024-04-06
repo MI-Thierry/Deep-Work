@@ -14,13 +14,12 @@
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 	DataContext="{x:Bind ViewModel}">
 	<Grid>
-		<SplitView Visibility="{x:Bind NullToVisibilityConverter(ViewModel.TaskToPlot)}" DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
+		<SplitView DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
 			<SplitView.Pane>
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
 						<RowDefinition/>
-						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
 					<TextBlock Text="Long Tasks" Margin="10 5" Style="{StaticResource SubtitleTextBlockStyle}"/>
 					<ScrollViewer Grid.Row="1">
@@ -44,10 +43,9 @@
 							</ListView.ItemTemplate>
 						</ListView>
 					</ScrollViewer>
-					<Button Content="All Long Tasks" Command="{Binding PlotAllTasksDataCommand}" Grid.Row="2" Margin="10 5" Style="{StaticResource AccentButtonStyle}"/>
 				</Grid>
 			</SplitView.Pane>
-			<Grid  Margin="10">
+			<Grid Margin="10">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition/>
 					<ColumnDefinition/>
@@ -61,39 +59,140 @@
 				<AppBarToggleButton x:Name="SplitViewOpenButton" Grid.Column="1" Icon="OpenPane" LabelPosition="Collapsed" HorizontalAlignment="Right" AutomationProperties.Name="SplitViewOpen"/>
 
 				<Pivot Grid.Row="1" Grid.ColumnSpan="2" ActualThemeChanged="Pivot_ActualThemeChanged">
-					<PivotItem Header="Weekly Data">
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition/>
-							</Grid.RowDefinitions>
-							<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Week" StepSpan="{x:Bind sys:TimeSpan.FromDays(7)}"/>
-							<lvc:CartesianChart Grid.Row="1" Series="{Binding WeeklySeries, Mode=OneWay}" XAxes="{Binding WeeklyXAxis, Mode=OneWay}" YAxes="{Binding WeeklyYAxis, Mode=OneWay}"/>
-						</Grid>
+					<PivotItem Header="Weekly Data" DataContext="{Binding WeekViewModel}">
+						<ScrollViewer>
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="500"/>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Week" StepSpan="{x:Bind sys:TimeSpan.FromDays(7)}"/>
+								<lvc:CartesianChart Grid.Row="1" Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxis, Mode=OneWay}" YAxes="{Binding YAxis, Mode=OneWay}"/>
+								<Grid Grid.Row="2">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition/>
+									</Grid.ColumnDefinitions>
+									<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
+									<ProgressRing Height="252" Width="252" HorizontalAlignment="Left" Value="{Binding TaskDurationPercentage, Mode=OneWay}" IsIndeterminate="False" Background="{ThemeResource ControlFillColorDefaultBrush}"/>
+									<RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Center" IsTextSelectionEnabled="False">
+										<Paragraph HorizontalTextAlignment="Center" FontSize="28" FontWeight="SemiBold">
+											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="%"/>
+										</Paragraph>
+									</RichTextBlock>
+									<RichTextBlock Grid.Column="1" Margin="30 0" FontSize="20" VerticalAlignment="Center" IsTextSelectionEnabled="False">
+										<Paragraph>
+											<Run Text="-"/>
+											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="% of this week's working hours were spent on this task."/>
+										</Paragraph>
+										<Paragraph>
+											<Run Text="- You've worked"/>
+											<Run Text="{Binding TaskTotalDuration.TotalHours}"/>
+											<Run Text="hours on this task this week."/>
+										</Paragraph>
+										<Paragraph>
+											<Run Text="- You've worked"/>
+											<Run Text="{Binding AllTaskTotalDuration.TotalHours}"/>
+											<Run Text="hours in whole week."/>
+										</Paragraph>
+									</RichTextBlock>
+								</Grid>
+							</Grid>
+						</ScrollViewer>
 					</PivotItem>
-					<PivotItem Header="Monthly Data">
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition/>
-							</Grid.RowDefinitions>
-							<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Month" StepSpan="{x:Bind sys:TimeSpan.FromDays(31)}"/>
-							<lvc:CartesianChart Grid.Row="1" Series="{Binding MonthlySeries, Mode=OneWay}" XAxes="{Binding MonthlyXAxis, Mode=OneWay}" YAxes="{Binding MonthlyYAxis, Mode=OneWay}"/>
-						</Grid>
+					<PivotItem Header="Monthly Data" DataContext="{Binding MonthViewModel}">
+						<ScrollViewer>
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="500"/>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Month" StepSpan="{x:Bind sys:TimeSpan.FromDays(31)}"/>
+								<lvc:CartesianChart Grid.Row="1" Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxis, Mode=OneWay}" YAxes="{Binding YAxis, Mode=OneWay}"/>
+								<Grid Grid.Row="2">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition/>
+									</Grid.ColumnDefinitions>
+									<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
+									<ProgressRing Height="252" Width="252" HorizontalAlignment="Left" Value="{Binding TaskDurationPercentage, Mode=OneWay}" IsIndeterminate="False" Background="{ThemeResource ControlFillColorDefaultBrush}"/>
+									<RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Center" IsTextSelectionEnabled="False">
+										<Paragraph HorizontalTextAlignment="Center" FontSize="28" FontWeight="SemiBold">
+											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="%"/>
+										</Paragraph>
+									</RichTextBlock>
+									<RichTextBlock Grid.Column="1" Margin="30 0" FontSize="20" VerticalAlignment="Center" IsTextSelectionEnabled="False">
+										<Paragraph>
+											<Run Text="-"/>
+											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="% of this month's working hours were spent on this task."/>
+										</Paragraph>
+										<Paragraph>
+											<Run Text="- You've worked"/>
+											<Run Text="{Binding TaskTotalDuration.TotalDays}"/>
+											<Run Text="days on this task this month."/>
+										</Paragraph>
+										<Paragraph>
+											<Run Text="- You've worked"/>
+											<Run Text="{Binding AllTaskTotalDuration.TotalDays}"/>
+											<Run Text="days in whole month."/>
+										</Paragraph>
+									</RichTextBlock>
+								</Grid>
+							</Grid>
+						</ScrollViewer>
 					</PivotItem>
-					<PivotItem Header="Yearly Data">
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto"/>
-								<RowDefinition/>
-							</Grid.RowDefinitions>
-							<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Year" StepSpan="{x:Bind sys:TimeSpan.FromDays(365)}"/>
-							<lvc:CartesianChart Grid.Row="1" Series="{Binding YearlySeries, Mode=OneWay}" XAxes="{Binding YearlyXAxis, Mode=OneWay}" YAxes="{Binding YearlyYAxis, Mode=OneWay}"/>
-						</Grid>
+					<PivotItem Header="Yearly Data" DataContext="{Binding YearViewModel}">
+						<ScrollViewer>
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="500"/>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Month" StepSpan="{x:Bind sys:TimeSpan.FromDays(365)}"/>
+								<lvc:CartesianChart Grid.Row="1" Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxis, Mode=OneWay}" YAxes="{Binding YAxis, Mode=OneWay}"/>
+								<Grid Grid.Row="2">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition/>
+									</Grid.ColumnDefinitions>
+									<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
+									<ProgressRing Height="252" Width="252" HorizontalAlignment="Left" Value="{Binding TaskDurationPercentage, Mode=OneWay}" IsIndeterminate="False" Background="{ThemeResource ControlFillColorDefaultBrush}"/>
+									<RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Center" IsTextSelectionEnabled="False">
+										<Paragraph HorizontalTextAlignment="Center" FontSize="28" FontWeight="SemiBold">
+											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="%"/>
+										</Paragraph>
+									</RichTextBlock>
+									<RichTextBlock Grid.Column="1" Margin="30 0" FontSize="20" VerticalAlignment="Center" IsTextSelectionEnabled="False">
+										<Paragraph>
+											<Run Text="-"/>
+											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="% of this year's working hours were spent on this task."/>
+										</Paragraph>
+										<Paragraph>
+											<Run Text="- You've worked"/>
+											<Run Text="{Binding TaskTotalDuration.TotalDays}"/>
+											<Run Text="days on this task this year."/>
+										</Paragraph>
+										<Paragraph>
+											<Run Text="- You've worked"/>
+											<Run Text="{Binding AllTaskTotalDuration.TotalDays}"/>
+											<Run Text="days in whole year."/>
+										</Paragraph>
+									</RichTextBlock>
+								</Grid>
+							</Grid>
+						</ScrollViewer>
 					</PivotItem>
 				</Pivot>
 			</Grid>
 		</SplitView>
-		<TextBlock Text="{Binding PlottingStatusMessage}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="IndianRed" Visibility="{x:Bind NullToVisibilityConverter(ViewModel.PlottingStatusMessage)}"/>
 	</Grid>
 </Page>
