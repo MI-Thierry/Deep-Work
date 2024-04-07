@@ -146,7 +146,8 @@ namespace DeepWork.Services
 			LongTask taskToRemove = ActiveAccount.RunningLongTasks.FirstOrDefault(item => item.Id == id);
 
 			foreach (var task in taskToRemove.RunningTasks)
-				FinishShortTask(taskToRemove.Id, task.Id);
+				taskToRemove.FinishedTasks.Add(task);
+			taskToRemove.RunningTasks.Clear();
 
 			ActiveAccount.RunningLongTasks.Remove(taskToRemove);
 			ActiveAccount.FinishedLongTasks.Add(taskToRemove);
