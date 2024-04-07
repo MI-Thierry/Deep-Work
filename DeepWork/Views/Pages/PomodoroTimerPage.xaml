@@ -13,6 +13,7 @@
 
 	<Page.Resources>
 		<helpers:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+		<helpers:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
 	</Page.Resources>
 
 	<ScrollViewer HorizontalScrollBarVisibility="Auto">
@@ -167,7 +168,7 @@
 												</Paragraph>
 												<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 													<Run Text="Duration of"/>
-													<Run Text="{x:Bind Duration.TotalMinutes, Mode=OneWay}"/>
+													<Run Text="{x:Bind Duration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
 													<Run Text="Minutes"/>
 												</Paragraph>
 											</RichTextBlock>

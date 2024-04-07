@@ -17,6 +17,7 @@
 
 	<Page.Resources>
 		<helpers:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+		<helpers:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
 	</Page.Resources>
 	
 	<Grid>
@@ -96,13 +97,13 @@
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding TaskTotalDuration.TotalHours, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
-											<Run Text="hours on this task this week."/>
+											<Run Text="{Binding TaskTotalDuration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+											<Run Text="on this task this week."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding AllTaskTotalDuration.TotalHours, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
-											<Run Text="hours in whole week."/>
+											<Run Text="{Binding AllTaskTotalDuration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+											<Run Text="in whole week."/>
 										</Paragraph>
 									</RichTextBlock>
 								</Grid>
@@ -140,13 +141,13 @@
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding TaskTotalDuration.TotalDays, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
-											<Run Text="days on this task this month."/>
+											<Run Text="{Binding TaskTotalDuration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+											<Run Text="on this task this month."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding AllTaskTotalDuration.TotalDays}"/>
-											<Run Text="days in whole month."/>
+											<Run Text="{Binding AllTaskTotalDuration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+											<Run Text="in whole month."/>
 										</Paragraph>
 									</RichTextBlock>
 								</Grid>
@@ -161,7 +162,7 @@
 									<RowDefinition Height="500"/>
 									<RowDefinition Height="Auto"/>
 								</Grid.RowDefinitions>
-								<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Month" StepSpan="{x:Bind sys:TimeSpan.FromDays(365)}"/>
+								<uc:DateTimeSlider DateTime="{Binding Date, Mode=TwoWay}" DisplayType="Year" StepSpan="{x:Bind sys:TimeSpan.FromDays(365)}"/>
 								<lvc:CartesianChart Grid.Row="1" Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxis, Mode=OneWay}" YAxes="{Binding YAxis, Mode=OneWay}"/>
 								<Grid Grid.Row="2">
 									<Grid.ColumnDefinitions>
@@ -184,13 +185,13 @@
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding TaskTotalDuration.TotalDays, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
-											<Run Text="days on this task this year."/>
+											<Run Text="{Binding TaskTotalDuration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+											<Run Text="on this task this year."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding AllTaskTotalDuration.TotalDays, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
-											<Run Text="days in whole year."/>
+											<Run Text="{Binding AllTaskTotalDuration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+											<Run Text="in whole year."/>
 										</Paragraph>
 									</RichTextBlock>
 								</Grid>

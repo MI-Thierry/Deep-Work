@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DeepWork.Helpers;
 using DeepWork.Models;
 using DeepWork.Themes;
 using LiveChartsCore;
+using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -76,10 +78,18 @@ namespace DeepWork.ViewModels.Pages
 			ReloadGraph();
 		}
 
+		private string LabelFormatter(ChartPoint point)
+		{
+			TimeSpanToStringConverter converter = new();
+			return (string)converter.Convert(TimeSpan.FromMinutes(point.Coordinate.PrimaryValue), default, default, default);
+		}
+
 		protected LineSeries<float?> GenerateLineSeries(IEnumerable<float?> data, string name)
 		{
+
 			return new LineSeries<float?>
 			{
+				YToolTipLabelFormatter = LabelFormatter,
 				Values = data,
 				Name = name,
 				Stroke = new SolidColorPaint(Theme.StrokeColor, 2),

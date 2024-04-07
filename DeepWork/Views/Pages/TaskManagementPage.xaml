@@ -5,6 +5,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:DeepWork.Views.Pages"
 	xmlns:viewModels="using:DeepWork.ViewModels.Pages"
+	xmlns:helpers="using:DeepWork.Helpers"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
@@ -19,6 +20,7 @@
 			<Setter Property="Height" Value="40"/>
 			<Setter Property="Width" Value="40"/>
 		</Style>
+		<helpers:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
 	</Page.Resources>
 	
 	<SplitView x:Name="splitView" DisplayMode="Overlay" PanePlacement="Right">
@@ -50,8 +52,8 @@
 											</Paragraph>
 											<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 												<Run Text="Duration of"/>
-												<Run Text="{x:Bind Duration.TotalMinutes, Mode=OneWay}"/>
-												<Run Text="Minutes"/>
+												<Run Text="{x:Bind Duration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
+												<Run Text="."/>
 											</Paragraph>
 										</RichTextBlock>
 									</Grid>
