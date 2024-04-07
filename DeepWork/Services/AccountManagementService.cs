@@ -26,7 +26,7 @@ namespace DeepWork.Services
 			context.Database.EnsureCreated();
 
 			// Todo: Remove this in production
-			_accountContext.DbInitialize();
+			// _accountContext.DbInitialize();
 			AvailableAccounts = [.. _accountContext.Accounts];
 
 			if (AvailableAccounts.Count != 0
@@ -38,7 +38,15 @@ namespace DeepWork.Services
 					.Include(p => p.RunningLongTasks).ThenInclude(p => p.FinishedTasks)
 					.Single(account => account.IsActive);
 
+				if (ActiveAccount.LastUpdated != DateTimeOffset.Now)
+				{
+					ActiveAccount.LastUpdated = DateTimeOffset.Now;
+					ActiveAccount.CompletedDailyTarget = TimeSpan.Zero;
+					_accountContext.SaveChanges();
+				}
+
 				IsAccountAvailable = true;
+				ActiveAccountChanged?.Invoke(ActiveAccount);
 			}
 			else
 			{
@@ -81,6 +89,12 @@ namespace DeepWork.Services
 				.Include(p => p.RunningLongTasks).ThenInclude(p => p.FinishedTasks)
 				.Single(acc => acc.Username == account.Username);
 			ActiveAccount.IsActive = true;
+
+			if (ActiveAccount.LastUpdated != DateTimeOffset.Now)
+			{
+				ActiveAccount.LastUpdated = DateTimeOffset.Now;
+				ActiveAccount.CompletedDailyTarget = TimeSpan.Zero;
+			}
 			ActiveAccountChanged?.Invoke(ActiveAccount);
 
 			_accountContext.SaveChanges();
@@ -214,6 +228,18 @@ namespace DeepWork.Services
 			LongTask parentTask = ActiveAccount.RunningLongTasks.First(item => item.Id == parentId);
 			ShortTask task = parentTask.RunningTasks.FirstOrDefault(item => item.Id == childId);
 			return task;
+		}
+
+		public void SetAccountDailyTarget(TimeSpan target)
+		{
+			ActiveAccount.DailyTarget = target;
+			_accountContext.SaveChanges();
+		}
+
+		public void SetAccountCompletedDailyTarget(TimeSpan span)
+		{
+			ActiveAccount.CompletedDailyTarget = span;
+			_accountContext.SaveChanges();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DeepWork.Models;
 using DeepWork.Services;
 using Microsoft.UI.Dispatching;
 using System;
@@ -58,6 +59,12 @@ namespace DeepWork.ViewModels.Pages
 		private DateTimeOffset _pmdrSessionEndTime = DateTimeOffset.Now;
 
 		[ObservableProperty]
+		private TimeSpan _dailyTarget;
+
+		[ObservableProperty]
+		private TimeSpan _completedDailyTarget;
+
+		[ObservableProperty]
 		private ObservableCollection<LongTaskViewModel> _longTasks;
 
 		[ObservableProperty]
@@ -70,18 +77,24 @@ namespace DeepWork.ViewModels.Pages
 		public PomodoroTimerViewModel(AccountManagementService accountManager)
 		{
 			_accountManager = accountManager;
-			_accountManager.ActiveAccountChanged += (account) => LoadTasks();
+			_accountManager.ActiveAccountChanged += LoadTasks;
 			_longTasks = [];
 			_shortTasks = [];
+			LoadTasks(_accountManager.ActiveAccount);
 		}
 
-		private void LoadTasks()
+		private void LoadTasks(Account activeAccount)
 		{
-			foreach (var task in _accountManager.ActiveAccount.RunningLongTasks)
-				LongTasks.Add(task);
+			if (activeAccount != null)
+			{
+				foreach (var task in activeAccount.RunningLongTasks)
+					LongTasks.Add(task);
 
-			if (LongTasks.Any())
-				SelectLongTask(LongTasks.First().Id);
+				if (LongTasks.Any())
+					SelectLongTask(LongTasks.First().Id);
+				DailyTarget = activeAccount.DailyTarget;
+				CompletedDailyTarget = activeAccount.CompletedDailyTarget;
+			}
 		}
 
 		public bool SelectLongTask(int id)
@@ -148,6 +161,7 @@ namespace DeepWork.ViewModels.Pages
 					PeriodEnded?.Invoke(CurrentPeriodType, NextPeriodType);
 					CurrentPeriodType = NextPeriodType;
 					NextPeriodType = CurrentBreakPeriodCount != TotalBreakPeriodCount ? PeriodType.BreakPeriod : PeriodType.None;
+
 					if (SelectedShortTask != null)
 					{
 						SelectedShortTask.Duration += TimeSpan.FromMinutes(25);
@@ -178,7 +192,17 @@ namespace DeepWork.ViewModels.Pages
 				WholePomodoroSessionEnded?.Invoke(ElapsedTime);
 				CurrentPeriodType = PeriodType.None;
 				CountDown = TimeSpan.Zero;
+
+				CompletedDailyTarget += ElapsedTime;
+				_accountManager.SetAccountCompletedDailyTarget(CompletedDailyTarget);
 			});
+		}
+
+		[RelayCommand]
+		public void SetDailyTarget(TimeSpan dailyTarget)
+		{
+			_accountManager.SetAccountDailyTarget(dailyTarget);
+			DailyTarget = dailyTarget;
 		}
 
 		public delegate void PmdrPeriodEndedEventHandle(PeriodType lastPeriodType, PeriodType nextPeriodType);

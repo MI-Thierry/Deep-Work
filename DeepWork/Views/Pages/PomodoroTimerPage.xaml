@@ -13,13 +13,14 @@
 	<ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<Grid>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
+				<ColumnDefinition Width="500"/>
+				<ColumnDefinition Width="500"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
+			
 			<Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" VerticalAlignment="Stretch" CornerRadius="5" Margin="5" Height="400">
 				<Grid Margin="5">
 					<StackPanel Margin="5" Spacing="10" Visibility="{x:Bind ConvertPeriodTypeToVisibility(ViewModel.CurrentPeriodType ,'OutSession'), Mode=OneWay}">
@@ -30,7 +31,7 @@
 							</Paragraph>
 						</RichTextBlock>
 						<uc:PmdrDurationInputBox Value="{x:Bind GetMinutesFromTimeSpan(ViewModel.PmdrSessionDuration), BindBack=GetTimeSpanFromMinutes, Mode=TwoWay}" StepValue="30" PlaceHolderText="Mins" MaxValue="360" MinValue="30"/>
-						<RichTextBlock>
+						<RichTextBlock IsTextSelectionEnabled="False">
 							<Paragraph TextAlignment="Center">
 								<Run Text="You'll have"/>
 								<Run Text="{x:Bind ViewModel.TotalBreakPeriodCount, Mode=OneWay}"/>
@@ -53,7 +54,7 @@
 						<Grid>
 							<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
 							<TextBlock Text="{x:Bind ConvertTimeSpanToString(ViewModel.CountDown), Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"/>
-							<ProgressRing Width="252" Height="252"  Value="{x:Bind CalculatePercentage(ViewModel.CountDown, ViewModel.CurrentPeriodType), Mode=OneWay}" IsIndeterminate="False" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+							<ProgressRing Width="252" Height="252"  Value="{x:Bind CalculatePomodoroTimerPercentage(ViewModel.CountDown, ViewModel.CurrentPeriodType), Mode=OneWay}" IsIndeterminate="False" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 						</Grid>
 						<RichTextBlock IsTextSelectionEnabled="False">
 							<Paragraph FontSize="14" TextAlignment="Center">
@@ -76,6 +77,41 @@
 			</Border>
 			
 			<Border Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="5" Margin="5">
+				<StackPanel Margin="10">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Text="Daily target" Style="{StaticResource BodyStrongTextBlockStyle}"/>
+						<Button Style="{StaticResource AlternateCloseButtonStyle}" Content="&#xE70F;" Click="SetDailyTargetButton_Click"/>
+					</Grid>
+					<Grid>
+						<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
+						<RichTextBlock IsTextSelectionEnabled="False" HorizontalTextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<Paragraph>
+								<Run Text="Daily goal"/>
+							</Paragraph>
+							<Paragraph FontSize="28" FontWeight="SemiBold">
+								<Run Text="{x:Bind ViewModel.DailyTarget.TotalHours, Mode=OneWay}"/>
+							</Paragraph>
+							<Paragraph>
+								<Run Text="hour"/>
+							</Paragraph>
+						</RichTextBlock>
+						<ProgressRing Width="252" Height="252" Value="{x:Bind CalculateCompletedDailyTargetPercentage(ViewModel.CompletedDailyTarget, ViewModel.DailyTarget), Mode=OneWay}" IsIndeterminate="False" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					</Grid>
+					<RichTextBlock IsTextSelectionEnabled="False" HorizontalTextAlignment="Center">
+						<Paragraph>
+							<Run Text="Completed:"/>
+							<Run Text="{x:Bind ViewModel.CompletedDailyTarget.TotalMinutes, Mode=OneWay}"/>
+							<Run Text="minutes"/>
+						</Paragraph>
+					</RichTextBlock>
+				</StackPanel>
+			</Border>
+			
+			<Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="5" Margin="5">
 				<ScrollViewer>
 					<StackPanel>
 						<TextBlock Text="Long Tasks" Margin="20 10 0 0" Style="{StaticResource SubtitleTextBlockStyle}"/>
@@ -105,7 +141,7 @@
 				</ScrollViewer>
 			</Border>
 			
-			<Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="5" Margin="5">
+			<Border Grid.Column="1" Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="5" Margin="5">
 				<ScrollViewer>
 					<StackPanel>
 						<TextBlock Text="Short Tasks" Margin="20 10 0 0" Style="{StaticResource SubtitleTextBlockStyle}"/>
@@ -138,15 +174,6 @@
 					</StackPanel>
 				</ScrollViewer>
 			</Border>
-			<RichTextBlock Grid.Column="1" Grid.Row="1" IsTextSelectionEnabled="False" Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
-				<Paragraph TextAlignment="Center" FontSize="16">
-					<Run>
-						If you want to record you focus time
-						you can check the check button on the
-						short task you want to record for.
-					</Run>
-				</Paragraph>
-			</RichTextBlock>
 		</Grid>
 	</ScrollViewer>
 </Page>

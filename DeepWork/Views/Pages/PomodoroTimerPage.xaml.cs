@@ -1,3 +1,4 @@
+using DeepWork.UserControls;
 using DeepWork.ViewModels.Pages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -72,13 +73,16 @@ namespace DeepWork.Views.Pages
 			timeSpan > TimeSpan.FromMinutes(1) ? timeSpan.Minutes.ToString("00") + " Mins"
 			: timeSpan.Seconds.ToString("00") + " Secs";
 
-		public double CalculatePercentage(TimeSpan timeSpan, PeriodType periodType) =>
+		public double CalculatePomodoroTimerPercentage(TimeSpan timeSpan, PeriodType periodType) =>
 			periodType switch
 			{
 				PeriodType.FocusPeriod => timeSpan.TotalSeconds * (100 / TimeSpan.FromMinutes(25).TotalSeconds),
 				PeriodType.BreakPeriod => timeSpan.TotalSeconds * (100 / TimeSpan.FromMinutes(5).TotalSeconds),
 				_ => 0.0,
 			};
+
+		public double CalculateCompletedDailyTargetPercentage(TimeSpan completeDailyTarget, TimeSpan dailyTarget) =>
+			completeDailyTarget.TotalMinutes * 100 / dailyTarget.TotalMinutes;
 
 		public Visibility ConvertPeriodTypeToVisibility(PeriodType periodType , string intendedPeriodType)
 		{
@@ -99,6 +103,29 @@ namespace DeepWork.Views.Pages
 		private void SelectShortTaskCheckBox_Click(object sender, RoutedEventArgs e)
 		{
 			ViewModel.SelectShortTask((int)(sender as CheckBox).Tag);
+		}
+
+		private async void SetDailyTargetButton_Click(object sender, RoutedEventArgs e)
+		{
+			StackPanel stackPanel = new() { Orientation = Orientation.Vertical };
+			TextBlock dailyGoalText = new() { Text = "Daily goal" };
+			TimeSpanSlider dailyGoalTimeSpan = new() { MaxTimeSpan = TimeSpan.FromHours(12), MinTimeSpan = TimeSpan.Zero };
+			stackPanel.Children.Add(dailyGoalText);
+			stackPanel.Children.Add(dailyGoalTimeSpan);
+
+			ContentDialog contentDialog = new()
+			{
+				XamlRoot = XamlRoot,
+				Title = "Edit your daily goal",
+				PrimaryButtonText = "Save",
+				CloseButtonText = "Cancel",
+				DefaultButton = ContentDialogButton.Primary,
+				Content = stackPanel,
+			};
+
+			var result = await contentDialog.ShowAsync();
+			if (result == ContentDialogResult.Primary)
+				ViewModel.SetDailyTarget(dailyGoalTimeSpan.TimeSpan);
 		}
 	}
 }

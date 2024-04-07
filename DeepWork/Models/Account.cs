@@ -20,6 +20,10 @@ namespace DeepWork.Models
 
 		public TimeSpan DailyTarget { get; set; }
 
+		public DateTimeOffset LastUpdated { get; set; }
+
+		public TimeSpan CompletedDailyTarget { get; set; }
+
 		public List<LongTask> RunningLongTasks { get; set; } = [];
 
 		public List<LongTask> FinishedLongTasks { get; set; } = [];
