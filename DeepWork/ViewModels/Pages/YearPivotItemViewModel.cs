@@ -31,7 +31,7 @@ namespace DeepWork.ViewModels.Pages
 				else
 					yearlyData.Add(null);
 
-				yearlyXAxisLabels.Add(date.ToString("MMM/yyyy"));
+				yearlyXAxisLabels.Add(date.ToString("MMM/yy"));
 
 				// Loading all tasks.
 				values =
@@ -49,12 +49,12 @@ namespace DeepWork.ViewModels.Pages
 
 			TaskTotalDuration = TimeSpan.FromMinutes(yearlyData.Sum() ?? 0);
 			AllTaskTotalDuration = TimeSpan.FromMinutes(allYearlyData.Sum() ?? 0);
-			TaskDurationPercentage = TaskTotalDuration.TotalMinutes * 100 / AllTaskTotalDuration.TotalMinutes;
+			TaskDurationPercentage = TaskTotalDuration.TotalHours * 100 / AllTaskTotalDuration.TotalHours;
 			if (double.IsNaN(TaskDurationPercentage))
 				TaskDurationPercentage = 0;
 
 			Series = [GenerateLineSeries(yearlyData, "Duration")];
-			XAxis = [GenerateXAxis(yearlyXAxisLabels, "Days of week")];
+			XAxis = [GenerateXAxis(yearlyXAxisLabels, "Months")];
 			YAxis = [GenerateYAxis()];
 		}
 	}

@@ -55,7 +55,7 @@ namespace DeepWork.ViewModels.Pages
 				TaskDurationPercentage = 0;
 
 			Series = [GenerateLineSeries(monthlyData, "Duration")];
-			XAxis = [GenerateXAxis(MonthlyXAxisLabels, "Days of week")];
+			XAxis = [GenerateXAxis(MonthlyXAxisLabels, "Days")];
 			YAxis = [GenerateYAxis()];
 		}
 	}
