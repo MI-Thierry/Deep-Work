@@ -20,6 +20,7 @@ namespace DeepWork.Views.Pages
 			ViewModel = App.GetService<PomodoroTimerViewModel>();
 			ViewModel.PeriodEnded += ViewModel_PeriodEnded;
 			ViewModel.WholePomodoroSessionEnded += ViewModel_WholePomodoroSessionEnded;
+			ViewModel.UpdateTasks();
 			DataContext = ViewModel;
 			this.InitializeComponent();
 		}
@@ -81,8 +82,14 @@ namespace DeepWork.Views.Pages
 				_ => 0.0,
 			};
 
-		public double CalculateCompletedDailyTargetPercentage(TimeSpan completeDailyTarget, TimeSpan dailyTarget) =>
-			completeDailyTarget.TotalMinutes * 100 / dailyTarget.TotalMinutes;
+		public double CalculateCompletedDailyTargetPercentage(TimeSpan completeDailyTarget, TimeSpan dailyTarget)
+		{
+			double value = completeDailyTarget.TotalMinutes * 100 / dailyTarget.TotalMinutes;
+			if (double.IsNaN(value) || double.IsInfinity(value))
+				return 0.0;
+			else
+				return value;
+		}
 
 		public Visibility ConvertPeriodTypeToVisibility(PeriodType periodType , string intendedPeriodType)
 		{

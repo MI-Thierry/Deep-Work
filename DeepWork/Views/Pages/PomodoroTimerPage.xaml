@@ -6,9 +6,14 @@
 	xmlns:local="using:DeepWork.Views.Pages"
 	xmlns:viewModels="using:DeepWork.ViewModels.Pages"
 	xmlns:uc="using:DeepWork.UserControls"
+	xmlns:helpers="using:DeepWork.Helpers"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
+
+	<Page.Resources>
+		<helpers:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+	</Page.Resources>
 
 	<ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<Grid>
@@ -104,7 +109,7 @@
 					<RichTextBlock IsTextSelectionEnabled="False" HorizontalTextAlignment="Center">
 						<Paragraph>
 							<Run Text="Completed:"/>
-							<Run Text="{x:Bind ViewModel.CompletedDailyTarget.TotalMinutes, Mode=OneWay}"/>
+							<Run Text="{x:Bind ViewModel.CompletedDailyTarget.TotalMinutes, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 							<Run Text="minutes"/>
 						</Paragraph>
 					</RichTextBlock>
