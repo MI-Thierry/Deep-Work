@@ -64,6 +64,7 @@ namespace DeepWork.ViewModels.Pages
 		private ObservableCollection<ShortTaskViewModel> _shortTasks;
 
 		public LongTaskViewModel SelectedLongTask { get; private set; }
+
 		public ShortTaskViewModel SelectedShortTask { get; private set; }
 
 		public PomodoroTimerViewModel(AccountManagementService accountManager)
@@ -117,7 +118,7 @@ namespace DeepWork.ViewModels.Pages
 		{
 			DispatcherQueue = dispatcherQueue;
 			_dispatcherQueueTimer = DispatcherQueue.CreateTimer();
-			_dispatcherQueueTimer.Interval = TimeSpan.FromMilliseconds(1);
+			_dispatcherQueueTimer.Interval = TimeSpan.FromSeconds(1);
 			_dispatcherQueueTimer.IsRepeating = true;
 			_dispatcherQueueTimer.Tick += DispatcherQueueTimer_Tick;
 

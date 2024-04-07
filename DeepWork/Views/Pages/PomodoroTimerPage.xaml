@@ -13,8 +13,8 @@
 	<ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<Grid>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="500"/>
-				<ColumnDefinition MinWidth="300"/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition/>
