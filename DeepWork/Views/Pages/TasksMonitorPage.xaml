@@ -8,11 +8,17 @@
 	xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
 	xmlns:uc="using:DeepWork.UserControls"
 	xmlns:sys="using:System"
+	xmlns:helpers ="using:DeepWork.Helpers"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 	DataContext="{x:Bind ViewModel}">
+
+	<Page.Resources>
+		<helpers:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+	</Page.Resources>
+	
 	<Grid>
 		<SplitView DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
 			<SplitView.Pane>
@@ -78,24 +84,24 @@
 									<ProgressRing Height="252" Width="252" HorizontalAlignment="Left" Value="{Binding TaskDurationPercentage, Mode=OneWay}" IsIndeterminate="False" Background="{ThemeResource ControlFillColorDefaultBrush}"/>
 									<RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Center" IsTextSelectionEnabled="False">
 										<Paragraph HorizontalTextAlignment="Center" FontSize="28" FontWeight="SemiBold">
-											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="{Binding TaskDurationPercentage, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="%"/>
 										</Paragraph>
 									</RichTextBlock>
 									<RichTextBlock Grid.Column="1" Margin="30 0" FontSize="20" VerticalAlignment="Center" IsTextSelectionEnabled="False">
 										<Paragraph>
 											<Run Text="-"/>
-											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="{Binding TaskDurationPercentage, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="% of this week's working hours were spent on this task."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding TaskTotalDuration.TotalHours}"/>
+											<Run Text="{Binding TaskTotalDuration.TotalHours, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="hours on this task this week."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding AllTaskTotalDuration.TotalHours}"/>
+											<Run Text="{Binding AllTaskTotalDuration.TotalHours, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="hours in whole week."/>
 										</Paragraph>
 									</RichTextBlock>
@@ -122,19 +128,19 @@
 									<ProgressRing Height="252" Width="252" HorizontalAlignment="Left" Value="{Binding TaskDurationPercentage, Mode=OneWay}" IsIndeterminate="False" Background="{ThemeResource ControlFillColorDefaultBrush}"/>
 									<RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Center" IsTextSelectionEnabled="False">
 										<Paragraph HorizontalTextAlignment="Center" FontSize="28" FontWeight="SemiBold">
-											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="{Binding TaskDurationPercentage, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="%"/>
 										</Paragraph>
 									</RichTextBlock>
 									<RichTextBlock Grid.Column="1" Margin="30 0" FontSize="20" VerticalAlignment="Center" IsTextSelectionEnabled="False">
 										<Paragraph>
 											<Run Text="-"/>
-											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="{Binding TaskDurationPercentage, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="% of this month's working hours were spent on this task."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding TaskTotalDuration.TotalDays}"/>
+											<Run Text="{Binding TaskTotalDuration.TotalDays, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="days on this task this month."/>
 										</Paragraph>
 										<Paragraph>
@@ -166,24 +172,24 @@
 									<ProgressRing Height="252" Width="252" HorizontalAlignment="Left" Value="{Binding TaskDurationPercentage, Mode=OneWay}" IsIndeterminate="False" Background="{ThemeResource ControlFillColorDefaultBrush}"/>
 									<RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Center" IsTextSelectionEnabled="False">
 										<Paragraph HorizontalTextAlignment="Center" FontSize="28" FontWeight="SemiBold">
-											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="{Binding TaskDurationPercentage, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="%"/>
 										</Paragraph>
 									</RichTextBlock>
 									<RichTextBlock Grid.Column="1" Margin="30 0" FontSize="20" VerticalAlignment="Center" IsTextSelectionEnabled="False">
 										<Paragraph>
 											<Run Text="-"/>
-											<Run Text="{Binding TaskDurationPercentage, Mode=OneWay}"/>
+											<Run Text="{Binding TaskDurationPercentage, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="% of this year's working hours were spent on this task."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding TaskTotalDuration.TotalDays}"/>
+											<Run Text="{Binding TaskTotalDuration.TotalDays, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="days on this task this year."/>
 										</Paragraph>
 										<Paragraph>
 											<Run Text="- You've worked"/>
-											<Run Text="{Binding AllTaskTotalDuration.TotalDays}"/>
+											<Run Text="{Binding AllTaskTotalDuration.TotalDays, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
 											<Run Text="days in whole year."/>
 										</Paragraph>
 									</RichTextBlock>
