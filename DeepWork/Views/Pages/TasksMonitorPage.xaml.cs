@@ -13,8 +13,11 @@ namespace DeepWork.Views.Pages
 			ViewModel = new TasksMonitorViewModel(ActualTheme);
 		}
 
-		private Visibility NullToVisibilityConverter(object obj) =>
-			obj != null ? Visibility.Visible : Visibility.Collapsed;
+		private Visibility IntToVisibilityConverter(int value) =>
+			value != 0 ? Visibility.Visible : Visibility.Collapsed;
+
+		private bool VisibilityToBoolConverter(Visibility value) =>
+			value != Visibility.Visible;
 
 		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{

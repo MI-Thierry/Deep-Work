@@ -20,7 +20,7 @@
 	</Page.Resources>
 	
 	<Grid>
-		<SplitView DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
+		<SplitView x:Name="GraphSplitView" Visibility="{x:Bind IntToVisibilityConverter(ViewModel.LongTasks.Count)}" DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="{Binding ElementName=SplitViewOpenButton, Path=IsChecked}">
 			<SplitView.Pane>
 				<Grid>
 					<Grid.RowDefinitions>
@@ -200,5 +200,6 @@
 				</Pivot>
 			</Grid>
 		</SplitView>
+		<InfoBar x:Name="InformationMessage" VerticalAlignment="Center" Margin="10" IsOpen="{x:Bind VisibilityToBoolConverter(GraphSplitView.Visibility)}" Title="Information" Message="Create some long tasks before you use monitoring system." IsClosable="False" Severity="Informational"/>
 	</Grid>
 </Page>
