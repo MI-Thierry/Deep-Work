@@ -130,7 +130,7 @@ namespace DeepWork
 
 		private void LaunchAndBringToForegroundIfNeeded()
 		{
-			WindowHelper.ShowWindow(MainWindow);
+			WindowHelpers.ShowWindow(MainWindow);
 		}
 
 		private void NotificationManager_NotificationInvoked(AppNotificationManager sender, AppNotificationActivatedEventArgs args)

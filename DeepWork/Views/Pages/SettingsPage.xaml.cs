@@ -64,7 +64,7 @@ public sealed partial class SettingsPage : Page
 
 		if (result == ContentDialogResult.Primary)
 			if (!ViewModel.SignInAccount(id, content.Password))
-				await WindowHelper.WarningDialog($"Failed to Sign In {content.Username}'s account", XamlRoot);
+				await WindowHelpers.WarningDialog($"Failed to Sign In {content.Username}'s account", XamlRoot);
 	}
 
 	private void CreateAccountButton_Click(object sender, RoutedEventArgs e)

@@ -17,6 +17,7 @@ using Microsoft.UI;
 using Windows.UI;
 using WinRT.Interop;
 using System.Runtime.InteropServices;
+using DeepWork.Helpers;
 
 namespace DeepWork.Views.Windows
 {
@@ -39,7 +40,7 @@ namespace DeepWork.Views.Windows
 			this.InitializeComponent();
 			_hWnd = WindowNative.GetWindowHandle(this);
 			_subclassDelegate = new SubclassProc(WindowSubClass);
-			bool bReturn = SetWindowSubclass(_hWnd, _subclassDelegate, 0, 0);
+			bool bReturn = WindowHelpers.SetWindowSubclass(_hWnd, _subclassDelegate, 0, 0);
 
 			if (MicaController.IsSupported())
 			{
@@ -219,34 +220,14 @@ namespace DeepWork.Views.Windows
 		{
 			switch (uMsg)
 			{
-				case WM_GETMINMAXINFO:
+				case WindowHelpers.WM_GETMINMAXINFO:
 					MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
 					mmi.ptMinTrackSize.X = MinWidth;
 					mmi.ptMinTrackSize.Y = MinHeight;
 					Marshal.StructureToPtr(mmi, lParam, false);
 					return 0;
 			}
-			return DefSubclassProc(hWnd, uMsg, wParam, lParam);
-		}
-
-		public delegate int SubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubClass, uint dwRefData);
-
-		[DllImport("Comctl32.dll", SetLastError = true)]
-		public static extern bool SetWindowSubclass([In] IntPtr hWnd, [In] SubclassProc pfnSubClass, [In]uint uIdSubClass, [In]uint dwRefData);
-
-		[DllImport("Comctl32.dll", SetLastError = true)]
-		public static extern int DefSubclassProc([In] IntPtr hWnd, [In] uint uMsg, [In] IntPtr wParam, [In] IntPtr lParam);
-
-		
-		public const int WM_GETMINMAXINFO = 0x0024;
-
-		public struct MINMAXINFO
-		{
-			public System.Drawing.Point ptReserved;
-			public System.Drawing.Point ptMaxSize;
-			public System.Drawing.Point ptMaxPosition;
-			public System.Drawing.Point ptMinTrackSize;
-			public System.Drawing.Point ptMaxTrackSize;
+			return WindowHelpers.DefSubclassProc(hWnd, uMsg, wParam, lParam);
 		}
 	}
 }

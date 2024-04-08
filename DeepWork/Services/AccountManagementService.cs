@@ -38,7 +38,7 @@ namespace DeepWork.Services
 					.Include(p => p.RunningLongTasks).ThenInclude(p => p.FinishedTasks)
 					.Single(account => account.IsActive);
 
-				if (ActiveAccount.LastUpdated != DateTimeOffset.Now)
+				if (DateOnly.FromDateTime(ActiveAccount.LastUpdated.DateTime) != DateOnly.FromDateTime(DateTime.Now))
 				{
 					ActiveAccount.LastUpdated = DateTimeOffset.Now;
 					ActiveAccount.CompletedDailyTarget = TimeSpan.Zero;
@@ -90,7 +90,7 @@ namespace DeepWork.Services
 				.Single(acc => acc.Username == account.Username);
 			ActiveAccount.IsActive = true;
 
-			if (ActiveAccount.LastUpdated != DateTimeOffset.Now)
+			if (DateOnly.FromDateTime(ActiveAccount.LastUpdated.DateTime) != DateOnly.FromDateTime(DateTime.Now))
 			{
 				ActiveAccount.LastUpdated = DateTimeOffset.Now;
 				ActiveAccount.CompletedDailyTarget = TimeSpan.Zero;

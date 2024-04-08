@@ -9,7 +9,17 @@ using WinRT.Interop;
 
 namespace DeepWork.Helpers
 {
-	public static class WindowHelper
+	public struct MINMAXINFO
+	{
+		public System.Drawing.Point ptReserved;
+		public System.Drawing.Point ptMaxSize;
+		public System.Drawing.Point ptMaxPosition;
+		public System.Drawing.Point ptMinTrackSize;
+		public System.Drawing.Point ptMaxTrackSize;
+	};
+
+	public delegate int SubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubClass, uint dwRefData);
+	public static class WindowHelpers
 	{
 		public static AppWindow GetAppWindow(Window window)
 		{
@@ -38,6 +48,13 @@ namespace DeepWork.Helpers
 		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+		[DllImport("Comctl32.dll", SetLastError = true)]
+		public static extern bool SetWindowSubclass([In] IntPtr hWnd, [In] SubclassProc pfnSubClass, [In] uint uIdSubClass, [In] uint dwRefData);
+
+		[DllImport("Comctl32.dll", SetLastError = true)]
+		public static extern int DefSubclassProc([In] IntPtr hWnd, [In] uint uMsg, [In] IntPtr wParam, [In] IntPtr lParam);
+
+		public const int WM_GETMINMAXINFO = 0x0024;
 		public static void ShowWindow(Window window)
 		{
 			IntPtr hwnd = WindowNative.GetWindowHandle(window);
