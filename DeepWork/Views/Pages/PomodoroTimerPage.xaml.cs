@@ -6,6 +6,8 @@ using Microsoft.Windows.AppNotifications;
 using Microsoft.Windows.AppNotifications.Builder;
 using System;
 using System.Linq;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 
 namespace DeepWork.Views.Pages
 {
@@ -56,6 +58,15 @@ namespace DeepWork.Views.Pages
 
 			AppNotificationManager notificationManager = AppNotificationManager.Default;
 			notificationManager.Show(builder.BuildNotification());
+
+			if (lastPeriodType != PeriodType.None)
+			{
+				MediaPlayer mediaPlayer = new()
+				{
+					Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/notification-sound.wav"))
+				};
+				mediaPlayer.Play();
+			}
 		}
 
 		public int GetMinutesFromTimeSpan(TimeSpan timeSpan) =>

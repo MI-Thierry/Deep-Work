@@ -110,7 +110,7 @@
 					<RichTextBlock IsTextSelectionEnabled="False" HorizontalTextAlignment="Center">
 						<Paragraph>
 							<Run Text="Completed:"/>
-							<Run Text="{x:Bind ViewModel.CompletedDailyTarget.TotalMinutes, Converter={StaticResource DoubleToStringConverter}, Mode=OneWay}"/>
+							<Run Text="{x:Bind ViewModel.CompletedDailyTarget, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
 							<Run Text="minutes"/>
 						</Paragraph>
 					</RichTextBlock>
