@@ -98,7 +98,15 @@ namespace DeepWork.ViewModels.Pages
 			};
 		}
 
-		// Todo: Add GenerateBarSeries function.
+		protected ColumnSeries<float?> GenerateColumnSeries(IEnumerable<float?> data, string name)
+		{
+			return new ColumnSeries<float?>
+			{
+				YToolTipLabelFormatter = LabelFormatter,
+				Values = data,
+				Name = name,
+			};
+		}
 		protected Axis GenerateXAxis(IEnumerable<string> labels, string name)
 		{
 			return new Axis

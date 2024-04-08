@@ -53,7 +53,7 @@ namespace DeepWork.ViewModels.Pages
 			if (double.IsNaN(TaskDurationPercentage))
 				TaskDurationPercentage = 0;
 
-			Series = [GenerateLineSeries(yearlyData, "Duration")];
+			Series = [GenerateColumnSeries(yearlyData, "Duration")];
 			XAxis = [GenerateXAxis(yearlyXAxisLabels, "Months")];
 			YAxis = [GenerateYAxis()];
 		}
