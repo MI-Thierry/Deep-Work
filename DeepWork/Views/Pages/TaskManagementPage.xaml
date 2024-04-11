@@ -39,14 +39,14 @@
 								<ListViewItem x:Name="ShortTaskListViewItem">
 									<Grid>
 										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="1*"/>
-											<ColumnDefinition Width="7*"/>
+											<ColumnDefinition Width="30"/>
+											<ColumnDefinition/>
 											<ColumnDefinition Width="Auto"/>
 										</Grid.ColumnDefinitions>
 										
 										<CheckBox Tag="{x:Bind Id, Mode=OneTime}" IsChecked="False" Click="FinishShortTaskCheckBox_Click"/>
 										<Button Content="&#xE74D;" Grid.Column="2" IsEnabled="{Binding ElementName=ShortTaskListViewItem, Path=IsSelected}" Style="{StaticResource AlternateCloseButtonStyle}" Foreground="IndianRed" Click="DeleteShortTaskButton_Click"/>
-										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
+										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False" Margin="0 5">
 											<Paragraph>
 												<Run Text="{x:Bind Name, Mode=OneWay}"/>
 											</Paragraph>
@@ -86,8 +86,8 @@
 							<ListViewItem x:Name="LongTaskListViewItem">
 								<Grid Margin="5">
 									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="1*"/>
-										<ColumnDefinition Width="18*"/>
+										<ColumnDefinition Width="25"/>
+										<ColumnDefinition/>
 										<ColumnDefinition Width="Auto"/>
 									</Grid.ColumnDefinitions>
 
