@@ -137,7 +137,7 @@ namespace DeepWork.ViewModels.Pages
 		{
 			DispatcherQueue = dispatcherQueue;
 			_dispatcherQueueTimer = DispatcherQueue.CreateTimer();
-			_dispatcherQueueTimer.Interval = TimeSpan.FromMilliseconds(1);
+			_dispatcherQueueTimer.Interval = TimeSpan.FromSeconds(1);
 			_dispatcherQueueTimer.IsRepeating = true;
 			_dispatcherQueueTimer.Tick += DispatcherQueueTimer_Tick;
 
