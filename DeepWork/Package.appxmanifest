@@ -12,14 +12,14 @@
 
   <Identity
     Name="8f2ac065-9c7c-4721-91e9-3f14d176a696"
-    Publisher="CN=mithi"
+    Publisher="CN=ATE Company"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="8f2ac065-9c7c-4721-91e9-3f14d176a696" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>DeepWork</DisplayName>
-    <PublisherDisplayName>mithi</PublisherDisplayName>
+    <PublisherDisplayName>ATE Company</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
