@@ -51,7 +51,7 @@ namespace DeepWork.ViewModels.Pages
 			TaskTotalDuration = TimeSpan.FromMinutes(monthlyData.Sum() ?? 0);
 			AllTaskTotalDuration = TimeSpan.FromMinutes(allMonthlyData.Sum() ?? 0);
 			TaskDurationPercentage = TaskTotalDuration.TotalMinutes * 100 / AllTaskTotalDuration.TotalMinutes;
-			if (double.IsNaN(TaskDurationPercentage))
+			if (double.IsNaN(TaskDurationPercentage) || double.IsInfinity(TaskDurationPercentage))
 				TaskDurationPercentage = 0;
 
 			Series = [GenerateLineSeries(monthlyData, "Duration")];

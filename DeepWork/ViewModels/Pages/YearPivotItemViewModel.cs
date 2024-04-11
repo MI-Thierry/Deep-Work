@@ -25,8 +25,8 @@ namespace DeepWork.ViewModels.Pages
 					where task.FinishDate.Month == date.Month
 					select task.Duration.TotalMinutes;
 
-				if (DateOnly.FromDateTime(TaskToPlot.StartDate.DateTime) <= DateOnly.FromDateTime(date.DateTime) &&
-					DateOnly.FromDateTime(date.DateTime) <= DateOnly.FromDateTime(DateTime.Now))
+				if (TaskToPlot.StartDate.Month <= date.Month && TaskToPlot.StartDate.Year == date.Year
+					&& date.Month <= DateTime.Now.Month)
 					yearlyData.Add((float)values.Sum());
 				else
 					yearlyData.Add(null);
@@ -40,8 +40,8 @@ namespace DeepWork.ViewModels.Pages
 					where task.FinishDate.Month == date.Month
 					select task.Duration.TotalMinutes;
 
-				if (DateOnly.FromDateTime(TaskToPlot.StartDate.DateTime) <= DateOnly.FromDateTime(date.DateTime) &&
-					DateOnly.FromDateTime(date.DateTime) <= DateOnly.FromDateTime(DateTime.Now))
+				if (TaskToPlot.StartDate.Month <= date.Month && TaskToPlot.StartDate.Year == date.Year
+					&& date.Month <= DateTime.Now.Month)
 					allYearlyData.Add((float)values.Sum());
 				else
 					allYearlyData.Add(null);
@@ -50,7 +50,7 @@ namespace DeepWork.ViewModels.Pages
 			TaskTotalDuration = TimeSpan.FromMinutes(yearlyData.Sum() ?? 0);
 			AllTaskTotalDuration = TimeSpan.FromMinutes(allYearlyData.Sum() ?? 0);
 			TaskDurationPercentage = TaskTotalDuration.TotalHours * 100 / AllTaskTotalDuration.TotalHours;
-			if (double.IsNaN(TaskDurationPercentage))
+			if (double.IsNaN(TaskDurationPercentage) || double.IsInfinity(TaskDurationPercentage))
 				TaskDurationPercentage = 0;
 
 			Series = [GenerateColumnSeries(yearlyData, "Duration")];
