@@ -53,7 +53,6 @@
 											<Paragraph Foreground="{ThemeResource AccentTextFillColorSecondaryBrush}" FontSize="12">
 												<Run Text="Duration of"/>
 												<Run Text="{x:Bind Duration, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}"/>
-												<Run Text="."/>
 											</Paragraph>
 										</RichTextBlock>
 									</Grid>

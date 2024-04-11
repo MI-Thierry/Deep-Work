@@ -198,7 +198,9 @@ namespace DeepWork.Views.Windows
 		private void BackRequestButton_Click(object sender, RoutedEventArgs e)
 		{
 			ContentFrame.GoBack();
-			NavView.SelectedItem = ViewModel.MenuItems.First(item => item.Tag as Type == ContentFrame.CurrentSourcePageType);
+			NavView.SelectedItem = ViewModel.MenuItems
+				.FirstOrDefault(item => item.Tag as Type == ContentFrame.CurrentSourcePageType)
+				?? NavView.SettingsItem;
 		}
 
 		private void BackRequestButton_PointerEntered(object sender, PointerRoutedEventArgs e)
