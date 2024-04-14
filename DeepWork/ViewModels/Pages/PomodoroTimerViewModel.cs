@@ -25,7 +25,7 @@ namespace DeepWork.ViewModels.Pages
 		[ObservableProperty]
 		private TimeSpan _countDown;
 
-		private TimeSpan _pmdrSessionDuration;
+		private TimeSpan _pmdrSessionDuration = TimeSpan.FromMinutes(30);
 		public TimeSpan PmdrSessionDuration
 		{
 			get => _pmdrSessionDuration;
@@ -167,13 +167,7 @@ namespace DeepWork.ViewModels.Pages
 					PeriodEnded?.Invoke(CurrentPeriodType, NextPeriodType);
 					CurrentPeriodType = NextPeriodType;
 					NextPeriodType = CurrentBreakPeriodCount != TotalBreakPeriodCount ? PeriodType.BreakPeriod : PeriodType.None;
-
-					if (SelectedShortTask != null)
-					{
-						SelectedShortTask.Duration += TimeSpan.FromMinutes(25);
-						EditShortTask(SelectedShortTask);
 					}
-				}
 				else if (NextPeriodType == PeriodType.BreakPeriod)
 				{
 					CountDown = TimeSpan.FromMinutes(5);
@@ -194,11 +188,18 @@ namespace DeepWork.ViewModels.Pages
 		{
 			DispatcherQueue?.TryEnqueue(delegate
 			{
+				// Resetting everything
 				_dispatcherQueueTimer.Stop();
 				WholePomodoroSessionEnded?.Invoke(ElapsedTime);
 				CurrentPeriodType = PeriodType.None;
 				CountDown = TimeSpan.Zero;
 
+				// Storing data
+				if (SelectedShortTask != null)
+				{
+					SelectedShortTask.Duration += ElapsedTime;
+					EditShortTask(SelectedShortTask);
+				}
 				CompletedDailyTarget += ElapsedTime;
 				_accountManager.SetAccountCompletedDailyTarget(CompletedDailyTarget);
 			});
