@@ -40,7 +40,7 @@
 						<RichTextBlock IsTextSelectionEnabled="False">
 							<Paragraph TextAlignment="Center">
 								<Run Text="You'll have"/>
-								<Run Text="{x:Bind ViewModel.TotalBreakPeriodCount, Mode=OneWay}"/>
+								<Run Text="{x:Bind ConvertBreakCountToString(ViewModel.TotalBreakPeriodCount), Mode=OneWay}"/>
 								<Run Text="breaks"/>
 							</Paragraph>
 							<Paragraph TextAlignment="Center">
@@ -48,6 +48,7 @@
 								<Run Text="{x:Bind ConvertDateTimeToString(ViewModel.PmdrSessionEndTime), Mode=OneWay}"/>
 							</Paragraph>
 						</RichTextBlock>
+						<CheckBox Content="Skip breaks" IsChecked="{x:Bind ViewModel.SkipBreaks, Mode=TwoWay}" HorizontalAlignment="Center"/>
 						<Button HorizontalAlignment="Center" Command="{x:Bind ViewModel.StartPomodoroSessionCommand}" CommandParameter="{x:Bind DispatcherQueue}" Style="{StaticResource AccentButtonStyle}" >
 							<StackPanel Spacing="5" Orientation="Horizontal">
 								<FontIcon Glyph="&#xedda;"/>
@@ -60,7 +61,7 @@
 						<Grid>
 							<Ellipse Width="250" Height="250" StrokeThickness="27" Stroke="{ThemeResource ControlFillColorDefaultBrush}"/>
 							<TextBlock Text="{x:Bind ConvertTimeSpanToString(ViewModel.CountDown), Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"/>
-							<ProgressRing Width="252" Height="252"  Value="{x:Bind CalculatePomodoroTimerPercentage(ViewModel.CountDown, ViewModel.CurrentPeriodType), Mode=OneWay}" IsIndeterminate="False" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+							<ProgressRing Width="252" Height="252"  Value="{x:Bind CalculatePomodoroTimerPercentage(ViewModel.CountDown), Mode=OneWay}" IsIndeterminate="False" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 						</Grid>
 						<RichTextBlock IsTextSelectionEnabled="False">
 							<Paragraph FontSize="14" TextAlignment="Center">
@@ -125,7 +126,7 @@
 							<ListView.ItemTemplate>
 								<DataTemplate x:DataType="viewModels:LongTaskViewModel">
 									<ListViewItem x:Name="LongTaskListViewItem" Margin="5">
-										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
+										<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False" Margin="5">
 											<Paragraph FontSize="13">
 												<Run Text="{x:Bind Name, Mode=OneWay}"/>
 											</Paragraph>
@@ -162,7 +163,7 @@
 											</Grid.ColumnDefinitions>
 
 											<CheckBox Tag="{x:Bind Id, Mode=OneTime}" IsChecked="False" Click="SelectShortTaskCheckBox_Click"/>
-											<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False">
+											<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False" Margin="5">
 												<Paragraph>
 													<Run Text="{x:Bind Name, Mode=OneWay}"/>
 												</Paragraph>

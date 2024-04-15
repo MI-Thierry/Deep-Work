@@ -74,6 +74,9 @@ namespace DeepWork.Views.Pages
 		public TimeSpan GetTimeSpanFromMinutes(int minutes) =>
 			ViewModel.PmdrSessionDuration = TimeSpan.FromMinutes(minutes);
 
+		public string ConvertBreakCountToString(int count) =>
+			count == 0 ? "no" : count.ToString();
+
 		public string ConvertDateTimeToString(DateTimeOffset dateTime) => dateTime.ToString("t");
 
 		public string ConvertPeriodTypeToString(PeriodType periodType) =>

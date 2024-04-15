@@ -31,11 +31,41 @@ namespace DeepWork.ViewModels.Pages
 			get => _pmdrSessionDuration;
 			set {
 				SetProperty(ref _pmdrSessionDuration, value);
+
 				PmdrSessionEndTime = DateTimeOffset.Now + _pmdrSessionDuration;
-				TotalFocusPeriodCount = (int)_pmdrSessionDuration.TotalMinutes / 25;
-				TotalBreakPeriodCount = Math.Max(TotalFocusPeriodCount - 1, 0);
+				if (SkipBreaks)
+				{
+					TotalFocusPeriodCount = 1;
+					TotalBreakPeriodCount = 0;
+				}
+				else
+				{
+					TotalFocusPeriodCount = (int)_pmdrSessionDuration.TotalMinutes / 25;
+					TotalBreakPeriodCount = Math.Max(TotalFocusPeriodCount - 1, 0);
+				}
 			}
 		}
+
+		private bool _skipBreaks;
+
+		public bool SkipBreaks
+		{
+			get => _skipBreaks;
+			set {
+				SetProperty(ref _skipBreaks, value);
+				if (value == true)
+				{
+					TotalFocusPeriodCount = 1;
+					TotalBreakPeriodCount = 0;
+				}
+				else
+				{
+					TotalFocusPeriodCount = (int)_pmdrSessionDuration.TotalMinutes / 25;
+					TotalBreakPeriodCount = Math.Max(TotalFocusPeriodCount - 1, 0);
+				}
+			}
+		}
+
 
 		[ObservableProperty]
 		private PeriodType _currentPeriodType;
@@ -54,6 +84,10 @@ namespace DeepWork.ViewModels.Pages
 
 		[ObservableProperty]
 		private int _currentFocusPeriodCount;
+
+
+		[ObservableProperty]
+		private TimeSpan _maxSessionSpan;
 
 		[ObservableProperty]
 		private DateTimeOffset _pmdrSessionEndTime = DateTimeOffset.Now;
@@ -137,7 +171,7 @@ namespace DeepWork.ViewModels.Pages
 		{
 			DispatcherQueue = dispatcherQueue;
 			_dispatcherQueueTimer = DispatcherQueue.CreateTimer();
-			_dispatcherQueueTimer.Interval = TimeSpan.FromSeconds(1);
+			_dispatcherQueueTimer.Interval = TimeSpan.FromMilliseconds(1);
 			_dispatcherQueueTimer.IsRepeating = true;
 			_dispatcherQueueTimer.Tick += DispatcherQueueTimer_Tick;
 
@@ -162,15 +196,28 @@ namespace DeepWork.ViewModels.Pages
 			{
 				if (NextPeriodType == PeriodType.FocusPeriod)
 				{
-					CountDown = TimeSpan.FromMinutes(25);
-					CurrentFocusPeriodCount++;
-					PeriodEnded?.Invoke(CurrentPeriodType, NextPeriodType);
-					CurrentPeriodType = NextPeriodType;
-					NextPeriodType = CurrentBreakPeriodCount != TotalBreakPeriodCount ? PeriodType.BreakPeriod : PeriodType.None;
+					if (SkipBreaks)
+					{
+						CountDown = PmdrSessionDuration;
+						MaxSessionSpan = CountDown;
+						CurrentPeriodType = PeriodType.FocusPeriod;
+						NextPeriodType = PeriodType.None;
 					}
+					else
+					{
+						CountDown = TimeSpan.FromMinutes(25);
+						MaxSessionSpan = CountDown;
+						CurrentFocusPeriodCount++;
+						CurrentPeriodType = NextPeriodType;
+						NextPeriodType = CurrentBreakPeriodCount != TotalBreakPeriodCount ? PeriodType.BreakPeriod : PeriodType.None;
+						if (ElapsedTime != TimeSpan.Zero)
+							PeriodEnded?.Invoke(CurrentPeriodType, NextPeriodType);
+					}
+				}
 				else if (NextPeriodType == PeriodType.BreakPeriod)
 				{
 					CountDown = TimeSpan.FromMinutes(5);
+						MaxSessionSpan = CountDown;
 					CurrentBreakPeriodCount++;
 					PeriodEnded?.Invoke(CurrentPeriodType, NextPeriodType);
 					CurrentPeriodType = NextPeriodType;
