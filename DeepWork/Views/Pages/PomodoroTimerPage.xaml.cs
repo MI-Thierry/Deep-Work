@@ -35,6 +35,7 @@ namespace DeepWork.Views.Pages
 
 			AppNotificationManager notificationManager = AppNotificationManager.Default;
 			notificationManager.Show(builder.BuildNotification());
+			PlaySound();
 		}
 
 		private void ViewModel_PeriodEnded(PeriodType lastPeriodType, PeriodType nextPeriodType)
@@ -60,13 +61,16 @@ namespace DeepWork.Views.Pages
 			notificationManager.Show(builder.BuildNotification());
 
 			if (lastPeriodType != PeriodType.None)
+				PlaySound();
+		}
+
+		private void PlaySound()
+		{
+			MediaPlayer mediaPlayer = new()
 			{
-				MediaPlayer mediaPlayer = new()
-				{
-					Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/notification-sound.wav"))
-				};
-				mediaPlayer.Play();
-			}
+				Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/notification-sound.wav"))
+			};
+			mediaPlayer.Play();
 		}
 
 		public int GetMinutesFromTimeSpan(TimeSpan timeSpan) =>
@@ -85,16 +89,11 @@ namespace DeepWork.Views.Pages
 			: "Finish";
 
 		public string ConvertTimeSpanToString(TimeSpan timeSpan) =>
-			timeSpan > TimeSpan.FromMinutes(1) ? timeSpan.Minutes.ToString("00") + " Mins"
-			: timeSpan.Seconds.ToString("00") + " Secs";
+			timeSpan > TimeSpan.FromMinutes(1) ? timeSpan.TotalMinutes.ToString("00") + " Mins"
+			: timeSpan.TotalSeconds.ToString("00") + " Secs";
 
-		public double CalculatePomodoroTimerPercentage(TimeSpan timeSpan, PeriodType periodType) =>
-			periodType switch
-			{
-				PeriodType.FocusPeriod => timeSpan.TotalSeconds * (100 / TimeSpan.FromMinutes(25).TotalSeconds),
-				PeriodType.BreakPeriod => timeSpan.TotalSeconds * (100 / TimeSpan.FromMinutes(5).TotalSeconds),
-				_ => 0.0,
-			};
+		public double CalculatePomodoroTimerPercentage(TimeSpan timeSpan) =>
+			timeSpan.TotalSeconds * (100 / ViewModel.MaxSessionSpan.TotalSeconds);
 
 		public double CalculateCompletedDailyTargetPercentage(TimeSpan completeDailyTarget, TimeSpan dailyTarget)
 		{
