@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DeepWork.Winui (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "DeepWork.Winui (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
