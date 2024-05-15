@@ -3,7 +3,7 @@ using DeepWork.Infrastructure.Common;
 using SQLite;
 
 namespace DeepWork.Infrastructure.Data;
-public class DeepWorkRepository(string connectionString) : IRepository, IDisposable
+public class DeepWorkRepository(string connectionString) : IRepository
 {
     private readonly string _connectionString = connectionString;
     private SQLiteAsyncConnection? _connection;
@@ -48,11 +48,11 @@ public class DeepWorkRepository(string connectionString) : IRepository, IDisposa
         return longTasks;
     }
 
-    public async Task DeleteLongTaskByIdAsync(int id)
+    public async Task DeleteLongTaskByIdAsync(LongTask task)
     {
         await Init();
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.Table<LongTask>().DeleteAsync(task => task.Id == id);
+        await _connection.Table<LongTask>().DeleteAsync(entity => entity.Id == task.Id);
     }
 
     public async Task DeleteAllLongTasksAsync()
@@ -93,11 +93,11 @@ public class DeepWorkRepository(string connectionString) : IRepository, IDisposa
         return longTasks;
     }
 
-    public async Task DeleteShortTaskByIdAsync(int id)
+    public async Task DeleteShortTaskByIdAsync(ShortTask task)
     {
         await Init();
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.Table<ShortTask>().DeleteAsync(task => task.Id == id);
+        await _connection.Table<ShortTask>().DeleteAsync(entity => entity.Id == task.Id);
     }
 
     public async Task DeleteAllShortTasksAsync()
@@ -105,11 +105,5 @@ public class DeepWorkRepository(string connectionString) : IRepository, IDisposa
         await Init();
         ArgumentNullException.ThrowIfNull(_connection);
         await _connection.Table<ShortTask>().DeleteAsync();
-    }
-
-    // For testing purposes
-    public void Dispose()
-    {
-        _connection?.CloseAsync().Wait();
     }
 }
