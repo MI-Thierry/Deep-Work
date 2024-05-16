@@ -1,7 +1,7 @@
 ﻿using DeepWork.Infrastructure.Data;
 
 namespace DeepWork.Infrastructure.Common;
-public  interface IDeepWorkRepository
+public  interface IDeepWorkRepositories
 {
     LongTaskRepository LongTaskRepository { get; }
     ShortTaskRepository ShortTaskRepository { get; }

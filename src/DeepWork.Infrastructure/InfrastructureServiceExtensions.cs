@@ -12,7 +12,7 @@ public static class InfrastructureServiceExtensions
         string connectionString = configurationManager.GetConnectionString("SqliteConnection")
             ?? throw new InvalidOperationException("Failed to get SqliteConnection from configurations");
 
-        services.AddSingleton<IDeepWorkRepository>(new DeepWorkRepository(connectionString));
+        services.AddSingleton<IDeepWorkRepositories>(new DeepWorkRepositories(connectionString));
 
         return services;
     }

@@ -2,14 +2,14 @@
 using SQLite;
 
 namespace DeepWork.Infrastructure.Data;
-public class DeepWorkRepository : IDeepWorkRepository
+public class DeepWorkRepositories : IDeepWorkRepositories
 {
     private readonly string _connectionString;
     private readonly SQLiteAsyncConnection? _connection;
     public LongTaskRepository LongTaskRepository { get; private set; }
     public ShortTaskRepository ShortTaskRepository { get; private set; }
 
-    public DeepWorkRepository(string connectionString)
+    public DeepWorkRepositories(string connectionString)
     {
         _connectionString = connectionString;
         _connection = new SQLiteAsyncConnection(_connectionString);
