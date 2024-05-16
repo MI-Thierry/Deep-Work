@@ -1,28 +1,28 @@
-﻿using DeepWork.Infrastructure.Models;
+﻿using DeepWork.Domain.Entities;
+using DeepWork.Infrastructure.Data;
 
 namespace DeepWork.IntegrationTests;
-public class LongTasksRepositoryCRUD : BaseDeepWorkRepoTest
+public class LongTasksRepositoryCRUD : BaseDeepWorkReposTest
 {
+    private readonly LongTasksRepository _repository;
+    public LongTasksRepositoryCRUD()
+    {
+        _repository = new LongTasksRepository(DbPath);
+    }
+
     [Fact]
     public async void AddsLongTaskAndSetsId()
     {
         string name = Guid.NewGuid().ToString();
         string description = "Test description";
-        DateTime startDate = DateTime.Now;
-        DateTime endDate = DateTime.Now + TimeSpan.FromDays(1);
+        DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly endDate = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(1));
 
-        LongTaskDTO longTask = new()
-        {
-            Name = name,
-            Description = description,
-            StartDate = startDate,
-            EndDate = endDate,
-        };
+        LongTask longTask = new(name, startDate, endDate, description);
 
-        var repo = GetDeepWorkRepo();
-        await repo.LongTaskRepository.AddAsync(longTask);
+        await _repository.AddAsync(longTask);
 
-        var newLongTask = (await repo.LongTaskRepository.ListAsync())
+        var newLongTask = (await _repository.ListAsync())
             .FirstOrDefault(task => task.Name == name);
 
         Assert.Equal(name, newLongTask?.Name);
@@ -37,30 +37,23 @@ public class LongTasksRepositoryCRUD : BaseDeepWorkRepoTest
     {
         string name = Guid.NewGuid().ToString();
         string description = "Test description";
-        DateTime startDate = DateTime.Now;
-        DateTime endDate = DateTime.Now + TimeSpan.FromDays(1);
+        DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly endDate = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(1));
 
-        LongTaskDTO longTask = new()
-        {
-            Name = name,
-            Description = description,
-            StartDate = startDate,
-            EndDate = endDate,
-        };
+        LongTask longTask = new(name, startDate, endDate, description);
 
-        var repo = GetDeepWorkRepo();
-        await repo.LongTaskRepository.AddAsync(longTask);
-        var newTask = (await repo.LongTaskRepository.ListAsync())
+        await _repository.AddAsync(longTask);
+        var newTask = (await _repository.ListAsync())
             .FirstOrDefault(task => task.Name == name);
 
         Assert.NotNull(newTask);
         Assert.NotSame(newTask, longTask);
 
         var newName = Guid.NewGuid().ToString();
-        newTask.Name = newName;
-        await repo.LongTaskRepository.UpdateAsync(newTask);
+        newTask.UpdateName(newName);
+        await _repository.UpdateAsync(newTask);
 
-        var updatedTask = await repo.LongTaskRepository.GetByIdAsync(newTask.Id);
+        var updatedTask = await _repository.GetByIdAsync(newTask.Id);
 
         Assert.NotNull(updatedTask);
         Assert.NotEqual(newName, longTask.Name);
@@ -74,21 +67,14 @@ public class LongTasksRepositoryCRUD : BaseDeepWorkRepoTest
     {
         string name = Guid.NewGuid().ToString();
         string description = "Test description";
-        DateTime startDate = DateTime.Now;
-        DateTime endDate = DateTime.Now + TimeSpan.FromDays(1);
+        DateOnly startDate = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly endDate = DateOnly.FromDateTime(DateTime.Now + TimeSpan.FromDays(1));
 
-        LongTaskDTO longTask = new()
-        {
-            Name = name,
-            Description = description,
-            StartDate = startDate,
-            EndDate = endDate,
-        };
+        LongTask longTask = new(name, startDate, endDate, description);
 
-        var repo = GetDeepWorkRepo();
-        await repo.LongTaskRepository.AddAsync(longTask);
-        await repo.LongTaskRepository.DeleteAsync(longTask);
+        await _repository.AddAsync(longTask);
+        await _repository.DeleteAsync(longTask);
 
-        Assert.DoesNotContain(await repo.LongTaskRepository.ListAsync(), entity => entity.Name == name);
+        Assert.DoesNotContain(await _repository.ListAsync(), entity => entity.Name == name);
     }
 }

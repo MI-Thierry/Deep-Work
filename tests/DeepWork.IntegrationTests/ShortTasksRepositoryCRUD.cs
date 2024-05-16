@@ -1,8 +1,14 @@
-﻿using DeepWork.Infrastructure.Models;
+﻿using DeepWork.Domain.Entities;
+using DeepWork.Infrastructure.Data;
 
 namespace DeepWork.IntegrationTests;
-public class ShortTasksRepositoryCRUD : BaseDeepWorkRepoTest
+public class ShortTasksRepositoryCRUD : BaseDeepWorkReposTest
 {
+    private readonly ShortTasksRepository _repository;
+    public ShortTasksRepositoryCRUD()
+    {
+        _repository = new ShortTasksRepository(DbPath);
+    }
     [Fact]
     public async void AddsShortTaskAndSetsId()
     {
@@ -12,19 +18,11 @@ public class ShortTasksRepositoryCRUD : BaseDeepWorkRepoTest
         DateTime endTime = DateTime.Now + TimeSpan.FromHours(1);
         int longTaskId = 1;
 
-        ShortTaskDTO shortTask = new()
-        {
-            Name = name,
-            Description = description,
-            StartTime = startTime,
-            EndTime = endTime,
-            LongTaskId = longTaskId
-        };
+        ShortTask shortTask = new(name, startTime, endTime, longTaskId, description);
 
-        var repo = GetDeepWorkRepo();
-        await repo.ShortTaskRepository.AddAsync(shortTask);
+        await _repository.AddAsync(shortTask);
 
-        var newShortTask = (await repo.ShortTaskRepository.ListAsync())
+        var newShortTask = (await _repository.ListAsync())
             .FirstOrDefault(task => task.Name == name);
 
         Assert.NotNull(newShortTask);
@@ -45,26 +43,18 @@ public class ShortTasksRepositoryCRUD : BaseDeepWorkRepoTest
         DateTime endTime = DateTime.Now + TimeSpan.FromHours(1);
         int longTaskId = 1;
 
-        ShortTaskDTO shortTask = new()
-        {
-            Name = name,
-            Description = description,
-            StartTime = startTime,
-            EndTime = endTime,
-            LongTaskId = longTaskId,
-        };
+        ShortTask shortTask = new(name, startTime, endTime, longTaskId, description);
 
-        var repo = GetDeepWorkRepo();
-        await repo.ShortTaskRepository.AddAsync(shortTask);
-        var newTask = (await repo.ShortTaskRepository.ListAsync())
+        await _repository.AddAsync(shortTask);
+        var newTask = (await _repository.ListAsync())
             .FirstOrDefault(task => task.Name == name);
 
         Assert.NotNull(newTask);
         Assert.NotSame(name, newTask);
 
         var newName = Guid.NewGuid().ToString();
-        await repo.ShortTaskRepository.UpdateAsync(newTask);
-        var updatedTask = await repo.ShortTaskRepository.GetByIdAsync(newTask.Id);
+        await _repository.UpdateAsync(newTask);
+        var updatedTask = await _repository.GetByIdAsync(newTask.Id);
 
         Assert.NotNull(updatedTask);
         Assert.NotEqual(newName, shortTask.Name);
@@ -82,19 +72,11 @@ public class ShortTasksRepositoryCRUD : BaseDeepWorkRepoTest
         DateTime endTime = DateTime.Now + TimeSpan.FromHours(1);
         int longTaskId = 1;
 
-        ShortTaskDTO shortTask = new()
-        {
-            Name = name,
-            Description = description,
-            StartTime = startTime,
-            EndTime = endTime,
-            LongTaskId = longTaskId,
-        };
+        ShortTask shortTask = new(name, startTime, endTime, longTaskId, description);
 
-        var repo = GetDeepWorkRepo();
-        await repo.ShortTaskRepository.AddAsync(shortTask);
-        await repo.ShortTaskRepository.DeleteAsync(shortTask);
+        await _repository.AddAsync(shortTask);
+        await _repository.DeleteAsync(shortTask);
 
-        Assert.DoesNotContain(await repo.ShortTaskRepository.ListAsync(), task => task.Name == name);
+        Assert.DoesNotContain(await _repository.ListAsync(), task => task.Name == name);
     }
 }
