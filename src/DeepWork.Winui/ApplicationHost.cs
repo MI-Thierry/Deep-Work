@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using DeepWork.Domain.Entities;
+using DeepWork.SharedKernel;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using System.Threading;

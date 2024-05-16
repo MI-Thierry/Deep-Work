@@ -1,12 +1,11 @@
-﻿namespace DeepWork.Maui
-{
-	public partial class App : Application
-	{
-		public App()
-		{
-			InitializeComponent();
+﻿namespace DeepWork.Maui;
 
-			MainPage = new AppShell();
-		}
-	}
+public partial class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+
+        MainPage = new AppShell();
+    }
 }

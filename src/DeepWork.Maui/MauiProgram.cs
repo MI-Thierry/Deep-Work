@@ -1,4 +1,6 @@
-﻿using DeepWork.Infrastructure;
+﻿using DeepWork.UseCases.LongTasks.Create;
+using DeepWork.Domain.Entities;
+using DeepWork.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -22,6 +24,10 @@ public static class MauiProgram
 
         // Add Infrastructure to cross-platform app
         builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssemblies(typeof(LongTask).Assembly, typeof(CreateLongTaskCommand).Assembly);
+        });
 
 #if DEBUG
         builder.Logging.AddDebug();
