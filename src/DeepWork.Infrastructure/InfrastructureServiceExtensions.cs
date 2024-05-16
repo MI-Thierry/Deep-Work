@@ -7,13 +7,13 @@ namespace DeepWork.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection servcies, IConfigurationManager configurationManager)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfigurationManager configurationManager)
     {
         string connectionString = configurationManager.GetConnectionString("SqliteConnection")
             ?? throw new InvalidOperationException("Failed to get SqliteConnection from configurations");
 
-        servcies.AddSingleton<IRepository>(new DeepWorkRepository(connectionString));
+        services.AddSingleton<IDeepWorkRepository>(new DeepWorkRepository(connectionString));
 
-        return servcies;
+        return services;
     }
 }
