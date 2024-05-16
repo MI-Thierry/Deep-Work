@@ -1,4 +1,4 @@
-﻿using DeepWork.Domain.Entities;
+﻿using DeepWork.Infrastructure.Models;
 
 namespace DeepWork.IntegrationTests;
 public class DeepWorkRepoDelete : BaseDeepWorkRepoTest
@@ -11,7 +11,7 @@ public class DeepWorkRepoDelete : BaseDeepWorkRepoTest
         DateTime startDate = DateTime.Now;
         DateTime endDate = DateTime.Now + TimeSpan.FromDays(1);
 
-        LongTask longTask = new()
+        LongTaskDTO longTask = new()
         {
             Name = name,
             Description = description,
@@ -20,10 +20,10 @@ public class DeepWorkRepoDelete : BaseDeepWorkRepoTest
         };
 
         var repo = GetDeepWorkRepo();
-        await repo.AddLongTaskAsync(longTask);
-        await repo.DeleteLongTaskByIdAsync(longTask);
+        await repo.LongTaskRepository.AddAsync(longTask);
+        await repo.LongTaskRepository.DeleteAsync(longTask);
 
-        Assert.DoesNotContain(await repo.GetAllLongTasksAsync(), task => task.Name == name);
+        Assert.DoesNotContain(await repo.LongTaskRepository.GetAllAsync(), task => task.Name == name);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class DeepWorkRepoDelete : BaseDeepWorkRepoTest
         DateTime endTime = DateTime.Now + TimeSpan.FromHours(1);
         int longTaskId = 1;
 
-        ShortTask shortTask = new()
+        ShortTaskDTO shortTask = new()
         {
             Name = name,
             Description = description,
@@ -45,9 +45,9 @@ public class DeepWorkRepoDelete : BaseDeepWorkRepoTest
         };
 
         var repo = GetDeepWorkRepo();
-        await repo.AddShortTaskAsync(shortTask);
-        await repo.DeleteShortTaskByIdAsync(shortTask);
+        await repo.ShortTaskRepository.AddAsync(shortTask);
+        await repo.ShortTaskRepository.DeleteAsync(shortTask);
 
-        Assert.DoesNotContain(await repo.GetAllShortTasksAsync(), task => task.Name == name);
+        Assert.DoesNotContain(await repo.ShortTaskRepository.GetAllAsync(), task => task.Name == name);
     }
 }

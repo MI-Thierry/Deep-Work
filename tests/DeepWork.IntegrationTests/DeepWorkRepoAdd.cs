@@ -1,4 +1,4 @@
-using DeepWork.Domain.Entities;
+using DeepWork.Infrastructure.Models;
 
 namespace DeepWork.IntegrationTests;
 
@@ -12,7 +12,7 @@ public class DeepWorkRepoAdd : BaseDeepWorkRepoTest
         DateTime startDate = DateTime.Now;
         DateTime endDate = DateTime.Now + TimeSpan.FromDays(1);
 
-        LongTask longTask = new()
+        LongTaskDTO longTask = new()
         {
             Name = name,
             Description = description,
@@ -21,9 +21,9 @@ public class DeepWorkRepoAdd : BaseDeepWorkRepoTest
         };
 
         var repo = GetDeepWorkRepo();
-        await repo.AddLongTaskAsync(longTask);
+        await repo.LongTaskRepository.AddAsync(longTask);
 
-        var newLongTask = (await repo.GetAllLongTasksAsync())
+        var newLongTask = (await repo.LongTaskRepository.GetAllAsync())
             .FirstOrDefault(task => task.StartDate == startDate);
 
         Assert.Equal(name, newLongTask?.Name);
@@ -42,7 +42,7 @@ public class DeepWorkRepoAdd : BaseDeepWorkRepoTest
         DateTime endTime = DateTime.Now + TimeSpan.FromHours(1);
         int longTaskId = 1;
 
-        ShortTask shortTask = new()
+        ShortTaskDTO shortTask = new()
         {
             Name = name,
             Description = description,
@@ -52,9 +52,9 @@ public class DeepWorkRepoAdd : BaseDeepWorkRepoTest
         };
 
         var repo = GetDeepWorkRepo();
-        await repo.AddShortTaskAsync(shortTask);
+        await repo.ShortTaskRepository.AddAsync(shortTask);
 
-        var newShortTask = (await repo.GetAllShortTasksAsync())
+        var newShortTask = (await repo.ShortTaskRepository.GetAllAsync())
             .FirstOrDefault(task => task.StartTime == startTime);
 
         Assert.NotNull(newShortTask);

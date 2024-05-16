@@ -3,14 +3,14 @@
 namespace DeepWork.IntegrationTests;
 public class BaseDeepWorkRepoTest
 {
-    private readonly DeepWorkRepository _deepWorkRepo;
+    private readonly DeepWorkRepositories _deepWorkRepo;
     private readonly string _dbPath = "deepWorkDbTest.db";
     public BaseDeepWorkRepoTest()
     {
-        _deepWorkRepo = new DeepWorkRepository(_dbPath);
+        _deepWorkRepo = new DeepWorkRepositories(_dbPath);
     }
 
-    protected DeepWorkRepository GetDeepWorkRepo()
+    protected DeepWorkRepositories GetDeepWorkRepo()
     {
         return _deepWorkRepo;
     }
