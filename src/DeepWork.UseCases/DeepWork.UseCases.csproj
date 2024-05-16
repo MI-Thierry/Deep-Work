@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeepWork.Domain\DeepWork.Domain.csproj" />
+    <ProjectReference Include="..\DeepWork.SharedKernel\DeepWork.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>
