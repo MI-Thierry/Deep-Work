@@ -1,4 +1,4 @@
-﻿using DeepWork.Infrastructure.Common;
+﻿using DeepWork.Infrastructure.Interfaces;
 using DeepWork.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

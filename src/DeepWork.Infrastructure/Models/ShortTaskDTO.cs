@@ -1,10 +1,11 @@
 ﻿using DeepWork.Domain.Common;
+using DeepWork.SharedKernel;
 using SQLite;
 
 namespace DeepWork.Infrastructure.Models;
 
 [Table("short-tasks")]
-public class ShortTaskDTO : HasDomainEventBase
+public class ShortTaskDTO : IAggregateRoot
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
