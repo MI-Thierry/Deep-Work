@@ -1,4 +1,4 @@
-﻿using DeepWork.Domain.Common;
+﻿using DeepWork.Domain.Entities;
 using DeepWork.SharedKernel;
 using SQLite;
 
@@ -10,9 +10,10 @@ public class ShortTaskDTO : IAggregateRoot
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    [MaxLength(255)]
-    public string Name { get; set; }
+    [MaxLength(ShortTask.NameLength)]
+    public string Name { get; set; } = string.Empty;
 
+    [MaxLength(ShortTask.DescriptionLength)]
     public string? Description { get; set; }
 
     public DateTime StartTime { get; set; }
