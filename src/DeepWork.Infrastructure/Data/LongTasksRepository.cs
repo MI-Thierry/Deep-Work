@@ -1,34 +1,48 @@
 ﻿using Ardalis.Specification;
+using DeepWork.Domain.Entities;
 using DeepWork.Infrastructure.Models;
 using DeepWork.SharedKernel;
 using SQLite;
 
 namespace DeepWork.Infrastructure.Data;
-public class LongTasksRepository : IRepository<LongTaskDTO>
+public class LongTasksRepository : IRepository<LongTask>
 {
     private readonly SQLiteAsyncConnection _connection;
 
-    public LongTasksRepository(SQLiteAsyncConnection connection)
+    public LongTasksRepository(string connectionString)
     {
-        _connection = connection;
-        _connection.CreateTableAsync<LongTaskDTO>();
+        _connection = new SQLiteAsyncConnection(connectionString);
+        _connection.CreateTableAsync<LongTaskDTO>().Wait();
     }
 
-    public async Task<LongTaskDTO> AddAsync(LongTaskDTO entity, CancellationToken cancellationToken = default)
+    public async Task<LongTask> AddAsync(LongTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.InsertAsync(entity);
+        LongTaskDTO longTaskDTO = (LongTaskDTO)entity!;
+        await _connection.InsertAsync(longTaskDTO);
+
+        // Restoring the Id
+        entity.Id = longTaskDTO.Id;
         return entity;
     }
 
-    public async Task<IEnumerable<LongTaskDTO>> AddRangeAsync(IEnumerable<LongTaskDTO> entities, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<LongTask>> AddRangeAsync(IEnumerable<LongTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.InsertAllAsync(entities);
+        List<LongTaskDTO> longTaskDTOs = entities.Select(entity => (LongTaskDTO)entity!).ToList();
+        await _connection.InsertAllAsync(longTaskDTOs);
+
+        // Restoring the Ids
+        int i = 0;
+        foreach(var entity in entities)
+        {
+            entity.Id = longTaskDTOs[i].Id;
+            i++;
+        }
         return entities;
     }
 
-    public Task<bool> AnyAsync(ISpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task<bool> AnyAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
@@ -39,13 +53,13 @@ public class LongTasksRepository : IRepository<LongTaskDTO>
         return (await _connection.Table<LongTaskDTO>().ToListAsync()).Count != 0;
     }
 
-    public IAsyncEnumerable<LongTaskDTO> AsAsyncEnumerable(ISpecification<LongTaskDTO> specification)
+    public IAsyncEnumerable<LongTask> AsAsyncEnumerable(ISpecification<LongTask> specification)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public Task<int> CountAsync(ISpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task<int> CountAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
@@ -56,68 +70,68 @@ public class LongTasksRepository : IRepository<LongTaskDTO>
         return await _connection.Table<LongTaskDTO>().CountAsync();
     }
 
-    public async Task DeleteAsync(LongTaskDTO entity, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(LongTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
         await _connection.Table<LongTaskDTO>().DeleteAsync(p => p.Id == entity.Id);
     }
 
-    public async Task DeleteRangeAsync(IEnumerable<LongTaskDTO> entities, CancellationToken cancellationToken = default)
+    public async Task DeleteRangeAsync(IEnumerable<LongTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
         await _connection.Table<LongTaskDTO>()
             .DeleteAsync(p => entities.Any(entity => entity.Id == p.Id));
     }
 
-    public Task DeleteRangeAsync(ISpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task DeleteRangeAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public Task<LongTaskDTO?> FirstOrDefaultAsync(ISpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task<LongTask?> FirstOrDefaultAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<LongTaskDTO, TResult> specification, CancellationToken cancellationToken = default)
+    public Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<LongTask, TResult> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public async Task<LongTaskDTO?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
+    public async Task<LongTask?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        return (await _connection.Table<LongTaskDTO>()
-            .ToListAsync()).FirstOrDefault(entity => Equals(id, entity.Id));
+       return (LongTask?)(await _connection.Table<LongTaskDTO>()
+            .ToListAsync()).FirstOrDefault(p => Equals(id, p.Id));
     }
 
-    public Task<LongTaskDTO?> GetBySpecAsync(ISpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task<LongTask?> GetBySpecAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public Task<TResult?> GetBySpecAsync<TResult>(ISpecification<LongTaskDTO, TResult> specification, CancellationToken cancellationToken = default)
+    public Task<TResult?> GetBySpecAsync<TResult>(ISpecification<LongTask, TResult> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public async Task<List<LongTaskDTO>> ListAsync(CancellationToken cancellationToken = default)
+    public async Task<List<LongTask>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await _connection.Table<LongTaskDTO>().ToListAsync();
+        return (await _connection.Table<LongTaskDTO>().ToListAsync()).Select(entity => (LongTask?)entity).ToList()!;
     }
 
-    public Task<List<LongTaskDTO>> ListAsync(ISpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task<List<LongTask>> ListAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public Task<List<TResult>> ListAsync<TResult>(ISpecification<LongTaskDTO, TResult> specification, CancellationToken cancellationToken = default)
+    public Task<List<TResult>> ListAsync<TResult>(ISpecification<LongTask, TResult> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
@@ -128,27 +142,27 @@ public class LongTasksRepository : IRepository<LongTaskDTO>
         throw new NotSupportedException();
     }
 
-    public Task<LongTaskDTO?> SingleOrDefaultAsync(ISingleResultSpecification<LongTaskDTO> specification, CancellationToken cancellationToken = default)
+    public Task<LongTask?> SingleOrDefaultAsync(ISingleResultSpecification<LongTask> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public Task<TResult?> SingleOrDefaultAsync<TResult>(ISingleResultSpecification<LongTaskDTO, TResult> specification, CancellationToken cancellationToken = default)
+    public Task<TResult?> SingleOrDefaultAsync<TResult>(ISingleResultSpecification<LongTask, TResult> specification, CancellationToken cancellationToken = default)
     {
         // Todo: Support this
         throw new NotSupportedException();
     }
 
-    public async Task UpdateAsync(LongTaskDTO entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(LongTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.UpdateAsync(entity);
+        await _connection.UpdateAsync((LongTaskDTO)entity!);
     }
 
-    public async Task UpdateRangeAsync(IEnumerable<LongTaskDTO> entities, CancellationToken cancellationToken = default)
+    public async Task UpdateRangeAsync(IEnumerable<LongTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.UpdateAllAsync(entities);
+        await _connection.UpdateAllAsync(entities.Select(entity => (LongTaskDTO)entity!));
     }
 }

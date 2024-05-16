@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Interfaces\IRepository.cs" />
+    <Compile Remove="Data\DeepWorkRepositories.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
@@ -15,8 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DeepWork.Application\DeepWork.Application.csproj" />
+    <ProjectReference Include="..\DeepWork.Domain\DeepWork.Domain.csproj" />
     <ProjectReference Include="..\DeepWork.SharedKernel\DeepWork.SharedKernel.csproj" />
+    <ProjectReference Include="..\DeepWork.UseCases\DeepWork.UseCases.csproj" />
   </ItemGroup>
 
 </Project>

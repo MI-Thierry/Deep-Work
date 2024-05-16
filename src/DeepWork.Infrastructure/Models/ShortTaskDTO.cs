@@ -22,4 +22,32 @@ public class ShortTaskDTO : IAggregateRoot
 
     [Indexed]
     public int LongTaskId { get; set; }
+
+    public static explicit operator ShortTaskDTO?(ShortTask? entity)
+    {
+        if (entity == null) return null;
+        return new ShortTaskDTO
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Description = entity.Description,
+            StartTime = entity.StartTime,
+            EndTime = entity.EndTime,
+            LongTaskId = entity.LongTaskId,
+        };
+    }
+
+    public static explicit operator ShortTask?(ShortTaskDTO? shortTaskDTO)
+    {
+        if (shortTaskDTO == null) return null;
+        return new ShortTask()
+        {
+            Id = shortTaskDTO.Id,
+            Name = shortTaskDTO.Name,
+            Description = shortTaskDTO.Description ?? string.Empty,
+            StartTime = shortTaskDTO.StartTime,
+            EndTime = shortTaskDTO.EndTime,
+            LongTaskId = shortTaskDTO.LongTaskId,
+        };
+    }
 }
