@@ -5,7 +5,7 @@ using SQLite;
 namespace DeepWork.Infrastructure.Models;
 
 [Table("long-tasks")]
-public class LongTaskDTO : IAggregateRoot
+public class LongTaskMap : IAggregateRoot
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
@@ -20,10 +20,10 @@ public class LongTaskDTO : IAggregateRoot
 
     public DateTime EndDate { get; set; }
 
-    public static explicit operator LongTaskDTO?(LongTask? entity)
+    public static explicit operator LongTaskMap?(LongTask? entity)
     {
         if (entity == null) return null;
-        return new LongTaskDTO
+        return new LongTaskMap
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -33,17 +33,16 @@ public class LongTaskDTO : IAggregateRoot
         };
     }
 
-    public static explicit operator LongTask?(LongTaskDTO? longTaskDTO)
+    public static explicit operator LongTask?(LongTaskMap? longTaskMap)
     {
-        if (longTaskDTO == null) return null;
-        LongTask longTask = new()
+        if (longTaskMap == null) return null;
+        return new LongTask 
         {
-            Id = longTaskDTO.Id,
-            Name = longTaskDTO.Name,
-            Description = longTaskDTO.Description ?? string.Empty,
-            StartDate = DateOnly.FromDateTime(longTaskDTO.StartDate),
-            EndDate = DateOnly.FromDateTime(longTaskDTO.EndDate)
+            Id = longTaskMap.Id,
+            Name = longTaskMap.Name,
+            Description = longTaskMap.Description ?? string.Empty,
+            StartDate = DateOnly.FromDateTime(longTaskMap.StartDate),
+            EndDate = DateOnly.FromDateTime(longTaskMap.EndDate)
         };
-        return longTask;
     }
 }

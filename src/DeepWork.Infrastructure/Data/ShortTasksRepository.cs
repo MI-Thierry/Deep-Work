@@ -11,31 +11,31 @@ public class ShortTasksRepository : IRepository<ShortTask>
     public ShortTasksRepository(string connectionString)
     {
         _connection = new SQLiteAsyncConnection(connectionString);
-        _connection.CreateTableAsync<ShortTaskDTO>();
+        _connection.CreateTableAsync<ShortTaskMap>();
     }
 
     public async Task<ShortTask> AddAsync(ShortTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        ShortTaskDTO shortTaskDTO = (ShortTaskDTO)entity!;
-        await _connection.InsertAsync(shortTaskDTO);
+        ShortTaskMap shortTaskMap = (ShortTaskMap)entity!;
+        await _connection.InsertAsync(shortTaskMap);
 
         // Restoring Id.
-        entity.Id = shortTaskDTO.Id;
+        entity.Id = shortTaskMap.Id;
         return entity;
     }
 
     public async Task<IEnumerable<ShortTask>> AddRangeAsync(IEnumerable<ShortTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        List<ShortTaskDTO> shortTaskDTOs = entities.Select(entity=>(ShortTaskDTO)entity!).ToList();
-        await _connection.InsertAsync(shortTaskDTOs);
+        List<ShortTaskMap> shortTaskMaps = entities.Select(entity=>(ShortTaskMap)entity!).ToList();
+        await _connection.InsertAsync(shortTaskMaps);
 
         // Restoring the Ids
         int i = 0;
         foreach (var entity in entities)
         {
-            entity.Id = shortTaskDTOs[i].Id;
+            entity.Id = shortTaskMaps[i].Id;
             i++;
         }
         return entities;
@@ -50,7 +50,7 @@ public class ShortTasksRepository : IRepository<ShortTask>
 
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
     {
-        return (await _connection.Table<ShortTaskDTO>().ToListAsync()).Count != 0;
+        return (await _connection.Table<ShortTaskMap>().ToListAsync()).Count != 0;
     }
 
     public IAsyncEnumerable<ShortTask> AsAsyncEnumerable(ISpecification<ShortTask> specification)
@@ -67,19 +67,19 @@ public class ShortTasksRepository : IRepository<ShortTask>
 
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
-        return await _connection.Table<ShortTaskDTO>().CountAsync();
+        return await _connection.Table<ShortTaskMap>().CountAsync();
     }
 
     public async Task DeleteAsync(ShortTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.Table<ShortTaskDTO>().DeleteAsync(p => p.Id == entity.Id);
+        await _connection.Table<ShortTaskMap>().DeleteAsync(p => p.Id == entity.Id);
     }
 
     public async Task DeleteRangeAsync(IEnumerable<ShortTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.Table<ShortTaskDTO>()
+        await _connection.Table<ShortTaskMap>()
             .DeleteAsync(p => entities.Any(entity => entity.Id == p.Id));
     }
 
@@ -104,7 +104,7 @@ public class ShortTasksRepository : IRepository<ShortTask>
     public async Task<ShortTask?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        return (ShortTask?)(await _connection.Table<ShortTaskDTO>().ToListAsync())
+        return (ShortTask?)(await _connection.Table<ShortTaskMap>().ToListAsync())
             .FirstOrDefault(entity => Equals(id, entity.Id));
     }
 
@@ -122,7 +122,7 @@ public class ShortTasksRepository : IRepository<ShortTask>
 
     public async Task<List<ShortTask>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return (await _connection.Table<ShortTaskDTO>().ToListAsync()).Select(entity => (ShortTask)entity!).ToList();
+        return (await _connection.Table<ShortTaskMap>().ToListAsync()).Select(entity => (ShortTask)entity!).ToList();
     }
 
     public Task<List<ShortTask>> ListAsync(ISpecification<ShortTask> specification, CancellationToken cancellationToken = default)
@@ -157,12 +157,12 @@ public class ShortTasksRepository : IRepository<ShortTask>
     public async Task UpdateAsync(ShortTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.UpdateAsync((ShortTaskDTO)entity!);
+        await _connection.UpdateAsync((ShortTaskMap)entity!);
     }
 
     public async Task UpdateRangeAsync(IEnumerable<ShortTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.UpdateAllAsync(entities.Select(entity => (ShortTaskDTO)entity!));
+        await _connection.UpdateAllAsync(entities.Select(entity => (ShortTaskMap)entity!));
     }
 }

@@ -12,31 +12,31 @@ public class LongTasksRepository : IRepository<LongTask>
     public LongTasksRepository(string connectionString)
     {
         _connection = new SQLiteAsyncConnection(connectionString);
-        _connection.CreateTableAsync<LongTaskDTO>().Wait();
+        _connection.CreateTableAsync<LongTaskMap>().Wait();
     }
 
     public async Task<LongTask> AddAsync(LongTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        LongTaskDTO longTaskDTO = (LongTaskDTO)entity!;
-        await _connection.InsertAsync(longTaskDTO);
+        LongTaskMap longTaskMap = (LongTaskMap)entity!;
+        await _connection.InsertAsync(longTaskMap);
 
         // Restoring the Id
-        entity.Id = longTaskDTO.Id;
+        entity.Id = longTaskMap.Id;
         return entity;
     }
 
     public async Task<IEnumerable<LongTask>> AddRangeAsync(IEnumerable<LongTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        List<LongTaskDTO> longTaskDTOs = entities.Select(entity => (LongTaskDTO)entity!).ToList();
-        await _connection.InsertAllAsync(longTaskDTOs);
+        List<LongTaskMap> longTaskMaps = entities.Select(entity => (LongTaskMap)entity!).ToList();
+        await _connection.InsertAllAsync(longTaskMaps);
 
         // Restoring the Ids
         int i = 0;
         foreach(var entity in entities)
         {
-            entity.Id = longTaskDTOs[i].Id;
+            entity.Id = longTaskMaps[i].Id;
             i++;
         }
         return entities;
@@ -50,7 +50,7 @@ public class LongTasksRepository : IRepository<LongTask>
 
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
     {
-        return (await _connection.Table<LongTaskDTO>().ToListAsync()).Count != 0;
+        return (await _connection.Table<LongTaskMap>().ToListAsync()).Count != 0;
     }
 
     public IAsyncEnumerable<LongTask> AsAsyncEnumerable(ISpecification<LongTask> specification)
@@ -67,19 +67,19 @@ public class LongTasksRepository : IRepository<LongTask>
 
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
-        return await _connection.Table<LongTaskDTO>().CountAsync();
+        return await _connection.Table<LongTaskMap>().CountAsync();
     }
 
     public async Task DeleteAsync(LongTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.Table<LongTaskDTO>().DeleteAsync(p => p.Id == entity.Id);
+        await _connection.Table<LongTaskMap>().DeleteAsync(p => p.Id == entity.Id);
     }
 
     public async Task DeleteRangeAsync(IEnumerable<LongTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.Table<LongTaskDTO>()
+        await _connection.Table<LongTaskMap>()
             .DeleteAsync(p => entities.Any(entity => entity.Id == p.Id));
     }
 
@@ -104,7 +104,7 @@ public class LongTasksRepository : IRepository<LongTask>
     public async Task<LongTask?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
     {
         ArgumentNullException.ThrowIfNull(_connection);
-       return (LongTask?)(await _connection.Table<LongTaskDTO>()
+       return (LongTask?)(await _connection.Table<LongTaskMap>()
             .ToListAsync()).FirstOrDefault(p => Equals(id, p.Id));
     }
 
@@ -122,7 +122,7 @@ public class LongTasksRepository : IRepository<LongTask>
 
     public async Task<List<LongTask>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return (await _connection.Table<LongTaskDTO>().ToListAsync()).Select(entity => (LongTask?)entity).ToList()!;
+        return (await _connection.Table<LongTaskMap>().ToListAsync()).Select(entity => (LongTask?)entity).ToList()!;
     }
 
     public Task<List<LongTask>> ListAsync(ISpecification<LongTask> specification, CancellationToken cancellationToken = default)
@@ -157,12 +157,12 @@ public class LongTasksRepository : IRepository<LongTask>
     public async Task UpdateAsync(LongTask entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.UpdateAsync((LongTaskDTO)entity!);
+        await _connection.UpdateAsync((LongTaskMap)entity!);
     }
 
     public async Task UpdateRangeAsync(IEnumerable<LongTask> entities, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_connection);
-        await _connection.UpdateAllAsync(entities.Select(entity => (LongTaskDTO)entity!));
+        await _connection.UpdateAllAsync(entities.Select(entity => (LongTaskMap)entity!));
     }
 }
