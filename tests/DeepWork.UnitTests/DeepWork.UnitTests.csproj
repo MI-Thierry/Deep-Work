@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DeepWork.Application\DeepWork.Application.csproj" />
     <ProjectReference Include="..\..\src\DeepWork.Domain\DeepWork.Domain.csproj" />
     <ProjectReference Include="..\..\src\DeepWork.Infrastructure\DeepWork.Infrastructure.csproj" />
   </ItemGroup>

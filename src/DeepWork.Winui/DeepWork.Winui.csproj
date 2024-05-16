@@ -41,8 +41,8 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeepWork.Application\DeepWork.Application.csproj" />
     <ProjectReference Include="..\DeepWork.Infrastructure\DeepWork.Infrastructure.csproj" />
+    <ProjectReference Include="..\DeepWork.UseCases\DeepWork.UseCases.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
