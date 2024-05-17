@@ -8,16 +8,28 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using System;
 using System.IO;
-using System.Reflection;
+using System.Collections.Generic;
 
 namespace DeepWork.Winui;
 
 public partial class App : Application
 {
-    public IHost AppHost { get; private set; }
+    public IHost? AppHost { get; private set; }
     public App()
     {
         this.InitializeComponent();
+    }
+
+    public TResult? GetService<TResult>()
+    {
+        ArgumentNullException.ThrowIfNull(AppHost);
+        return AppHost.Services.GetService<TResult>();
+    }
+
+    public TResult GetRequiredService<TResult>() where TResult : notnull
+    {
+        ArgumentNullException.ThrowIfNull(AppHost);
+        return AppHost.Services.GetRequiredService<TResult>();
     }
 
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
@@ -39,7 +51,6 @@ public partial class App : Application
         builder.Logging.AddDebug();
 #endif
         builder.Services.AddHostedService<ApplicationHost>();
-        builder.Services.AddTransient<MainWindow>();
 
         // Add Infrastructure to windows-platform app
         builder.Services.AddInfrastructureServices(builder.Configuration);

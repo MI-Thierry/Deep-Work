@@ -11,6 +11,7 @@
     <UseWinUI>true</UseWinUI>
     <UseRidGraph>true</UseRidGraph>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
