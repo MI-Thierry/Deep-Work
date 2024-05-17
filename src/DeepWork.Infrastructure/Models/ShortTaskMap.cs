@@ -1,11 +1,10 @@
 ﻿using DeepWork.Domain.Entities;
-using DeepWork.SharedKernel;
 using SQLite;
 
 namespace DeepWork.Infrastructure.Models;
 
 [Table("short-tasks")]
-public class ShortTaskMap : IAggregateRoot
+public class ShortTaskMap
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
@@ -33,7 +32,7 @@ public class ShortTaskMap : IAggregateRoot
             Description = entity.Description,
             StartTime = entity.StartTime,
             EndTime = entity.EndTime,
-            LongTaskId = entity.LongTaskId,
+            LongTaskId = entity.ParentLongTaskId,
         };
     }
 
@@ -47,7 +46,7 @@ public class ShortTaskMap : IAggregateRoot
             Description = shortTaskMap.Description ?? string.Empty,
             StartTime = shortTaskMap.StartTime,
             EndTime = shortTaskMap.EndTime,
-            LongTaskId = shortTaskMap.LongTaskId,
+            ParentLongTaskId = shortTaskMap.LongTaskId,
         };
     }
 }

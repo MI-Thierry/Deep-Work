@@ -1,11 +1,10 @@
 ﻿using DeepWork.Domain.Entities;
-using DeepWork.SharedKernel;
 using SQLite;
 
 namespace DeepWork.Infrastructure.Models;
 
 [Table("long-tasks")]
-public class LongTaskMap : IAggregateRoot
+public class LongTaskMap
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
