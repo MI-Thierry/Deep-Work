@@ -24,8 +24,16 @@ public partial class App : Application
     {
         var builder = Host.CreateApplicationBuilder();
 
-        builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
+        string contentPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeepWork");
+        Directory.CreateDirectory(contentPath);
+
+        builder.Environment.ContentRootPath = contentPath;
+        builder.Configuration.AddEnvironmentVariables();
         builder.Configuration.AddJsonFile("appsettings.json", false);
+        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["ConnectionStrings:SQLiteConnection"] = Path.Combine(builder.Environment.ContentRootPath, "DeepWork.db")
+        });
 
 #if DEBUG
         builder.Logging.AddDebug();

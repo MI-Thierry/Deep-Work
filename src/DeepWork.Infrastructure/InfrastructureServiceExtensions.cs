@@ -10,7 +10,7 @@ public static class InfrastructureServiceExtensions
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfigurationManager configurationManager)
     {
-        string connectionString = configurationManager.GetConnectionString("SqliteConnection")
+        string connectionString = configurationManager.GetConnectionString("SQLiteConnection")
             ?? throw new InvalidOperationException("Failed to get SqliteConnection from configurations");
 
         services.AddSingleton<IRepository<LongTask>>(new LongTasksRepository(connectionString));

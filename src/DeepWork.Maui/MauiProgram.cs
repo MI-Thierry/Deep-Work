@@ -8,6 +8,7 @@ namespace DeepWork.Maui;
 
 public static class MauiProgram
 {
+    public static string ContentRootPath { get; private set; } = string.Empty;
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
@@ -19,8 +20,15 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+        ContentRootPath = Path.Combine(FileSystem.AppDataDirectory, "DeepWork");
+        Directory.CreateDirectory(ContentRootPath);
+
         using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
         builder.Configuration.AddJsonStream(stream);
+        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["ConnectionStrings:SQLiteConnection"] = Path.Combine(ContentRootPath, "DeepWork.db")
+        });
 
         // Add Infrastructure to cross-platform app
         builder.Services.AddInfrastructureServices(builder.Configuration);
