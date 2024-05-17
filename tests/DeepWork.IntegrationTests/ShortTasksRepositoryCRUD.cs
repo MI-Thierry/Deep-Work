@@ -30,7 +30,7 @@ public class ShortTasksRepositoryCRUD : BaseDeepWorkReposTest
         Assert.Equal(description, newShortTask.Description);
         Assert.Equal(startTime, newShortTask.StartTime);
         Assert.Equal(endTime, newShortTask.EndTime);
-        Assert.Equal(longTaskId, newShortTask.LongTaskId);
+        Assert.Equal(longTaskId, newShortTask.ParentLongTaskId);
         Assert.True(newShortTask.Id > 0);
     }
 

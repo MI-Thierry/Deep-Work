@@ -20,7 +20,7 @@ public class ShortTaskConstructor
         Assert.Equal(_smallDesc, shortTask.Description);
         Assert.Equal(_startTime, shortTask.StartTime);
         Assert.Equal(_endTime, shortTask.EndTime);
-        Assert.Equal(_longTaskId, shortTask.LongTaskId);
+        Assert.Equal(_longTaskId, shortTask.ParentLongTaskId);
 
         Assert.ThrowsAny<ArgumentException>(() => new ShortTask(string.Empty, _startTime, _endTime, _longTaskId, _smallDesc));
         Assert.ThrowsAny<ArgumentException>(() => new ShortTask(_name, DateTime.Now - TimeSpan.FromHours(1), _endTime, _longTaskId, _smallDesc));
