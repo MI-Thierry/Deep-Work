@@ -11,10 +11,14 @@ Deep Work is a productivity software inspired by Cal Newport's Deep Work philoso
 ## Supported Platforms:
 
 - Windows 10 (version 17763.0 and later)
+- iOS 11.0 and later
+- Android 5.0 and later
+- macOS Catalina 10.15.1 and later
 ## Requirements:
 
 - **.NET 8 SDK (or compatible version):** Download and install the [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download) or an earlier version that may require some configuration changes to run Deep Work.
 - **Windows App SDK (required):** This is required because the project uses WinUI 3 to build the user interface (UI). WinUI 3 is a framework specifically designed for creating modern Windows applications, and it relies on the Windows App SDK for functionality.
+- **.NET MAUI (required):** This is required because the project uses .NET MAUI to build build the user interface (UI) on other supported platform other than Windows.
 ## License
 
 Deep Work is licensed under the [MIT License](https://github.com/MI-Thierry/Deep-Work/blob/main/LICENSE).
