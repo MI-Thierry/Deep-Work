@@ -11,13 +11,13 @@ public class ShortTask : EntityBase, IAggregateRoot
 
     public string Name { get; set; }
 
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }
 
-    public int LongTaskId { get; set; }
+    public int ParentLongTaskId { get; set; }
 
     public ShortTask(string name, DateTime startTime, DateTime endTime, int longTaskId, string? description = null)
     {
@@ -27,7 +27,7 @@ public class ShortTask : EntityBase, IAggregateRoot
             || date + TimeSpan.FromMinutes(1) < DateTime.Now, startTime, _timeMessage);
         EndTime = Guard.Against.Expression(date => DateOnly.FromDateTime(date) != DateOnly.FromDateTime(startTime)
             || date + TimeSpan.FromMinutes(1) < startTime, endTime, _timeMessage);
-        LongTaskId = Guard.Against.InvalidInput(longTaskId, nameof(longTaskId), id => id > 0);
+        ParentLongTaskId = Guard.Against.InvalidInput(longTaskId, nameof(longTaskId), id => id > 0);
     }
 
     public ShortTask()
@@ -38,16 +38,13 @@ public class ShortTask : EntityBase, IAggregateRoot
 
     public void UpdateName(string updateName) => Name = Guard.Against.NullOrEmpty(updateName);
 
-    public void UpdateStartDate(DateTime updateTime)
+    public void UpdateTimes(DateTime startTime, DateTime endTime)
     {
         StartTime = Guard.Against.Expression(time => DateOnly.FromDateTime(time) != DateOnly.FromDateTime(EndTime)
-        || time < DateTime.Now, updateTime, _timeMessage);
-    }
+        || time < DateTime.Now, startTime, _timeMessage);
 
-    public void UpdateEndDate(DateTime updateTime)
-    {
         EndTime = Guard.Against.Expression(time => DateOnly.FromDateTime(time) != DateOnly.FromDateTime(StartTime)
-        || time >= StartTime, updateTime, _timeMessage);
+        || time >= StartTime, endTime, _timeMessage);
     }
 
     public void UpdateDescription(string updateDescription) =>

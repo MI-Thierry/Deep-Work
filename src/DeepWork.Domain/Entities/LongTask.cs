@@ -34,18 +34,15 @@ public class LongTask : EntityBase, IAggregateRoot
 
     public void UpdateName(string name) => Name = Guard.Against.NullOrEmpty(name);
 
-    public void UpdateStartDate(DateOnly startDate)
+    public void UpdateDates(DateOnly startDate, DateOnly endDate)
     {
         StartDate = Guard.Against.Expression(date => date < DateOnly.FromDateTime(DateTime.Now),
             startDate, "Start date needs to be greater than or equal to today");
-    }
 
-    public void UpdateEndDate(DateOnly endDate)
-    {
         EndDate = Guard.Against.Expression(date => date < StartDate,
             endDate, "End date needs to be greater than or equal to start date");
     }
 
-    public void UpdateDescription(string description) =>
-        Description = Guard.Against.StringTooLong(description, DescriptionLength);
+    public void UpdateDescription(string? description) =>
+        Description = Guard.Against.StringTooLong(description ?? string.Empty, DescriptionLength);
 }
