@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using DeepWork.Winui.Views;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using System.Collections.Generic;
