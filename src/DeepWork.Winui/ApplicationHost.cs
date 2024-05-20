@@ -39,4 +39,18 @@ public class ApplicationHost(ILogger<ApplicationHost> logger) : IHostedService
         _appWindows.Add(window);
         return window;
     }
+
+	public static void TrackWindow(Window window)
+	{
+		window.Closed += (object sender, WindowEventArgs args) =>
+		   _appWindows.Remove((Window)sender);
+
+		_appWindows.Add(window);
+	}
+
+	public static Window GetElementsWindow(UIElement element)
+	{
+		Window? window = _appWindows.FirstOrDefault(w => w.Content.XamlRoot == element.XamlRoot);
+		return window ?? throw new InvalidOperationException("The element's window in not tracked by application. Call ApplicationHost.TrackWindow() to track it");
+	}
 }
