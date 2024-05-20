@@ -14,7 +14,7 @@ namespace DeepWork.Winui;
 public class ApplicationHost(ILogger<ApplicationHost> logger) : IHostedService
 {
 	private static readonly List<Window> _appWindows = [];
-	private readonly Window _appRootWindow = CreateWindow<MainWindow>();
+	private readonly MainWindow _appRootWindow = CreateWindow<MainWindow>();
 	private readonly ILogger<ApplicationHost> _logger = logger;
 
 	public Task StartAsync(CancellationToken cancellationToken)
@@ -22,6 +22,9 @@ public class ApplicationHost(ILogger<ApplicationHost> logger) : IHostedService
 		_logger.LogInformation("The application is starting...");
 
 		_appRootWindow.Activate();
+        _appRootWindow.MinHeight = 500;
+        _appRootWindow.MinWidth = 500;
+
 		if (_appRootWindow is INavigableWindow window)
 			window.NavigateTo(typeof(NavigationPage), new EntranceNavigationTransitionInfo());
 
