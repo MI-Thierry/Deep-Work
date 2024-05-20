@@ -56,6 +56,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\home_dark.png" />
+	  <None Remove="Resources\Images\home_light.png" />
+	  <None Remove="Resources\Images\settings.png" />
 	  <None Remove="resources\raw\appsettings.json" />
 	</ItemGroup>
 
