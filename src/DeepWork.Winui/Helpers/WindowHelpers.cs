@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Runtime.InteropServices;
 using Windows.Foundation;
+using Windows.Graphics;
 using WinRT.Interop;
 
 namespace DeepWork.Winui.Helpers;
@@ -21,7 +22,16 @@ public struct MINMAXINFO
 public delegate int SubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubClass, uint dwRefData);
 public static class WindowHelpers
 {
-    public static AppWindow GetAppWindow(Window window)
+	public static RectInt32 GetRect(Rect bounds, double scale)
+	{
+		return new RectInt32(
+			_X: (int)Math.Round(bounds.X * scale),
+			_Y: (int)Math.Round(bounds.Y * scale),
+			_Width: (int)Math.Round(bounds.Width * scale),
+			_Height: (int)Math.Round(bounds.Height * scale)
+			);
+	}
+	public static AppWindow GetAppWindow(Window window)
     {
         IntPtr hWnd = WindowNative.GetWindowHandle(window);
         WindowId winId = Win32Interop.GetWindowIdFromWindow(hWnd);

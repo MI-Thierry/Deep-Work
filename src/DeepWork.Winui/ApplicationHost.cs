@@ -1,44 +1,50 @@
-﻿using DeepWork.Winui.Views;
+﻿using DeepWork.Winui.Views.Pages;
+using DeepWork.Winui.Windows;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media.Animation;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeepWork.Winui;
 public class ApplicationHost(ILogger<ApplicationHost> logger) : IHostedService
 {
-    private static readonly List<Window> _appWindows = [];
-    private readonly Window _appRootWindow = CreateWindow<MainWindow>();
-    private readonly ILogger<ApplicationHost> _logger = logger;
+	private static readonly List<Window> _appWindows = [];
+	private readonly Window _appRootWindow = CreateWindow<MainWindow>();
+	private readonly ILogger<ApplicationHost> _logger = logger;
 
+	public Task StartAsync(CancellationToken cancellationToken)
+	{
+		_logger.LogInformation("The application is starting...");
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("The application is starting...");
+		_appRootWindow.Activate();
+		if (_appRootWindow is INavigableWindow window)
+			window.NavigateTo(typeof(NavigationPage), new EntranceNavigationTransitionInfo());
 
-        _appRootWindow.Activate();
-        return Task.CompletedTask;
-    }
+		return Task.CompletedTask;
+	}
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("The application is stopping...");
+	public Task StopAsync(CancellationToken cancellationToken)
+	{
+		_logger.LogInformation("The application is stopping...");
 
-        _appWindows.ForEach(window => window.Close());
-        return Task.CompletedTask;
-    }
+		_appWindows.ForEach(window => window.Close());
+		return Task.CompletedTask;
+	}
 
-    public static TResult CreateWindow<TResult>() where TResult : Window, new()
-    {
-        TResult window = new();
-        window.Closed += (object sender, WindowEventArgs args) =>
-            _appWindows.Remove((Window)sender);
+	public static TResult CreateWindow<TResult>() where TResult : Window, new()
+	{
+		TResult window = new();
+		window.Closed += (object sender, WindowEventArgs args) =>
+			_appWindows.Remove((Window)sender);
 
-        _appWindows.Add(window);
-        return window;
-    }
+		_appWindows.Add(window);
+		return window;
+	}
 
 	public static void TrackWindow(Window window)
 	{
