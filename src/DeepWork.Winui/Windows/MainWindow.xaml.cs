@@ -22,8 +22,8 @@ public sealed partial class MainWindow : Window, INavigableWindow
 	public double NavViewCompactModeThresholdWidth { get; set; }
 	public int MinHeight { get; set; }
 	public int MinWidth { get; set; }
-	public int MaxHeight { get; set; }
-	public int MaxWidth { get; set; }
+    public int MaxHeight { get; set; } = int.MaxValue;
+    public int MaxWidth { get; set; } = int.MaxValue;
 
 	public MainWindow()
 	{
