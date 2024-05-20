@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-	x:Class="DeepWork.Maui.AppShell"
-	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:local="clr-namespace:DeepWork.Maui"
-	xmlns:views="clr-namespace:DeepWork.Maui.Views"
-	Title="Deep Work"
-	Shell.ForegroundColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
-	Shell.BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}">
+    x:Class="DeepWork.Maui.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DeepWork.Maui"
+    Shell.FlyoutBehavior="Disabled"
+    Title="DeepWork.Maui">
 
-	<Shell.FlyoutHeader>
-		<Label Text="Deep Work" Margin="20" FontSize="Header"/>
-	</Shell.FlyoutHeader>
-
-	<FlyoutItem Title="Home" FlyoutIcon="{AppThemeBinding Dark=home_dark.png, Light=home_light.png}" x:Name="homeItem">
-		<ShellContent Title="Home" ContentTemplate="{DataTemplate views:HomePage}" Route="HomePage" />
-	</FlyoutItem>
-	
-	<ShellContent x:Name="settingsItem" FlyoutIcon="{AppThemeBinding Dark=home_dark.png, Light=home_light.png}" Title="Settings" ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage" />
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
 
 </Shell>
