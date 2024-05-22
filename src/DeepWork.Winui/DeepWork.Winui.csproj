@@ -12,6 +12,7 @@
     <UseRidGraph>true</UseRidGraph>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <Copyright>Copyright © $([System.DateTime]::UtcNow.Year) ATE Company. All rights reserved.</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
