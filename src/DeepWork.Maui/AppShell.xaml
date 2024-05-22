@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="DeepWork.Maui.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:DeepWork.Maui"
-    Shell.FlyoutBehavior="Disabled"
-    Title="DeepWork.Maui">
+	x:Class="DeepWork.Maui.AppShell"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:DeepWork.Maui"
+	xmlns:views="clr-namespace:DeepWork.Maui.Views"
+	Shell.FlyoutBehavior="Flyout"
+	Title="DeepWork.Maui"
+	Shell.ForegroundColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource OffBlack}}">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+	<Shell.FlyoutHeader>
+		<Grid>
+			<Label Text="Deep Work" VerticalOptions="Center" Margin="20"/>
+		</Grid>
+	</Shell.FlyoutHeader>
+	
+	<FlyoutItem Title="Task Manager"
+				FlyoutIcon="{AppThemeBinding Light=checklist_light.png, Dark=checklist_dark.png}">
+		<ShellContent ContentTemplate="{DataTemplate views:TaskManagementPage}" Route="TaskManagementPage"/>
+		
+	</FlyoutItem>
+
+	<ShellContent Title="Settings" FlyoutIcon="{AppThemeBinding Light=settings_light.png, Dark=settings_dark.png}"
+				  ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
 
 </Shell>
