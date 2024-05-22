@@ -34,7 +34,8 @@
 		
 		<NavigationView x:Name="NavView" DataContext="{x:Bind ViewModel}" Grid.RowSpan="2" MenuItemsSource="{Binding MenuItems}" CompactModeThresholdWidth="{x:Bind NavViewCompactModeThresholdWidth, Mode=TwoWay}"
 						IsBackEnabled="{Binding ElementName=ContentFrame, Path=CanGoBack}" ItemInvoked="NavView_ItemInvoked" Loaded="NavView_Loaded" 
-						BackRequested="NavView_BackRequested" SelectedItem="{Binding MenuItems[0]}" IsTitleBarAutoPaddingEnabled="False">
+						BackRequested="NavView_BackRequested" SelectedItem="{Binding MenuItems[0]}" IsTitleBarAutoPaddingEnabled="False"
+						PaneTitle="Deep Work">
 			
 			<Frame x:Name="ContentFrame" NavigationFailed="ContentFrame_NavigationFailed"/>
 		</NavigationView>

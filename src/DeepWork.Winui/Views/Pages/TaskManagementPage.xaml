@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="DeepWork.Winui.Views.Pages.HomePage"
+    x:Class="DeepWork.Winui.Views.Pages.TaskManagementPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:DeepWork.Winui.Views.Pages"
@@ -8,6 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock Text="Home" Style="{StaticResource TitleTextBlockStyle}" Margin="20"/>
-    
+	<TextBlock Text="Task Manager" Style="{StaticResource TitleTextBlockStyle}"/>
+	
 </Page>

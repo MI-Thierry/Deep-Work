@@ -4,16 +4,16 @@ using Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
 
 namespace DeepWork.Winui.ViewModels;
-public partial class NavigationPageViewModel : ObservableObject
+public partial class NavigationViewModel : ObservableObject
 {
 	[ObservableProperty]
 	private ObservableCollection<NavigationViewItemBase> _menuItems =
 	[
 		new NavigationViewItem
 		{
-			Content = "Home",
+			Content = "Task Manager",
 			Icon = new FontIcon() { Glyph = "\uE9D5" },
-			Tag = typeof(HomePage)
+			Tag = typeof(TaskManagementPage)
 		},
 	];
 }

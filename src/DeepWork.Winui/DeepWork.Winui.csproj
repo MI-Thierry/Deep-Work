@@ -50,13 +50,13 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Pages\TaskManagementPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Pages\NavigationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Views\Pages\SettingsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Update="Views\Pages\HomePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -73,8 +73,8 @@
     <PRIResource Remove="View\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Views\Pages\HomePage.xaml" />
     <None Remove="Views\Pages\NavigationPage.xaml" />
     <None Remove="Views\Pages\SettingsPage.xaml" />
+    <None Remove="Views\Pages\TaskManagementPage.xaml" />
   </ItemGroup>
 </Project>

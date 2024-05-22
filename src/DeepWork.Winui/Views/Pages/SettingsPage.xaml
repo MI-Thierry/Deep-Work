@@ -4,10 +4,98 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:DeepWork.Winui.Views.Pages"
+	xmlns:viewModels="using:DeepWork.Winui.ViewModels"
+	xmlns:helpers="using:DeepWork.Winui.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock Text="Settings" Style="{StaticResource TitleTextBlockStyle}" Margin="20"/>
-    
+	<Page.DataContext>
+		<viewModels:SettingsViewModel/>
+	</Page.DataContext>
+
+	<Page.Resources>
+		<helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+	</Page.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		
+		<TextBlock Text="Settings" Margin="20 10 0 0" Style="{StaticResource TitleTextBlockStyle}"/>
+		
+		<ScrollViewer Grid.Row="1">
+			<StackPanel Margin="10">
+				<!--Account Section-->
+				<TextBlock Margin="20 20 0 0" Style="{StaticResource BodyStrongTextBlockStyle}" Text="Account"/>
+				<Expander Margin="20 0 0 0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+					<Expander.Header>
+						<TextBlock Text="Future implementaion"/>
+					</Expander.Header>
+				</Expander>
+				
+				<!--Themes section-->
+				<TextBlock Margin="20 20 0 0" Style="{StaticResource BodyStrongTextBlockStyle}" Text="General"/>
+				<Expander HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Margin="20 0 0 0">
+					<Expander.Header>
+						<StackPanel Orientation="Horizontal">
+							<FontIcon Glyph="&#xE790;" />
+							<RichTextBlock IsTextSelectionEnabled="False" Margin="15">
+								<Paragraph FontSize="14">
+									<Run Text="App theme"/>
+								</Paragraph>
+								<Paragraph FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+									<Run Text="Select which app theme to display"/>
+								</Paragraph>
+							</RichTextBlock>
+						</StackPanel>
+					</Expander.Header>
+					<Expander.Content>
+						<StackPanel>
+							<RadioButton Margin="0 12 0 0" Content="Light" Tag="Light" GroupName="themeSelect"
+										 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
+										 Checked="ChangeThemeRadioButton_Checked"/>
+
+							<RadioButton Margin="0 8 0 0" Content="Dark" Tag="Dark" GroupName="themeSelect"
+										 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
+										 Checked="ChangeThemeRadioButton_Checked"/>
+
+							<RadioButton Margin="0 8 0 0" Content="Use system setting" Tag="Default" GroupName="themeSelect"
+										 IsChecked="{Binding CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
+										 Checked="ChangeThemeRadioButton_Checked"/>
+						</StackPanel>
+					</Expander.Content>
+				</Expander>
+				
+				<!--About section-->
+				<TextBlock Text="About" Style="{StaticResource BodyStrongTextBlockStyle}" Margin="20 20 0 0"/>
+				<Expander HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Margin="20 0 0 0">
+					<Expander.Header>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<ImageIcon Source="ms-Appx:///Assets/Square44x44Logo.scale-200.png" Height="25"/>
+							<RichTextBlock Grid.Column="1" IsTextSelectionEnabled="False" Margin="15">
+								<Paragraph FontSize="14">
+									<Run Text="Deep Work"/>
+								</Paragraph>
+								<Paragraph FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+									<Run Text="{Binding CopyrightInformation}"/>
+								</Paragraph>
+							</RichTextBlock>
+							<TextBlock Grid.Column="2" Text="{Binding AppVersion}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+						</Grid>
+					</Expander.Header>
+					<Expander.Content>
+						<HyperlinkButton Content="License Terms" NavigateUri="https://github.com/MI-Thierry/Deep-Work/blob/main/LICENSE"/>
+					</Expander.Content>
+				</Expander>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
 </Page>

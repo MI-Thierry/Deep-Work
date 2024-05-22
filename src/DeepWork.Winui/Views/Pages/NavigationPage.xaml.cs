@@ -13,12 +13,12 @@ using Windows.Graphics;
 namespace DeepWork.Winui.Views.Pages;
 public sealed partial class NavigationPage : Page
 {
-	public NavigationPageViewModel ViewModel { get; private set; }
+	public NavigationViewModel ViewModel { get; private set; }
 	public double NavViewCompactModeThresholdWidth { get; private set; } = 500;
 
 	public NavigationPage()
 	{
-		ViewModel = new NavigationPageViewModel();
+		ViewModel = new NavigationViewModel();
 		this.InitializeComponent();
 		AppTitleBar.Loaded += (sender, e) => SetRegionsForCustomTitleBar();
 		AppTitleBar.SizeChanged += (sender, e) => SetRegionsForCustomTitleBar();
@@ -30,6 +30,7 @@ public sealed partial class NavigationPage : Page
 		Window window = ApplicationHost.GetElementsWindow(this);
 		if (window is INavigableWindow navigationWindow)
 		{
+			// Undone: Correct the bug here
 			double scaleAdjustment = AppTitleBar.XamlRoot.RasterizationScale;
 			double navigationButtonsWidth = NavView.DisplayMode == NavigationViewDisplayMode.Minimal
 				? (double)Application.Current.Resources["NavigationBackButtonWidth"] * 2
