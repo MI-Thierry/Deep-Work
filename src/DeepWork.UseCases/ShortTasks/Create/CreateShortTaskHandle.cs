@@ -12,7 +12,7 @@ public class CreateShortTaskHandle(IRepository<ShortTask> repository, IMediator 
 
     public async Task<int> Handle(CreateShortTaskCommand request, CancellationToken cancellationToken)
     {
-        ShortTask entity = new(request.Name, request.StartTime, request.EndTime, request.ParentLongTaskId, request.Description);
+        ShortTask entity = new(request.Name, request.ParentLongTaskId, request.Description);
         await _repository.AddAsync(entity, cancellationToken);
 
         await _mediator.Publish(new ShortTaskCreatedEvent(entity.Id, entity.ParentLongTaskId), cancellationToken);

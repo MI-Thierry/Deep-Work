@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using DeepWork.Domain.Enums;
 using DeepWork.SharedKernel;
 
 namespace DeepWork.Domain.Entities;
@@ -13,20 +14,16 @@ public class ShortTask : EntityBase, IAggregateRoot
 
     public string Description { get; set; }
 
-    public DateTime StartTime { get; set; }
+	public DateTime StartTime { get; set; } = DateTime.MinValue;
 
-    public DateTime EndTime { get; set; }
+	public DateTime EndTime { get; set; } = DateTime.MinValue;
 
     public int ParentLongTaskId { get; set; }
 
-    public ShortTask(string name, DateTime startTime, DateTime endTime, int longTaskId, string? description = null)
+    public ShortTask(string name, int longTaskId, string? description = null)
     {
         Name = Guard.Against.NullOrEmpty(name);
         Description = Guard.Against.StringTooLong(description ?? string.Empty, DescriptionLength);
-        StartTime = Guard.Against.Expression(date => DateOnly.FromDateTime(date) != DateOnly.FromDateTime(endTime)
-            || date + TimeSpan.FromMinutes(1) < DateTime.Now, startTime, _timeMessage);
-        EndTime = Guard.Against.Expression(date => DateOnly.FromDateTime(date) != DateOnly.FromDateTime(startTime)
-            || date + TimeSpan.FromMinutes(1) < startTime, endTime, _timeMessage);
         ParentLongTaskId = Guard.Against.InvalidInput(longTaskId, nameof(longTaskId), id => id > 0);
     }
 
@@ -38,13 +35,14 @@ public class ShortTask : EntityBase, IAggregateRoot
 
     public void UpdateName(string updateName) => Name = Guard.Against.NullOrEmpty(updateName);
 
-    public void UpdateTimes(DateTime startTime, DateTime endTime)
+    public void UpdateTimes(ShortTaskTimeType timeType)
     {
-        StartTime = Guard.Against.Expression(time => DateOnly.FromDateTime(time) != DateOnly.FromDateTime(EndTime)
-        || time < DateTime.Now, startTime, _timeMessage);
-
-        EndTime = Guard.Against.Expression(time => DateOnly.FromDateTime(time) != DateOnly.FromDateTime(StartTime)
-        || time >= StartTime, endTime, _timeMessage);
+		if (timeType == ShortTaskTimeType.StartTime)
+			StartTime = DateTime.Now;
+		else if (timeType == ShortTaskTimeType.EndTime)
+			EndTime = DateTime.Now;
+		else if (timeType == (ShortTaskTimeType.StartTime | ShortTaskTimeType.EndTime))
+			StartTime = EndTime = DateTime.Now;
     }
 
     public void UpdateDescription(string updateDescription) =>

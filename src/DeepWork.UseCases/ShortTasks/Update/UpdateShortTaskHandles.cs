@@ -46,7 +46,7 @@ public class UpdateShortTaskTimesHandle(IRepository<ShortTask> repository)
         ShortTask? entity = await _repository.GetByIdAsync(request.ShortTaskId, cancellationToken);
         if (entity == null) return null;
 
-        entity.UpdateTimes(request.StartTime, request.EndTime);
+		entity.UpdateTimes(request.TimeType);
         await _repository.UpdateAsync(entity, cancellationToken);
 
         return new ShortTaskDTO(entity.Id, entity.Name, entity.Description, entity.StartTime, entity.EndTime);
