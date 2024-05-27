@@ -1,5 +1,6 @@
 ﻿using DeepWork.Domain.Entities;
 using SQLite;
+using System.Runtime.CompilerServices;
 
 namespace DeepWork.Infrastructure.Models;
 
@@ -35,13 +36,16 @@ public class LongTaskMap
     public static explicit operator LongTask?(LongTaskMap? longTaskMap)
     {
         if (longTaskMap == null) return null;
-        return new LongTask 
-        {
-            Id = longTaskMap.Id,
-            Name = longTaskMap.Name,
-            Description = longTaskMap.Description ?? string.Empty,
-            StartDate = DateOnly.FromDateTime(longTaskMap.StartDate),
-            EndDate = DateOnly.FromDateTime(longTaskMap.EndDate)
-        };
+
+		LongTask longTask = (LongTask)RuntimeHelpers.GetUninitializedObject(typeof(LongTask));
+		Type longTaskType = typeof(LongTask);
+
+		longTaskType.GetProperty(nameof(LongTask.Id))?.SetValue(longTask, longTaskMap.Id);
+		longTaskType.GetProperty(nameof(LongTask.Name))?.SetValue(longTask, longTaskMap.Name);
+		longTaskType.GetProperty(nameof(LongTask.Description))?.SetValue(longTask, longTaskMap.Description);
+		longTaskType.GetProperty(nameof(LongTask.StartDate))?.SetValue(longTask, DateOnly.FromDateTime(longTaskMap.StartDate));
+		longTaskType.GetProperty(nameof(LongTask.EndDate))?.SetValue(longTask, DateOnly.FromDateTime(longTaskMap.EndDate));
+
+		return longTask;
     }
 }

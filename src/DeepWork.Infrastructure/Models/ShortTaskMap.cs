@@ -1,5 +1,6 @@
 ﻿using DeepWork.Domain.Entities;
 using SQLite;
+using System.Runtime.CompilerServices;
 
 namespace DeepWork.Infrastructure.Models;
 
@@ -39,14 +40,17 @@ public class ShortTaskMap
     public static explicit operator ShortTask?(ShortTaskMap? shortTaskMap)
     {
         if (shortTaskMap == null) return null;
-        return new ShortTask()
-        {
-            Id = shortTaskMap.Id,
-            Name = shortTaskMap.Name,
-            Description = shortTaskMap.Description ?? string.Empty,
-            StartTime = shortTaskMap.StartTime,
-            EndTime = shortTaskMap.EndTime,
-            ParentLongTaskId = shortTaskMap.LongTaskId,
-        };
+
+		ShortTask shortTask = (ShortTask)RuntimeHelpers.GetUninitializedObject(typeof(ShortTask));
+		Type shortTaskType = typeof(ShortTask);
+
+		shortTaskType.GetProperty(nameof(ShortTask.Id))?.SetValue(shortTask, shortTaskMap.Id);
+		shortTaskType.GetProperty(nameof(ShortTask.Name))?.SetValue(shortTask, shortTaskMap.Name);
+		shortTaskType.GetProperty(nameof(ShortTask.Description))?.SetValue(shortTask, shortTaskMap.Description);
+		shortTaskType.GetProperty(nameof(ShortTask.StartTime))?.SetValue(shortTask, shortTaskMap.StartTime);
+		shortTaskType.GetProperty(nameof(ShortTask.EndTime))?.SetValue(shortTask, shortTaskMap.EndTime);
+		shortTaskType.GetProperty(nameof(ShortTask.ParentLongTaskId))?.SetValue(shortTask, shortTaskMap.LongTaskId);
+
+		return shortTask;
     }
 }

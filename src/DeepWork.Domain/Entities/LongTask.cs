@@ -3,36 +3,22 @@ using DeepWork.SharedKernel;
 
 namespace DeepWork.Domain.Entities;
 
-public class LongTask : EntityBase, IAggregateRoot
+public class LongTask(string name, DateOnly startDate, DateOnly endDate, string? description = null)
+	: EntityBase, IAggregateRoot
 {
     public const int NameLength = 64;
     public const int DescriptionLength = 1024;
-    public string Name { get; set; }
+	public string Name { get; private set; } = Guard.Against.NullOrEmpty(name);
 
-    public string Description { get; set; }
+	public string Description { get; private set; } = Guard.Against.StringTooLong(description ?? string.Empty, DescriptionLength);
 
-    public DateOnly StartDate { get; set; }
+	public DateOnly StartDate { get; private set; } = Guard.Against.Expression(date => date < DateOnly.FromDateTime(DateTime.Now),
+			startDate, "Start date needs to be greater than or equal to today");
 
-    public DateOnly EndDate { get; set; }
+	public DateOnly EndDate { get; private set; } = Guard.Against.Expression(date => date < startDate,
+			endDate, "End date needs to be greater than or equal to start date");
 
-    public LongTask(string name, DateOnly startDate, DateOnly endDate, string? description = null)
-    {
-        Name = Guard.Against.NullOrEmpty(name);
-        Description = Guard.Against.StringTooLong(description ?? string.Empty, DescriptionLength);
-        StartDate = Guard.Against.Expression(date => date < DateOnly.FromDateTime(DateTime.Now),
-            startDate, "Start date needs to be greater than or equal to today");
-        EndDate = Guard.Against.Expression(date => date < startDate,
-            endDate, "End date needs to be greater than or equal to start date");
-    }
-
-    // Don't use this constructor
-    public LongTask()
-    {
-        Name = string.Empty;
-        Description = string.Empty;
-    }
-
-    public void UpdateName(string name) => Name = Guard.Against.NullOrEmpty(name);
+	public void UpdateName(string name) => Name = Guard.Against.NullOrEmpty(name);
 
     public void UpdateDates(DateOnly startDate, DateOnly endDate)
     {

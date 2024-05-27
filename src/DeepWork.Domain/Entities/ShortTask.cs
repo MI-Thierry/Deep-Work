@@ -4,36 +4,22 @@ using DeepWork.SharedKernel;
 
 namespace DeepWork.Domain.Entities;
 
-public class ShortTask : EntityBase, IAggregateRoot
+public class ShortTask(string name, int longTaskId, string? description = null) : EntityBase, IAggregateRoot
 {
-    private const string _timeMessage = "Start time and End time should in the same day which is not in past";
-    public const int NameLength = 64;
+	public const int NameLength = 64;
     public const int DescriptionLength = 256;
 
-    public string Name { get; set; }
+	public string Name { get; private set; } = Guard.Against.NullOrEmpty(name);
 
-    public string Description { get; set; }
+	public string Description { get; private set; } = Guard.Against.StringTooLong(description ?? string.Empty, DescriptionLength);
 
-	public DateTime StartTime { get; set; } = DateTime.MinValue;
+	public DateTime StartTime { get; private set; } = DateTime.MinValue;
 
-	public DateTime EndTime { get; set; } = DateTime.MinValue;
+	public DateTime EndTime { get; private set; } = DateTime.MinValue;
 
-    public int ParentLongTaskId { get; set; }
+	public int ParentLongTaskId { get; private set; } = Guard.Against.InvalidInput(longTaskId, nameof(longTaskId), id => id > 0);
 
-    public ShortTask(string name, int longTaskId, string? description = null)
-    {
-        Name = Guard.Against.NullOrEmpty(name);
-        Description = Guard.Against.StringTooLong(description ?? string.Empty, DescriptionLength);
-        ParentLongTaskId = Guard.Against.InvalidInput(longTaskId, nameof(longTaskId), id => id > 0);
-    }
-
-    public ShortTask()
-    {
-        Name = string.Empty;
-        Description = string.Empty;
-    }
-
-    public void UpdateName(string updateName) => Name = Guard.Against.NullOrEmpty(updateName);
+	public void UpdateName(string updateName) => Name = Guard.Against.NullOrEmpty(updateName);
 
     public void UpdateTimes(ShortTaskTimeType timeType)
     {
