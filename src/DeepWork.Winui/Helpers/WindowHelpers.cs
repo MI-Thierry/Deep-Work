@@ -2,6 +2,7 @@
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Win32;
 using System;
 using System.Runtime.InteropServices;
 using Windows.Foundation;
@@ -22,6 +23,20 @@ public struct MINMAXINFO
 public delegate int SubclassProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam, IntPtr uIdSubClass, uint dwRefData);
 public static class WindowHelpers
 {
+	public static ApplicationTheme GetWindowsTheme()
+	{
+		string registryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+		string registryValueName = "AppsUseLightTheme";
+		
+		using RegistryKey? key = Registry.CurrentUser.OpenSubKey(registryKeyPath);
+		object? registrationValueObject = key?.GetValue(registryValueName);
+
+		if (registrationValueObject == null)
+			return ApplicationTheme.Dark;
+
+		int registryValue = (int)registrationValueObject;
+		return registryValue > 0 ? ApplicationTheme.Light : ApplicationTheme.Dark;
+	}
 	public static RectInt32 GetRect(Rect bounds, double scale)
 	{
 		return new RectInt32(

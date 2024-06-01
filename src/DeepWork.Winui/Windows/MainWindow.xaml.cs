@@ -43,6 +43,7 @@ public sealed partial class MainWindow : Window, INavigableWindow
 			SystemBackdrop = new MicaBackdrop();
 			ExtendsContentIntoTitleBar = true;
 			AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Standard;
+			SetTheme();
 
 			if (Content is FrameworkElement element)
 				element.ActualThemeChanged += (elem, o) => SetTheme();

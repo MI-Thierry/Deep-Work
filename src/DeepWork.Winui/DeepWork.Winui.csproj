@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeepWork.Infrastructure\DeepWork.Infrastructure.csproj" />
+    <ProjectReference Include="..\DeepWork.UI.Shared\DeepWork.UI.Shared.csproj" />
     <ProjectReference Include="..\DeepWork.UseCases\DeepWork.UseCases.csproj" />
   </ItemGroup>
   <ItemGroup>

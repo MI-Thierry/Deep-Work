@@ -1,3 +1,4 @@
+using DeepWork.Winui.Helpers;
 using DeepWork.Winui.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -22,7 +23,7 @@ public sealed partial class SettingsPage : Page
 			else
 			{
 				((sender as RadioButton)!.XamlRoot.Content as FrameworkElement)!.RequestedTheme =
-					Application.Current.RequestedTheme == ApplicationTheme.Light
+					WindowHelpers.GetWindowsTheme() == ApplicationTheme.Light
 					? ElementTheme.Light : ElementTheme.Dark;
 			}
 
