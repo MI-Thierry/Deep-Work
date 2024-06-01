@@ -20,6 +20,9 @@ public static class MauiProgram
 			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
+				fonts.AddFont("FontAwesomeBrands.otf", "FontBrands");
+				fonts.AddFont("FontAwesomeRegular.otf", "FontRegular");
+				fonts.AddFont("FontAwesomeSolid.otf", "FontSolid");
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
@@ -27,6 +30,7 @@ public static class MauiProgram
 		ContentRootPath = Path.Combine(FileSystem.AppDataDirectory, "DeepWork");
 		Directory.CreateDirectory(ContentRootPath);
 
+		// Add configurations
 		using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
 		builder.Configuration.AddJsonStream(stream);
 		builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
@@ -34,6 +38,7 @@ public static class MauiProgram
 			["ConnectionStrings:SQLiteConnection"] = Path.Combine(ContentRootPath, "DeepWork.db")
 		});
 
+		// Add services
 		builder.Services.AddSingleton<IAppPreferences, AppPreferences>();
 		builder.Services.AddInfrastructureServices(builder.Configuration);
 		builder.Services.AddMediatR(config =>
@@ -44,7 +49,16 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+		MauiApp mauiApp = builder.Build();
 
-		return builder.Build();
+		// Setting the app theme before App constructor run
+		IAppPreferences preferences = mauiApp.Services.GetRequiredService<IAppPreferences>();
+		string? theme = preferences.Get<string>("Theme");
+		if (theme != null)
+		{
+			App.StartupAppTheme = Enum.Parse<AppTheme>(theme);
+		}
+
+		return mauiApp;
 	}
 }

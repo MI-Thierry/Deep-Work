@@ -9,19 +9,37 @@
 	Title="DeepWork.Maui"
 	Shell.ForegroundColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource OffBlack}}">
 
-	<Shell.FlyoutHeader>
-		<Grid>
-			<Label Text="Deep Work" VerticalOptions="Center" Margin="20"/>
-		</Grid>
-	</Shell.FlyoutHeader>
+	<Shell.Resources>
+		<ResourceDictionary>
+			<FontImageSource FontFamily="FontSolid" Glyph="&#xf0ae;" Color="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource OffBlack}}" x:Key="TaskManagerIcon"/>
+			<FontImageSource FontFamily="FontSolid" Glyph="&#xf013;" Color="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource OffBlack}}" x:Key="SettinsIcon"/>
+		</ResourceDictionary>
+	</Shell.Resources>
 	
-	<FlyoutItem Title="Task Manager"
-				FlyoutIcon="{AppThemeBinding Light=checklist_light.png, Dark=checklist_dark.png}">
-		<ShellContent ContentTemplate="{DataTemplate views:TaskManagementPage}" Route="TaskManagementPage"/>
+	<Shell.FlyoutHeader>
+		<Label Margin="{OnPlatform Default='0, 0, 0, 12',
+								   iOS='0',
+								   MacCatalyst='4,0'}"
+			   Padding="{OnPlatform Default='4,0',
+									iOS='4, 100, 4, 0',
+									MacCatalyst='4, 100, 4, 0'}"
+			   FontSize="24"
+			   HorizontalOptions="Start"
+			   Text="Deep Work"
+			   VerticalTextAlignment="Center"/>
 		
+	</Shell.FlyoutHeader>
+
+	<FlyoutItem Title="Task Manager"
+				Route="TaskManagerPage"
+				Icon="{StaticResource TaskManagerIcon}">
+		<ShellContent ContentTemplate="{DataTemplate views:TaskManagementPage}"/>
 	</FlyoutItem>
 
-	<ShellContent Title="Settings" FlyoutIcon="{AppThemeBinding Light=settings_light.png, Dark=settings_dark.png}"
-				  ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
+	<FlyoutItem Title="Settings"
+				Route="SettingsPage"
+				Icon="{StaticResource SettinsIcon}">
+		<ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
+	</FlyoutItem>
 
 </Shell>

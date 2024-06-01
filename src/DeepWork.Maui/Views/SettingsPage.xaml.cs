@@ -1,14 +1,17 @@
-using CommunityToolkit.Maui.Behaviors;
+using DeepWork.Maui.ViewModels;
 
 namespace DeepWork.Maui.Views;
 
 public partial class SettingsPage : ContentPage
 {
-    private StatusBarBehavior _statusBarBehavior;
 	public SettingsPage()
 	{
 		InitializeComponent();
-        _statusBarBehavior = new StatusBarBehavior();
+	}
 
+	private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+	{
+		AppShell.NavigateTo(typeof(ThemeSettingsPage), true);
+		(sender as ListView)!.SelectedItem = null;
 	}
 }

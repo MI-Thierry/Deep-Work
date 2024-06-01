@@ -35,6 +35,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<Copyright>Copyright © $([System.DateTime]::UtcNow.Year) ATE Company. All rights reserved.</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -56,16 +57,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\checklist_dark.png" />
-	  <None Remove="Resources\Images\checklist_light.png" />
-	  <None Remove="Resources\Images\settings_dark.png" />
-	  <None Remove="Resources\Images\settings_light.png" />
+	  <AndroidResource Remove="AppConfigurations\**" />
+	  <Compile Remove="AppConfigurations\**" />
+	  <EmbeddedResource Remove="AppConfigurations\**" />
+	  <MauiCss Remove="AppConfigurations\**" />
+	  <MauiXaml Remove="AppConfigurations\**" />
+	  <None Remove="AppConfigurations\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Fonts\FontAwesomeBrands.otf" />
+	  <None Remove="Resources\Fonts\FontAwesomeRegular.otf" />
+	  <None Remove="Resources\Fonts\FontAwesomeSolid.otf" />
 	  <None Remove="resources\raw\appsettings.json" />
+	  <None Remove="Resources\Raw\settings.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.40" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.40" />
@@ -86,5 +98,11 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
